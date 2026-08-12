@@ -1,0 +1,47 @@
+# Local development services (requires Docker Desktop).
+# Without Docker, local dev falls back to sqlite (see docs/engineering/local-development.md);
+# CI always validates against PostgreSQL 16.
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: piotrack
+      POSTGRES_USER: piotrack
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U piotrack"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"   # SMTP
+      - "8025:8025"   # Web UI
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.12
+    environment:
+      MEILI_NO_ANALYTICS: "true"
+      MEILI_MASTER_KEY: local-dev-key
+    ports:
+      - "7700:7700"
+    volumes:
+      - meilidata:/meili_data
+
+volumes:
+  pgdata:
+  redisdata:
+  meilidata:

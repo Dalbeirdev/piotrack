@@ -1,0 +1,134 @@
+# CI quality gates per Master Prompt §51:
+# lint → type check → tests (unit/feature) → build → security → migration validation.
+# Staging deploy + smoke test gates are added when deployment infrastructure exists (DEVX-005).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    name: Lint, formatting & static analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Pint (code style)
+        run: vendor/bin/pint --test
+
+      - name: PHPStan (static analysis)
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Prettier (formatting)
+        run: npm run format:check
+
+      - name: ESLint
+        run: npx eslint .
+
+      - name: TypeScript type check
+        run: npx tsc --noEmit
+
+  tests:
+    name: Tests & migration validation (PostgreSQL 16)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: piotrack_test
+          POSTGRES_USER: piotrack
+          POSTGRES_PASSWORD: secret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U piotrack"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DB_CONNECTION: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_DATABASE: piotrack_test
+      DB_USERNAME: piotrack
+      DB_PASSWORD: secret
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_pgsql, pgsql, intl, gd, zip, bcmath
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Build frontend assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Prepare application
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Migration validation (migrate, rollback, re-migrate)
+        run: |
+          php artisan migrate --force
+          php artisan migrate:rollback --force
+          php artisan migrate --force
+
+      - name: Run test suite
+        run: php vendor/bin/pest --ci
+
+  security:
+    name: Dependency security audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Composer audit
+        run: composer audit
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: npm audit
+        run: |
+          npm ci
+          npm audit --audit-level=high

@@ -343,7 +343,19 @@ PLATFORM += s("DEVX", "Engineering Foundation & Delivery", [
 ])
 
 
+def load_existing_state():
+    """Preserve tracking fields across regenerations, keyed by feature ID."""
+    if not OUT_CSV.exists():
+        return {}
+    with open(OUT_CSV, encoding="utf-8-sig") as f:
+        return {
+            r["id"]: {k: r[k] for k in ("status", "backend", "frontend", "tests", "docs", "depends_on", "notes")}
+            for r in csv.DictReader(f)
+        }
+
+
 def main():
+    existing = load_existing_state()
     rows, notes = parse_inventory(INVENTORY_TXT)
 
     # Sanity: expect 50 sections
@@ -388,6 +400,10 @@ def main():
             "tests": "Pending", "docs": "Pending",
             "depends_on": "", "notes": "",
         })
+
+    for row in out_rows:
+        if row["id"] in existing:
+            row.update(existing[row["id"]])
 
     with open(OUT_CSV, "w", newline="", encoding="utf-8-sig") as f:
         w = csv.DictWriter(f, fieldnames=list(out_rows[0].keys()))

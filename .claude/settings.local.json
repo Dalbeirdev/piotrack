@@ -7,7 +7,25 @@
       "Bash(python \"C:/Users/DALBEI~1/AppData/Local/Temp/claude/E--autotask-DPI-Autotask-piotrack/3e02c8a9-0a72-4af0-be56-d60c09e6acb9/scratchpad/extract_inv.py\")",
       "Bash(python scripts/build_feature_register.py)",
       "Bash(python -)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git push *)",
+      "Bash(ls -d /c/php* /c/xampp/php /c/laragon/bin/php* /c/tools/php* /c/ProgramData/chocolatey /c/Users/DalbeirSingh/scoop)",
+      "Bash(command -v winget.exe)",
+      "Bash(command -v choco)",
+      "Bash(git config *)",
+      "Bash(curl -s https://api.github.com/users/Dalbeirdev)",
+      "Bash(/c/tools/php84/php.exe --version)",
+      "Bash(/c/tools/php84/php.exe -m)",
+      "Read(//c/tools/php84/**)",
+      "Read(//c/ProgramData/ComposerSetup/**)",
+      "Read(//c/tools/**)",
+      "Bash(npm install *)",
+      "Bash(python scripts/update_register.py DEVX-001 --status Implemented --backend Done --docs Done --notes \"Laravel 12 + Inertia/React/TS scaffold; Pint, PHPStan L6, ESLint, Prettier, tsc; .env-only config\")",
+      "Bash(python scripts/update_register.py DEVX-002 --status Implemented --backend Done --tests Done --notes \"Versioned migrations; CI validates migrate+rollback+re-migrate on PostgreSQL 16\")",
+      "Bash(python scripts/update_register.py DEVX-003 --status \"Partially Implemented\" --notes \"Local env complete \\(sqlite + docker-compose for pgsql/redis/mailpit/meili\\); staging & production provisioning pending\")",
+      "Bash(python scripts/update_register.py DEVX-004 --status \"Partially Implemented\" --backend Done --notes \"CI: quality, tests+migration validation on Postgres, security audits. Staging deploy + smoke test gate pending infra\")",
+      "Bash(python scripts/update_register.py DEVX-005 --status Planned --notes \"Deployment runbook drafted \\(docs/runbooks/deployment.md\\); infrastructure not yet provisioned\")",
+      "Bash(git -c core.safecrlf=false commit -q -m 'Stage 0 \\(DEVX\\): Laravel 12 + Inertia/React/TS foundation with CI quality gates *)"
     ]
   }
 }

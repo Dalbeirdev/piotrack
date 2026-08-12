@@ -1,6 +1,23 @@
 # Piotrack — working instructions
 
-Commercial multi-tenant MSP Growth SaaS ("MSP Growth OS"). Read before doing anything:
+Commercial multi-tenant MSP Growth SaaS ("MSP Growth OS"). Laravel 12 + Inertia/React/TypeScript +
+PostgreSQL. GitHub: https://github.com/Dalbeirdev/piotrack
+
+## Toolchain on this machine (Windows — nothing on PATH by default)
+
+```bash
+export PATH="/c/tools/php84:$PATH"                 # PHP 8.4
+alias composer='php /c/tools/composer/composer.phar'
+```
+
+Quality gate before every commit (all must pass; CI re-runs them plus Postgres migration validation):
+`vendor/bin/pint --test` · `php vendor/bin/phpstan analyse` · `npm run format:check` ·
+`npx eslint .` · `npm run types` · `php vendor/bin/pest`
+
+Local DB is sqlite (`database/database.sqlite`); the product DB is PostgreSQL 16 — keep migrations
+Postgres-compatible. See docs/engineering/local-development.md.
+
+Read before doing anything:
 
 1. **README.md** — project state and artifact map.
 2. **docs/register/FEATURE_REGISTER.md** — the Feature Traceability Register (1,142 features).

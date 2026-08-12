@@ -3,9 +3,18 @@
 Commercial multi-tenant SaaS platform for MSP growth: marketing execution connected to sales
 operations, proved by qualified pipeline, MRR, revenue and ROI.
 
-**Current phase: requirements & architecture complete — implementation not started.**
-Technology stack ([ADR-0001](docs/architecture/09-technology-stack.md)) accepted; next step is
-Stage 0 (project foundation) per the [phase plan](docs/architecture/10-dependency-map-and-phases.md).
+**Current phase: Stage 0 (engineering foundation) complete — next is Stage 1 (Identity).**
+Stack ([ADR-0001](docs/architecture/09-technology-stack.md)): Laravel 12 · Inertia + React +
+TypeScript · PostgreSQL 16 · Redis · Stripe (abstracted). Phase plan:
+[dependency map & stages](docs/architecture/10-dependency-map-and-phases.md) · latest gate:
+[Stage 0 completion report](docs/qa/2026-08-12-stage-0-devx.md).
+
+## Development
+
+Setup, commands and the pre-commit quality gate: [docs/engineering/local-development.md](docs/engineering/local-development.md).
+Coding standards: [docs/engineering/coding-standards.md](docs/engineering/coding-standards.md).
+CI runs lint/static-analysis/types/tests + PostgreSQL migration validation + security audits on
+every push and PR ([ci.yml](.github/workflows/ci.yml)).
 
 ## Source documents (authoritative)
 
