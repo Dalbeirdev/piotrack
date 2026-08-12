@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "piotrack",
+      "runtimeExecutable": "C:\\tools\\php84\\php.exe",
+      "runtimeArgs": ["artisan", "serve", "--port=8734"],
+      "port": 8734,
+      "autoPort": false
+    }
+  ]
+}

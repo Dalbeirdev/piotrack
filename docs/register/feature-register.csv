@@ -976,17 +976,17 @@ AIVIS-014,AIVIS,AI Visibility Dashboard,,Vertical-level AI visibility,Feature In
 AIVIS-015,AIVIS,AI Visibility Dashboard,,Prompt library management,Feature Inventory,Inventory §50 p.27,Planned,Pending,Pending,Pending,Pending,,
 AIVIS-016,AIVIS,AI Visibility Dashboard,,Trend reporting,Feature Inventory,Inventory §50 p.27,Planned,Pending,Pending,Pending,Pending,,
 AIVIS-017,AIVIS,AI Visibility Dashboard,,Alerting when visibility changes,Feature Inventory,Inventory §50 p.27,Planned,Pending,Pending,Pending,Pending,,
-AUTH-001,AUTH,Identity & Authentication,Registration,Account registration with email + password,Master Prompt,"§6, §57 Stage 1",Planned,Pending,Pending,Pending,Pending,,
-AUTH-002,AUTH,Identity & Authentication,Registration,Email verification flow,Master Prompt,"§6, §57 Stage 1",Planned,Pending,Pending,Pending,Pending,,
-AUTH-003,AUTH,Identity & Authentication,Registration,Password setup and strength validation,Master Prompt,§6,Planned,Pending,Pending,Pending,Pending,,
-AUTH-004,AUTH,Identity & Authentication,Login,Secure login / logout,Master Prompt,"§21, §57 Stage 1",Planned,Pending,Pending,Pending,Pending,,
-AUTH-005,AUTH,Identity & Authentication,Login,Password hashing (modern algorithm),Master Prompt,§21,Planned,Pending,Pending,Pending,Pending,,
-AUTH-006,AUTH,Identity & Authentication,Login,Session management with secure cookies,Master Prompt,§21,Planned,Pending,Pending,Pending,Pending,,
-AUTH-007,AUTH,Identity & Authentication,Login,Brute-force protection and login rate limiting,Master Prompt,§21,Planned,Pending,Pending,Pending,Pending,,
-AUTH-008,AUTH,Identity & Authentication,Login,Failed-login audit events,Master Prompt,§20,Planned,Pending,Pending,Pending,Pending,,
-AUTH-009,AUTH,Identity & Authentication,Recovery,Password reset flow,Master Prompt,§57 Stage 1,Planned,Pending,Pending,Pending,Pending,,
-AUTH-010,AUTH,Identity & Authentication,MFA,"MFA-ready architecture (TOTP enrollment, recovery codes)",Master Prompt,"§21, §57 Stage 1",Planned,Pending,Pending,Pending,Pending,,
-AUTH-011,AUTH,Identity & Authentication,API auth,Personal/tenant API keys with create/revoke + audit,Master Prompt,"§20, §22",Planned,Pending,Pending,Pending,Pending,,
+AUTH-001,AUTH,Identity & Authentication,Registration,Account registration with email + password,Master Prompt,"§6, §57 Stage 1",Tested,Done,Pending,Done,Pending,,Registration + audit event; kit + policy tests
+AUTH-002,AUTH,Identity & Authentication,Registration,Email verification flow,Master Prompt,"§6, §57 Stage 1",Tested,Done,Pending,Done,Pending,,MustVerifyEmail + verified middleware on app routes; enforcement tests
+AUTH-003,AUTH,Identity & Authentication,Registration,Password setup and strength validation,Master Prompt,§6,Tested,Done,Pending,Done,Pending,,"Password::defaults min 12, uncompromised in prod; rejection tests"
+AUTH-004,AUTH,Identity & Authentication,Login,Secure login / logout,Master Prompt,"§21, §57 Stage 1",Tested,Done,Done,Done,Pending,,Login/logout with audit; 2FA-aware login flow
+AUTH-005,AUTH,Identity & Authentication,Login,Password hashing (modern algorithm),Master Prompt,§21,Tested,Done,Pending,Done,Pending,,bcrypt(12) via hashed cast; argon2id revisit documented for prod
+AUTH-006,AUTH,Identity & Authentication,Login,Session management with secure cookies,Master Prompt,§21,Tested,Done,Done,Done,Pending,,DB sessions; SESSION_SECURE_COOKIE env; logout-other-sessions with password confirm + tests
+AUTH-007,AUTH,Identity & Authentication,Login,Brute-force protection and login rate limiting,Master Prompt,§21,Tested,Done,Pending,Done,Pending,,Login 5/min lockout + route throttles on register/forgot/reset/2FA; lockout audit test
+AUTH-008,AUTH,Identity & Authentication,Login,Failed-login audit events,Master Prompt,§20,Tested,Done,Pending,Done,Pending,,audit_logs table + AuditLogger + RecordAuthEvents (auto-discovered); 14 auth actions
+AUTH-009,AUTH,Identity & Authentication,Recovery,Password reset flow,Master Prompt,§57 Stage 1,Tested,Done,Done,Done,Pending,,Kit reset flow + password_reset audit event
+AUTH-010,AUTH,Identity & Authentication,MFA,"MFA-ready architecture (TOTP enrollment, recovery codes)",Master Prompt,"§21, §57 Stage 1",Tested,Done,Done,Done,Pending,,google2fa TOTP; encrypted secret/recovery codes; enroll/confirm/challenge/recovery/disable + 11 tests; manual QA passed
+AUTH-011,AUTH,Identity & Authentication,API auth,Personal/tenant API keys with create/revoke + audit,Master Prompt,"§20, §22",Tested,Done,Done,Done,Pending,,Sanctum personal tokens; one-time reveal; create/list/revoke + audit; /api/user; ownership + revocation tests; manual QA passed
 TEN-001,TEN,Tenant & Organization Management,Organizations,Organization (tenant) creation,Master Prompt,"§4, §57 Stage 2",Planned,Pending,Pending,Pending,Pending,,
 TEN-002,TEN,Tenant & Organization Management,Organizations,Organization profile and settings,Master Prompt,§6,Planned,Pending,Pending,Pending,Pending,,
 TEN-003,TEN,Tenant & Organization Management,Organizations,Organization deletion with safeguards,Master Prompt,"§27, §40",Planned,Pending,Pending,Pending,Pending,,

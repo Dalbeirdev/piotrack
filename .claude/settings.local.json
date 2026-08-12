@@ -25,7 +25,9 @@
       "Bash(python scripts/update_register.py DEVX-003 --status \"Partially Implemented\" --notes \"Local env complete \\(sqlite + docker-compose for pgsql/redis/mailpit/meili\\); staging & production provisioning pending\")",
       "Bash(python scripts/update_register.py DEVX-004 --status \"Partially Implemented\" --backend Done --notes \"CI: quality, tests+migration validation on Postgres, security audits. Staging deploy + smoke test gate pending infra\")",
       "Bash(python scripts/update_register.py DEVX-005 --status Planned --notes \"Deployment runbook drafted \\(docs/runbooks/deployment.md\\); infrastructure not yet provisioned\")",
-      "Bash(git -c core.safecrlf=false commit -q -m 'Stage 0 \\(DEVX\\): Laravel 12 + Inertia/React/TS foundation with CI quality gates *)"
+      "Bash(git -c core.safecrlf=false commit -q -m 'Stage 0 \\(DEVX\\): Laravel 12 + Inertia/React/TS foundation with CI quality gates *)",
+      "Bash(npm run *)",
+      "Bash(curl -s -H \"Authorization: Bearer 1|dFiHQp7gVObNZNBemDxev8mhGrYmDbtyncuKFLuRb3124769\" -H \"Accept: application/json\" http://localhost:8734/api/user)"
     ]
   }
 }

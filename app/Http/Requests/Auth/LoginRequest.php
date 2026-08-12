@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
+use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -51,6 +53,34 @@ class LoginRequest extends FormRequest
         }
 
         RateLimiter::clear($this->throttleKey());
+    }
+
+    /**
+     * Validate the credentials WITHOUT logging the user in — used by the
+     * two-factor flow, where login is deferred until the challenge passes.
+     *
+     * @throws ValidationException
+     */
+    public function validateCredentials(): User
+    {
+        $this->ensureIsNotRateLimited();
+
+        if (! Auth::validate($this->only('email', 'password'))) {
+            RateLimiter::hit($this->throttleKey());
+
+            event(new Failed('web', null, $this->only('email')));
+
+            throw ValidationException::withMessages([
+                'email' => __('auth.failed'),
+            ]);
+        }
+
+        RateLimiter::clear($this->throttleKey());
+
+        /** @var User $user */
+        $user = Auth::getProvider()->retrieveByCredentials($this->only('email', 'password'));
+
+        return $user;
     }
 
     /**

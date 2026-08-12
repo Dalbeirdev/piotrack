@@ -122,7 +122,66 @@ export default function Password() {
                         </div>
                     </form>
                 </div>
+
+                <OtherBrowserSessions />
             </SettingsLayout>
         </AppLayout>
+    );
+}
+
+function OtherBrowserSessions() {
+    const { data, setData, errors, delete: destroy, reset, processing, recentlySuccessful } = useForm({ password: '' });
+
+    const submit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        destroy(route('sessions.destroy-others'), {
+            preserveScroll: true,
+            onSuccess: () => reset(),
+            onError: () => reset(),
+        });
+    };
+
+    return (
+        <div className="space-y-6">
+            <HeadingSmall
+                title="Log out other browser sessions"
+                description="Sign out of every other browser and device where your account is logged in"
+            />
+
+            <form onSubmit={submit} className="space-y-6">
+                <div className="grid gap-2">
+                    <Label htmlFor="sessions_password">Confirm password</Label>
+
+                    <Input
+                        id="sessions_password"
+                        value={data.password}
+                        onChange={(e) => setData('password', e.target.value)}
+                        type="password"
+                        className="mt-1 block w-full"
+                        autoComplete="current-password"
+                        placeholder="Current password"
+                    />
+
+                    <InputError message={errors.password} />
+                </div>
+
+                <div className="flex items-center gap-4">
+                    <Button variant="outline" disabled={processing}>
+                        Log out other sessions
+                    </Button>
+
+                    <Transition
+                        show={recentlySuccessful}
+                        enter="transition ease-in-out"
+                        enterFrom="opacity-0"
+                        leave="transition ease-in-out"
+                        leaveTo="opacity-0"
+                    >
+                        <p className="text-sm text-neutral-600">Other sessions logged out</p>
+                    </Transition>
+                </div>
+            </form>
+        </div>
     );
 }
