@@ -27,7 +27,9 @@
       "Bash(python scripts/update_register.py DEVX-005 --status Planned --notes \"Deployment runbook drafted \\(docs/runbooks/deployment.md\\); infrastructure not yet provisioned\")",
       "Bash(git -c core.safecrlf=false commit -q -m 'Stage 0 \\(DEVX\\): Laravel 12 + Inertia/React/TS foundation with CI quality gates *)",
       "Bash(npm run *)",
-      "Bash(curl -s -H \"Authorization: Bearer 1|dFiHQp7gVObNZNBemDxev8mhGrYmDbtyncuKFLuRb3124769\" -H \"Accept: application/json\" http://localhost:8734/api/user)"
+      "Bash(curl -s -H \"Authorization: Bearer 1|dFiHQp7gVObNZNBemDxev8mhGrYmDbtyncuKFLuRb3124769\" -H \"Accept: application/json\" http://localhost:8734/api/user)",
+      "Bash(mv 2026_08_12_215123_create_organization_user_table.php 2026_08_12_215128_create_organization_user_table.php)",
+      "Bash(mv 2026_08_12_215124_create_team_user_table.php 2026_08_12_215129_create_team_user_table.php)"
     ]
   }
 }

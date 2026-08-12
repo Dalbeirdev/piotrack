@@ -10,10 +10,10 @@ it('redirects unverified users away from the dashboard', function () {
         ->assertRedirect(route('verification.notice'));
 });
 
-it('allows verified users onto the dashboard', function () {
-    $user = User::factory()->create();
+it('allows verified users with an organization onto the dashboard', function () {
+    [, $owner] = makeOrganization();
 
-    $this->actingAs($user)
+    $this->actingAs($owner)
         ->get(route('dashboard'))
         ->assertOk();
 });

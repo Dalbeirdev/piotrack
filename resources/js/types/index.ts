@@ -1,7 +1,18 @@
 import { LucideIcon } from 'lucide-react';
 
+export interface OrganizationSummary {
+    id: number;
+    name: string;
+    slug: string;
+    role?: string | null;
+}
+
 export interface Auth {
     user: User;
+    currentOrganization: OrganizationSummary | null;
+    organizations: OrganizationSummary[];
+    permissions: string[];
+    role: string | null;
 }
 
 export interface BreadcrumbItem {

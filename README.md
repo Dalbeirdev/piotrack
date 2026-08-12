@@ -3,22 +3,25 @@
 Commercial multi-tenant SaaS platform for MSP growth: marketing execution connected to sales
 operations, proved by qualified pipeline, MRR, revenue and ROI.
 
-**Current phase: Stage 1 (Identity) complete — next is Stage 2 (Tenant Architecture).**
+**Current phase: Stage 2 (Tenant Architecture) complete — next is Stage 3 (Commercial Foundation).**
 Stack ([ADR-0001](docs/architecture/09-technology-stack.md)): Laravel 12 · Inertia + React +
 TypeScript · PostgreSQL 16 · Redis · Stripe (abstracted). Phase plan:
 [dependency map & stages](docs/architecture/10-dependency-map-and-phases.md).
 
 Gate reports: [Stage 0 — Foundation](docs/qa/2026-08-12-stage-0-devx.md) ·
-[Stage 1 — Identity](docs/qa/2026-08-13-stage-1-auth.md).
+[Stage 1 — Identity](docs/qa/2026-08-13-stage-1-auth.md) ·
+[Stage 2 — Tenancy](docs/qa/2026-08-13-stage-2-tenancy.md).
 
 **Deploying to piotrack.com:** the app is production-ready for a first live preview on
 **Laravel Cloud** (managed PostgreSQL 16 + Redis, auto-TLS). Follow
 [docs/runbooks/go-live-piotrack-com.md](docs/runbooks/go-live-piotrack-com.md); deploy settings are
 in [.laravel-cloud/deploy.md](.laravel-cloud/deploy.md) and prod env in
 [.env.production.example](.env.production.example). Host account + DNS are owner-provisioned.
-Stage 1 delivers registration, enforced email verification, password policy, login/logout with a
-full audit trail, brute-force protection, two-factor auth (TOTP + recovery codes), personal API
-tokens (Sanctum), and browser-session revocation.
+Stage 1 delivers registration, verification, password policy, login/logout with a full audit trail,
+brute-force protection, two-factor auth, API tokens, and session revocation. Stage 2 delivers
+multi-tenant organizations, per-org memberships and roles, invitations, teams, row-level tenant
+isolation, a code-defined RBAC engine ([ADR-0002](docs/architecture/adr/ADR-0002-rbac-approach.md)),
+and an organization-scoped audit viewer.
 
 ## Development
 

@@ -1,5 +1,9 @@
 <?php
 
+use App\Authorization\Role;
+use App\Models\Organization;
+use App\Models\User;
+use App\Services\OrganizationService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -47,4 +51,42 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+/*
+|--------------------------------------------------------------------------
+| Tenancy test helpers (Stage 2)
+|--------------------------------------------------------------------------
+*/
+
+/**
+ * Create an organization owned by a fresh user.
+ *
+ * @return array{0: Organization, 1: User}
+ */
+function makeOrganization(string $name = 'Test Org'): array
+{
+    $owner = User::factory()->create();
+    $organization = app(OrganizationService::class)->create($owner, $name);
+
+    return [$organization, $owner->refresh()];
+}
+
+/**
+ * Add a member with the given role to an organization and make it their
+ * current organization.
+ */
+function addMember(Organization $organization, Role $role): User
+{
+    $user = User::factory()->create();
+
+    $organization->members()->attach($user->id, [
+        'role' => $role->value,
+        'status' => 'active',
+        'joined_at' => now(),
+    ]);
+
+    $user->forceFill(['current_organization_id' => $organization->id])->save();
+
+    return $user->refresh();
 }

@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use App\Authorization\Permission;
+use App\Authorization\Role;
+use App\Authorization\RolePermissions;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -59,5 +64,118 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasEnabledTwoFactor(): bool
     {
         return $this->two_factor_confirmed_at !== null;
+    }
+
+    // ---------------------------------------------------------------------
+    // Tenancy
+    // ---------------------------------------------------------------------
+
+    /**
+     * @return BelongsToMany<Organization, $this, OrganizationUser>
+     */
+    public function organizations(): BelongsToMany
+    {
+        return $this->belongsToMany(Organization::class)
+            ->using(OrganizationUser::class)
+            ->withPivot(['role', 'status', 'joined_at'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Active memberships only (excludes deactivated).
+     *
+     * @return BelongsToMany<Organization, $this, OrganizationUser>
+     */
+    public function activeOrganizations(): BelongsToMany
+    {
+        return $this->organizations()->wherePivot('status', 'active');
+    }
+
+    /**
+     * @return BelongsTo<Organization, $this>
+     */
+    public function currentOrganization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class, 'current_organization_id');
+    }
+
+    public function belongsToOrganization(Organization $organization): bool
+    {
+        return $this->organizations()
+            ->where('organizations.id', $organization->id)
+            ->wherePivot('status', 'active')
+            ->exists();
+    }
+
+    /**
+     * Membership regardless of status (includes deactivated members) — used for
+     * member management, where deactivated members must remain addressable.
+     */
+    public function isMemberOf(Organization $organization): bool
+    {
+        return $this->organizations()
+            ->where('organizations.id', $organization->id)
+            ->exists();
+    }
+
+    /**
+     * The user's organization role in the given organization, or null if not
+     * an active member.
+     */
+    public function roleIn(Organization $organization): ?Role
+    {
+        $membership = $this->organizations()
+            ->where('organizations.id', $organization->id)
+            ->wherePivot('status', 'active')
+            ->first();
+
+        $role = $membership?->getAttribute('pivot')?->role;
+
+        return $role !== null ? Role::tryFrom($role) : null;
+    }
+
+    // ---------------------------------------------------------------------
+    // Authorization (RBAC — ADR-0002)
+    // ---------------------------------------------------------------------
+
+    public function platformRole(): ?Role
+    {
+        return $this->platform_role !== null ? Role::tryFrom($this->platform_role) : null;
+    }
+
+    public function isPlatformSuperAdmin(): bool
+    {
+        return $this->platformRole() === Role::PlatformSuperAdmin;
+    }
+
+    /**
+     * The permission keys the user holds in the given organization.
+     * Memoized per organization for the lifetime of the request to avoid
+     * repeated membership lookups across multiple gate checks.
+     *
+     * @var array<int, list<string>>
+     */
+    private array $permissionCache = [];
+
+    /**
+     * @return list<string>
+     */
+    public function permissionsIn(Organization $organization): array
+    {
+        return $this->permissionCache[$organization->id] ??= $this->resolvePermissionsIn($organization);
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function resolvePermissionsIn(Organization $organization): array
+    {
+        if ($this->isPlatformSuperAdmin()) {
+            return Permission::values();
+        }
+
+        $role = $this->roleIn($organization);
+
+        return $role !== null ? RolePermissions::for($role->value) : [];
     }
 }

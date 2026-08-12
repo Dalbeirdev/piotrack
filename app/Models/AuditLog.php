@@ -17,7 +17,7 @@ class AuditLog extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'tenant_id',
+        'organization_id',
         'actor_id',
         'action',
         'resource_type',
@@ -45,5 +45,13 @@ class AuditLog extends Model
     public function actor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'actor_id');
+    }
+
+    /**
+     * @return BelongsTo<Organization, $this>
+     */
+    public function organization(): BelongsTo
+    {
+        return $this->belongsTo(Organization::class);
     }
 }

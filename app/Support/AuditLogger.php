@@ -6,9 +6,12 @@ use App\Models\AuditLog;
 
 class AuditLogger
 {
+    public function __construct(private CurrentOrganization $currentOrganization) {}
+
     /**
-     * Record an audit event. Actor defaults to the authenticated user;
-     * pass an explicit $actorId for events without one (e.g. failed logins).
+     * Record an audit event. Actor defaults to the authenticated user and
+     * organization to the current tenant; pass explicit values for events that
+     * have neither (e.g. failed logins) or that target a different tenant.
      *
      * @param  array<string, mixed>  $context  Never include secrets or passwords.
      */
@@ -18,12 +21,12 @@ class AuditLogger
         ?int $actorId = null,
         ?string $resourceType = null,
         ?string $resourceId = null,
-        ?int $tenantId = null,
+        ?int $organizationId = null,
     ): AuditLog {
         $request = request();
 
         return AuditLog::create([
-            'tenant_id' => $tenantId,
+            'organization_id' => $organizationId ?? $this->currentOrganization->id(),
             'actor_id' => $actorId ?? $request->user()?->getAuthIdentifier(),
             'action' => $action,
             'resource_type' => $resourceType,

@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Middleware\AssignRequestId;
+use App\Http\Middleware\EnsureHasOrganization;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\SetCurrentOrganization;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -27,8 +30,21 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->prepend(AssignRequestId::class);
 
         $middleware->web(append: [
+            SetCurrentOrganization::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
+        ]);
+
+        // Tenant context MUST be established before route-model binding, so the
+        // tenant scope is active when {team}/{invitation} are resolved —
+        // otherwise binding could load another tenant's record.
+        $middleware->prependToPriorityList(
+            before: SubstituteBindings::class,
+            prepend: SetCurrentOrganization::class,
+        );
+
+        $middleware->alias([
+            'organization' => EnsureHasOrganization::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

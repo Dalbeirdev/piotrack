@@ -987,22 +987,22 @@ AUTH-008,AUTH,Identity & Authentication,Login,Failed-login audit events,Master P
 AUTH-009,AUTH,Identity & Authentication,Recovery,Password reset flow,Master Prompt,§57 Stage 1,Tested,Done,Done,Done,Pending,,Kit reset flow + password_reset audit event
 AUTH-010,AUTH,Identity & Authentication,MFA,"MFA-ready architecture (TOTP enrollment, recovery codes)",Master Prompt,"§21, §57 Stage 1",Tested,Done,Done,Done,Pending,,google2fa TOTP; encrypted secret/recovery codes; enroll/confirm/challenge/recovery/disable + 11 tests; manual QA passed
 AUTH-011,AUTH,Identity & Authentication,API auth,Personal/tenant API keys with create/revoke + audit,Master Prompt,"§20, §22",Tested,Done,Done,Done,Pending,,Sanctum personal tokens; one-time reveal; create/list/revoke + audit; /api/user; ownership + revocation tests; manual QA passed
-TEN-001,TEN,Tenant & Organization Management,Organizations,Organization (tenant) creation,Master Prompt,"§4, §57 Stage 2",Planned,Pending,Pending,Pending,Pending,,
-TEN-002,TEN,Tenant & Organization Management,Organizations,Organization profile and settings,Master Prompt,§6,Planned,Pending,Pending,Pending,Pending,,
-TEN-003,TEN,Tenant & Organization Management,Organizations,Organization deletion with safeguards,Master Prompt,"§27, §40",Planned,Pending,Pending,Pending,Pending,,
-TEN-004,TEN,Tenant & Organization Management,Isolation,Row-level tenant scoping on every business record,Master Prompt,§4,Planned,Pending,Pending,Pending,Pending,,
-TEN-005,TEN,Tenant & Organization Management,Isolation,Tenant context resolution middleware (session/token),Master Prompt,§4,Planned,Pending,Pending,Pending,Pending,,
-TEN-006,TEN,Tenant & Organization Management,Isolation,Automated cross-tenant access tests,Master Prompt,"§4, §33",Planned,Pending,Pending,Pending,Pending,,
-TEN-007,TEN,Tenant & Organization Management,Users,User membership within organizations,Master Prompt,§5,Planned,Pending,Pending,Pending,Pending,,
-TEN-008,TEN,Tenant & Organization Management,Users,"Team invitations (send, accept, expire, revoke, resend)",Master Prompt,"§6, §34",Planned,Pending,Pending,Pending,Pending,,
-TEN-009,TEN,Tenant & Organization Management,Users,Teams / groups,Master Prompt,§57 Stage 2,Planned,Pending,Pending,Pending,Pending,,
-TEN-010,TEN,Tenant & Organization Management,Users,User deactivation and removal,Master Prompt,§20,Planned,Pending,Pending,Pending,Pending,,
-RBAC-001,RBAC,Roles & Permissions,Platform roles,"Platform roles: Super Admin, Platform Admin, Support Admin, Finance Admin, Read-only Support",Master Prompt,§5,Planned,Pending,Pending,Pending,Pending,,
-RBAC-002,RBAC,Roles & Permissions,Org roles,"Org roles: Owner, Admin, Marketing Manager, Sales Manager, Sales Rep, Marketing User, Analyst, Billing Admin, Viewer",Master Prompt,§5,Planned,Pending,Pending,Pending,Pending,,
-RBAC-003,RBAC,Roles & Permissions,Engine,Granular permission registry (resource.action naming),Master Prompt,§5,Planned,Pending,Pending,Pending,Pending,,
-RBAC-004,RBAC,Roles & Permissions,Engine,Backend authorization enforcement on every endpoint,Master Prompt,"§5, §21",Planned,Pending,Pending,Pending,Pending,,
-RBAC-005,RBAC,Roles & Permissions,Engine,"Frontend permission-aware visibility (UX only, not security)",Master Prompt,§5,Planned,Pending,Pending,Pending,Pending,,
-RBAC-006,RBAC,Roles & Permissions,Engine,Permission-change audit events,Master Prompt,§20,Planned,Pending,Pending,Pending,Pending,,
+TEN-001,TEN,Tenant & Organization Management,Organizations,Organization (tenant) creation,Master Prompt,"§4, §57 Stage 2",Tested,Done,Done,Done,Pending,,Org creation makes creator Owner + sets current; onboarding entry
+TEN-002,TEN,Tenant & Organization Management,Organizations,Organization profile and settings,Master Prompt,§6,Tested,Done,Done,Done,Pending,,Org profile settings (name/slug); update audited
+TEN-003,TEN,Tenant & Organization Management,Organizations,Organization deletion with safeguards,Master Prompt,"§27, §40",Tested,Done,Done,Done,Pending,,Delete requires Owner + typed name confirmation; soft-delete; clears members current org
+TEN-004,TEN,Tenant & Organization Management,Isolation,Row-level tenant scoping on every business record,Master Prompt,§4,Tested,Done,Pending,Done,Pending,,BelongsToTenant global scope + auto-stamp + immutable organization_id; applied to Team/Invitation
+TEN-005,TEN,Tenant & Organization Management,Isolation,Tenant context resolution middleware (session/token),Master Prompt,§4,Tested,Done,Pending,Done,Pending,,SetCurrentOrganization middleware (runs before route-model binding via priority list); EnsureHasOrganization guard
+TEN-006,TEN,Tenant & Organization Management,Isolation,Automated cross-tenant access tests,Master Prompt,"§4, §33",Tested,Pending,Pending,Done,Pending,,"Cross-tenant suite: ORM scope, binding 404, list no-leak, audit scoped, withoutTenantScope escape, immutability"
+TEN-007,TEN,Tenant & Organization Management,Users,User membership within organizations,Master Prompt,§5,Tested,Done,Done,Done,Pending,,organization_user pivot with role+status; multi-org membership; roleIn/permissionsIn
+TEN-008,TEN,Tenant & Organization Management,Users,"Team invitations (send, accept, expire, revoke, resend)",Master Prompt,"§6, §34",Tested,Done,Done,Done,Pending,,Invite/accept/expire/revoke/resend; hashed token; email notification; email-match enforced
+TEN-009,TEN,Tenant & Organization Management,Users,Teams / groups,Master Prompt,§57 Stage 2,Tested,Done,Done,Done,Pending,,Teams CRUD + members (org-member validation); tenant-scoped
+TEN-010,TEN,Tenant & Organization Management,Users,User deactivation and removal,Master Prompt,§20,Tested,Done,Done,Done,Pending,,Member removal + deactivate/reactivate; last-Owner protection
+RBAC-001,RBAC,Roles & Permissions,Platform roles,"Platform roles: Super Admin, Platform Admin, Support Admin, Finance Admin, Read-only Support",Master Prompt,§5,Tested,Done,Pending,Done,Pending,,5 platform roles defined; Super Admin global bypass exercised; rest wired for Stage 13
+RBAC-002,RBAC,Roles & Permissions,Org roles,"Org roles: Owner, Admin, Marketing Manager, Sales Manager, Sales Rep, Marketing User, Analyst, Billing Admin, Viewer",Master Prompt,§5,Tested,Done,Done,Done,Pending,,9 org roles with permission maps; role select in members UI
+RBAC-003,RBAC,Roles & Permissions,Engine,Granular permission registry (resource.action naming),Master Prompt,§5,Tested,Done,Pending,Done,Pending,,Permission enum (resource.action) + RolePermissions map; code-defined registry (ADR-0002)
+RBAC-004,RBAC,Roles & Permissions,Engine,Backend authorization enforcement on every endpoint,Master Prompt,"§5, §21",Tested,Done,Pending,Done,Pending,,Gate-based can: middleware on every tenant endpoint; verified 403/200 per role in browser + tests
+RBAC-005,RBAC,Roles & Permissions,Engine,"Frontend permission-aware visibility (UX only, not security)",Master Prompt,§5,Tested,Pending,Done,Done,Pending,,Inertia shares permission list; usePermissions().can() gates nav+controls; verified Viewer nav reduced
+RBAC-006,RBAC,Roles & Permissions,Engine,Permission-change audit events,Master Prompt,§20,Tested,Done,Pending,Done,Pending,,member.role_changed + role/permission-relevant events audited
 ONBD-001,ONBD,Customer Onboarding,Flow,Plan selection during signup,Master Prompt,§6,Planned,Pending,Pending,Pending,Pending,,
 ONBD-002,ONBD,Customer Onboarding,Flow,Company/organization creation step,Master Prompt,§6,Planned,Pending,Pending,Pending,Pending,,
 ONBD-003,ONBD,Customer Onboarding,Flow,Payment and subscription activation step,Master Prompt,§6,Planned,Pending,Pending,Pending,Pending,,
@@ -1069,12 +1069,12 @@ IMEX-001,IMEX,Import / Export,Import,"CSV import: contacts, companies, leads, op
 IMEX-002,IMEX,Import / Export,Import,"Import pipeline: mapping, validation, preview, duplicate detection, error report, history",Master Prompt,§19,Planned,Pending,Pending,Pending,Pending,,
 IMEX-003,IMEX,Import / Export,Export,CSV and Excel exports,Master Prompt,§19,Planned,Pending,Pending,Pending,Pending,,
 IMEX-004,IMEX,Import / Export,Export,PDF report exports,Master Prompt,§19,Planned,Pending,Pending,Pending,Pending,,
-AUDIT-001,AUDIT,Audit Logging,Framework,"Central audit log (actor, tenant, action, resource, before/after, IP/device)",Master Prompt,§20,Planned,Pending,Pending,Pending,Pending,,
-AUDIT-002,AUDIT,Audit Logging,Coverage,"Security events: logins, failed logins, password/MFA changes",Master Prompt,§20,Planned,Pending,Pending,Pending,Pending,,
-AUDIT-003,AUDIT,Audit Logging,Coverage,"Admin events: user/role/permission changes, API keys, impersonation",Master Prompt,§20,Planned,Pending,Pending,Pending,Pending,,
-AUDIT-004,AUDIT,Audit Logging,Coverage,"Data events: deletes, deal changes, campaign changes, exports",Master Prompt,§20,Planned,Pending,Pending,Pending,Pending,,
+AUDIT-001,AUDIT,Audit Logging,Framework,"Central audit log (actor, tenant, action, resource, before/after, IP/device)",Master Prompt,§20,Tested,Done,Pending,Done,Pending,,"audit_logs: actor, organization_id, action, resource, context(before/after), IP/device; append-only"
+AUDIT-002,AUDIT,Audit Logging,Coverage,"Security events: logins, failed logins, password/MFA changes",Master Prompt,§20,Tested,Done,Pending,Done,Pending,,Stage 1 security events (login/failed/password/MFA) recorded
+AUDIT-003,AUDIT,Audit Logging,Coverage,"Admin events: user/role/permission changes, API keys, impersonation",Master Prompt,§20,Tested,Done,Pending,Done,Pending,,"Admin events: org/member/role/team changes, API keys, invitations"
+AUDIT-004,AUDIT,Audit Logging,Coverage,"Data events: deletes, deal changes, campaign changes, exports",Master Prompt,§20,Partially Implemented,Done,Pending,Pending,Pending,,Delete/change events for tenancy entities recorded; CRM/campaign data events arrive with those modules
 AUDIT-005,AUDIT,Audit Logging,Coverage,Billing and subscription change events,Master Prompt,§20,Planned,Pending,Pending,Pending,Pending,,
-AUDIT-006,AUDIT,Audit Logging,Access,Audit log viewer with filters (org + platform level),Master Prompt,"§20, §29",Planned,Pending,Pending,Pending,Pending,,
+AUDIT-006,AUDIT,Audit Logging,Access,Audit log viewer with filters (org + platform level),Master Prompt,"§20, §29",Tested,Done,Done,Done,Pending,,Org-scoped audit viewer with action/actor filters + pagination; permission-gated; platform-level view in Stage 13
 SEC-001,SEC,Security,AppSec,"CSRF, XSS, SQL-injection and SSRF protections",Master Prompt,§21,Planned,Pending,Pending,Pending,Pending,,
 SEC-002,SEC,Security,AppSec,Secure headers and API rate limiting,Master Prompt,§21,Planned,Pending,Pending,Pending,Pending,,
 SEC-003,SEC,Security,AppSec,File-upload validation and scanning,Master Prompt,§21,Planned,Pending,Pending,Pending,Pending,,
