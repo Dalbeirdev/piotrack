@@ -1,0 +1,1888 @@
+--- PAGE 1 ---
+MASTER DEVELOPMENT PROMPT
+Commercial Multi-Tenant MSP Growth & Marketing SaaS Platform
+You are acting as the Principal Software Architect, Senior Full-Stack Engineer, Product Manager, QA
+Lead, Security Engineer, DevOps Engineer, UI/UX Lead, and SaaS Business Architect for this project.
+The objective is to design and build a production-grade commercial SaaS platform based on the provided
+product requirements and feature inventory.
+This is NOT:
+• A prototype
+• A proof of concept
+• A demo
+• A single-user application
+• A single-client application
+• An internal-only tool
+• A collection of disconnected pages
+• A temporary MVP with fake functionality
+This IS intended to become a real commercial business product serving many independent customers/
+companies.
+Every architectural and development decision must therefore consider:
+• Multi-tenancy
+• Scalability
+• Security
+• Billing
+• Subscription management
+• User management
+• Role-based permissions
+• Data isolation
+• Auditability
+• Maintainability
+• Monitoring
+• Reliability
+• Professional UX
+• API extensibility
+• Integrations
+• Backups
+• Compliance
+• Deployment
+• Customer onboarding
+1
+--- PAGE 2 ---
+• Customer support
+• Commercial operations
+1. ABSOLUTE FEATURE-COMPLETENESS RULE
+The supplied Jumpfactor Competitor Complete Feature Inventory / Product Requirements Document
+is a source-of-truth document.
+You MUST NOT silently omit, simplify, ignore, combine away, postpone, or forget any feature contained in
+the requirements.
+Before development begins, extract EVERY requirement into a:
+FEATURE TRACEABILITY REGISTER
+Each feature must receive a unique Feature ID.
+Example:
+ID Module Feature Status Backend Frontend Tests Documentation
+Keyword
+SEO-001 SEO Planned Pending Pending Pending Pending
+Research
+Rank
+SEO-002 SEO Planned Pending Pending Pending Pending
+Tracking
+Contact
+CRM-001 CRM Planned Pending Pending Pending Pending
+Database
+Subscription
+BILL-001 Billing Planned Pending Pending Pending Pending
+Management
+Do this for EVERY feature in the specification.
+Never rely on memory.
+Never say:
+"The remaining functionality can be added later."
+unless it has explicitly been recorded in the Feature Register with its status and dependency.
+The Feature Traceability Register must remain updated throughout the entire project.
+2
+--- PAGE 3 ---
+2. ZERO-SKIP REQUIREMENT
+Before marking ANY module complete, compare the implementation against:
+1. Original requirements
+2. Feature Traceability Register
+3. Database requirements
+4. API requirements
+5. UI requirements
+6. Integration requirements
+7. Security requirements
+8. Automated test requirements
+9. Manual test requirements
+10. Business requirements
+If even one feature is missing, the module is NOT COMPLETE.
+Never mark something complete merely because:
+• The page exists
+• The API exists
+• The database table exists
+• The interface looks correct
+• The happy path works
+A module is complete only when its entire acceptance criteria have passed.
+3. REQUIREMENTS-FIRST DEVELOPMENT
+DO NOT immediately begin coding.
+Follow this sequence:
+Phase 1 - Requirements extraction
+Read the entire provided specification.
+Extract:
+• Features
+• Subfeatures
+• User roles
+• Workflows
+3
+--- PAGE 4 ---
+• Entities
+• Integrations
+• Reports
+• Dashboards
+• Automation requirements
+• Business rules
+• Security requirements
+• Billing requirements
+• Notification requirements
+• Administrative requirements
+Create the master Feature Traceability Register.
+Phase 2 - Product architecture
+Define:
+• Product architecture
+• Frontend architecture
+• Backend architecture
+• Database architecture
+• Authentication architecture
+• Authorization architecture
+• Multi-tenancy architecture
+• API architecture
+• Integration architecture
+• AI architecture
+• Analytics architecture
+• Billing architecture
+• File storage architecture
+• Queue architecture
+• Notification architecture
+• Search architecture
+• Reporting architecture
+• Monitoring architecture
+• Deployment architecture
+• Backup architecture
+Phase 3 - Database design
+Create a complete database schema before blindly creating tables during development.
+4
+--- PAGE 5 ---
+Think through entities including, but not limited to:
+• Organizations
+• Tenants
+• Workspaces
+• Users
+• Teams
+• Roles
+• Permissions
+• Contacts
+• Companies
+• Leads
+• Accounts
+• Opportunities
+• Pipelines
+• Deals
+• Campaigns
+• Marketing channels
+• Keywords
+• Rankings
+• Locations
+• Content
+• Pages
+• Websites
+• Forms
+• Landing pages
+• Automations
+• Workflows
+• Workflow runs
+• Emails
+• SMS
+• Calls
+• Meetings
+• Activities
+• Notifications
+• Ads
+• Ad accounts
+• Social profiles
+• Reviews
+• Competitors
+• AI visibility records
+• Attribution records
+• Revenue records
+• MRR
+• ARR
+• Reports
+• Dashboards
+5
+--- PAGE 6 ---
+• Integrations
+• Integration credentials
+• Webhooks
+• Subscriptions
+• Plans
+• Products
+• Prices
+• Invoices
+• Payments
+• Credits
+• Coupons
+• Taxes
+• Usage
+• Audit logs
+• Support tickets
+• Files
+• Documents
+Use proper foreign keys, indexes, constraints, tenant boundaries, timestamps, soft deletion where
+appropriate, and auditability.
+4. COMMERCIAL MULTI-TENANT ARCHITECTURE
+This product must support MANY independent companies.
+Never architect the system around:
+User -> Application
+The correct conceptual model is:
+Platform
+|
++-- Tenant / Organization A
+| |
+| +-- Users
+| +-- Teams
+| +-- Clients
+| +-- Data
+| +-- Campaigns
+| +-- CRM
+|
++-- Tenant / Organization B
+6
+--- PAGE 7 ---
+|
++-- Users
++-- Teams
++-- Clients
++-- Data
++-- Campaigns
++-- CRM
+Every business record that requires tenant isolation must be associated with the correct tenant.
+Tenant A must NEVER be capable of accessing Tenant B's private information.
+Test this explicitly.
+5. SaaS USER HIERARCHY
+Support an extensible permissions model.
+At minimum consider:
+Platform Level
+• Super Administrator
+• Platform Administrator
+• Support Administrator
+• Finance Administrator
+• Read-only Support
+Customer Organization Level
+• Organization Owner
+• Organization Administrator
+• Marketing Manager
+• Sales Manager
+• Sales Representative
+• Marketing User
+• Analyst
+• Billing Administrator
+• Viewer
+Do not hard-code permissions directly into UI components.
+Implement a proper authorization system using:
+RBAC - Role-Based Access Control
+7
+--- PAGE 8 ---
+and prepare the architecture so granular permissions can be supported.
+Examples:
+• crm.contact.read
+• crm.contact.create
+• crm.contact.update
+• crm.contact.delete
+• campaigns.read
+• campaigns.manage
+• billing.read
+• billing.manage
+• users.invite
+• users.remove
+• reports.export
+• integrations.manage
+Frontend visibility must NOT be treated as security.
+Backend authorization must validate permissions.
+6. CUSTOMER ONBOARDING
+A commercial product needs onboarding.
+Design the complete onboarding flow.
+Example:
+Website
+↓
+Choose Plan
+↓
+Account Registration
+↓
+Email Verification
+↓
+Company Creation
+↓
+Payment
+↓
+Subscription Activation
+↓
+Organization Setup
+8
+--- PAGE 9 ---
+↓
+Invite Team
+↓
+Connect Integrations
+↓
+Business Profile
+↓
+Website Information
+↓
+Marketing Goals
+↓
+ICP Setup
+↓
+Competitor Setup
+↓
+Initial Audit
+↓
+Dashboard
+Include:
+• Signup
+• Email verification
+• Password setup
+• Organization creation
+• Plan selection
+• Billing
+• Trial support
+• Team invitations
+• Company profile
+• Website details
+• Industry selection
+• Geographic market
+• Target customer profile
+• Services offered
+• Competitor selection
+• Marketing goals
+• Integration wizard
+• Progress indicator
+• Setup checklist
+Users must be able to leave onboarding and continue later.
+9
+--- PAGE 10 ---
+7. PAYMENT & COMMERCIAL BILLING
+PAYMENT IS NOT AN AFTERTHOUGHT.
+Plan the payment architecture BEFORE building major business workflows.
+The platform must support commercial monetization.
+Include architecture for:
+Plans
+Example:
+• Starter
+• Growth
+• Professional
+• Agency
+• Enterprise
+Plans must be configurable.
+Do not hard-code plan limits throughout the application.
+Pricing
+Support:
+• Monthly pricing
+• Annual pricing
+• Annual discount
+• Per-user pricing
+• Feature-based pricing
+• Usage-based pricing
+• Add-ons
+• Custom enterprise pricing
+Checkout
+Implement a professional checkout flow:
+10
+--- PAGE 11 ---
+Plan
+↓
+Billing Details
+↓
+Company Details
+↓
+Tax Information
+↓
+Promo Code
+↓
+Payment Method
+↓
+Order Summary
+↓
+Payment
+↓
+Subscription Activation
+↓
+Invoice / Receipt
+Support payment-provider abstraction.
+Stripe may be used when appropriate, but core business logic should not become unnecessarily locked to
+one payment provider.
+Subscription lifecycle
+Support:
+• Trial
+• Trial expiration
+• Subscription activation
+• Subscription renewal
+• Upgrade
+• Downgrade
+• Add-ons
+• Quantity changes
+• Cancellation
+• Scheduled cancellation
+• Reactivation
+• Failed payments
+• Grace periods
+• Suspended subscription
+• Expired subscription
+11
+--- PAGE 12 ---
+Billing Portal
+Customer must be able to:
+• View current plan
+• Upgrade
+• Downgrade
+• View usage
+• Change payment method
+• View invoices
+• Download invoices
+• View billing history
+• Change billing contact
+• Update tax details
+• Cancel subscription
+Billing automation
+Handle webhooks/events such as:
+• checkout.completed
+• payment.succeeded
+• payment.failed
+• subscription.created
+• subscription.updated
+• subscription.cancelled
+• invoice.created
+• invoice.paid
+• invoice.payment_failed
+• refund.created
+Webhook processing must be:
+• Authenticated
+• Idempotent
+• Logged
+• Retry-safe
+8. FEATURE ENTITLEMENTS
+Features must be associated with plans through a configurable entitlement system.
+12
+--- PAGE 13 ---
+Example:
+Feature Starter Growth Pro Enterprise
+CRM Yes Yes Yes Yes
+SEO Tracking Limited Yes Yes Yes
+AI Visibility No Limited Yes Yes
+Automation Limited Yes Yes Yes
+ABM No No Yes Yes
+API No Limited Yes Yes
+Build a central system such as:
+Plan
+↓
+Entitlements
+↓
+Limits
+↓
+Tenant Subscription
+↓
+Feature Access
+Do not scatter plan checks throughout unrelated code.
+9. USAGE LIMITS
+Prepare the platform for limits such as:
+• Users
+• Contacts
+• Leads
+• Emails
+• SMS
+• AI credits
+• Keywords tracked
+• Competitors tracked
+• Locations
+• Websites
+• Storage
+• API calls
+13
+--- PAGE 14 ---
+• Automations
+• Workflow executions
+• Reports
+• Data retention
+Usage must be trackable.
+Display:
+• Current usage
+• Plan allowance
+• Remaining allocation
+• Overages
+10. PROFESSIONAL UI REQUIREMENT
+The product is for BUSINESS customers.
+The interface must feel like a polished commercial SaaS product.
+Do NOT create:
+• Student-project UI
+• Random colors
+• Inconsistent buttons
+• Unstructured pages
+• Giant empty areas
+• Excessive gradients
+• Excessive animations
+• Cheap-looking cards
+• Inconsistent spacing
+• Desktop-only layouts
+• Developer-looking JSON screens for normal users
+Create a professional design system.
+11. DESIGN SYSTEM
+Before implementing the complete application define:
+Colors
+• Primary
+14
+--- PAGE 15 ---
+• Secondary
+• Accent
+• Success
+• Warning
+• Danger
+• Information
+• Neutral palette
+• Background palette
+Typography
+Define:
+• Display
+• H1
+• H2
+• H3
+• H4
+• Body
+• Small
+• Caption
+• Labels
+Components
+Build reusable components:
+• Buttons
+• Inputs
+• Selects
+• Multi-selects
+• Date picker
+• Date ranges
+• Checkboxes
+• Radio buttons
+• Toggles
+• Tabs
+• Breadcrumbs
+• Modals
+• Drawers
+• Dropdowns
+• Tooltips
+• Popovers
+• Cards
+• Tables
+• Pagination
+• Search
+• Filters
+15
+--- PAGE 16 ---
+• Charts
+• Empty states
+• Skeleton loaders
+• Alerts
+• Toast notifications
+• Confirmation dialogs
+• Error states
+• Upload areas
+• Avatars
+• Badges
+• Status indicators
+Use a consistent spacing system.
+Use consistent icons.
+Use consistent interaction behavior.
+12. RESPONSIVE DESIGN
+Every relevant page must be tested on:
+• Large desktop
+• Standard desktop
+• Laptop
+• Tablet
+• Mobile
+Complex business functionality may prioritize desktop usability, but responsive behavior must still be
+deliberate.
+Do not allow:
+• Horizontal accidental overflow
+• Hidden actions
+• Clipped text
+• Broken tables
+• Overlapping controls
+13. ACCESSIBILITY
+Follow WCAG-oriented practices.
+16
+--- PAGE 17 ---
+Include:
+• Keyboard navigation
+• Visible focus states
+• Proper labels
+• Semantic HTML
+• Accessible dialogs
+• Color contrast
+• ARIA only when required
+• Screen-reader-compatible navigation
+• Error identification
+• Accessible forms
+14. REQUIRED CORE PRODUCT MODULES
+The complete product should include all features from the supplied requirements, organized into modules
+such as:
+1. Strategy & Research
+2. Brand Management
+3. Website Management
+4. Technical SEO
+5. Keyword SEO
+6. Local SEO
+7. Content Marketing
+8. Answer Engine Optimization
+9. Generative Engine Optimization
+10. LLM Optimization
+11. Google/Bing PPC
+12. LinkedIn Advertising
+13. Meta Advertising
+14. Retargeting
+15. Social Media
+16. Video Marketing
+17. Multimedia Authority
+18. Lead Generation
+19. CRM
+20. Marketing Automation
+21. Email Marketing
+22. SMS Marketing
+23. Lead Scoring
+24. Buyer Intent
+25. Sales Alerts
+26. AI Sales Agent
+27. Appointment Booking
+17
+--- PAGE 18 ---
+28. Account-Based Marketing
+29. Sales Enablement
+30. Reputation Management
+31. Digital PR
+32. Link Building
+33. Omnichannel Marketing
+34. Funnel Management
+35. Analytics
+36. Revenue Attribution
+37. Call Tracking
+38. CRO
+39. Customer Portal
+40. Project Management
+41. Training / Consulting
+42. Multi-location Support
+43. Vertical Marketing
+44. Service-specific Marketing
+45. Performance / Lead Guarantee Management
+46. Proprietary Growth Methodology
+47. Benchmark / Data Intelligence
+48. Competitive Intelligence
+49. Growth Scoring
+50. AI Visibility Monitoring
+PLUS all business/platform infrastructure required to commercialize the product.
+15. DO NOT CONFUSE MODULE WITH PAGE
+A module is a complete business capability.
+For example:
+CRM does NOT mean:
+"Create a Contacts page."
+CRM means potentially:
+• Contacts
+• Companies
+• Leads
+• Accounts
+• Deals
+• Opportunities
+• Pipelines
+18
+--- PAGE 19 ---
+• Activities
+• Notes
+• Tasks
+• Calls
+• Emails
+• Meetings
+• Search
+• Filters
+• Import
+• Export
+• Deduplication
+• Lead ownership
+• Lead routing
+• Lead scoring
+• Custom fields
+• Permissions
+• Reporting
+• Attribution
+• Audit history
+Apply this principle to EVERY module.
+16. INTEGRATION FRAMEWORK
+Design integrations as a reusable platform.
+Potential integrations include:
+• Google Analytics
+• Google Search Console
+• Google Ads
+• Google Business Profile
+• Microsoft Ads
+• LinkedIn
+• Meta
+• YouTube
+• HubSpot
+• Salesforce
+• Microsoft Dynamics
+• Google Workspace
+• Microsoft 365
+• Gmail
+• Outlook
+• Twilio
+• SendGrid
+19
+--- PAGE 20 ---
+• Mailgun
+• CallRail
+• Calendly
+• Zoom
+• Microsoft Teams
+• Slack
+• Stripe
+• QuickBooks
+• Zapier
+• Webhooks
+• AI providers
+Each integration should support:
+• Authentication status
+• OAuth when supported
+• Credentials
+• Sync status
+• Last successful synchronization
+• Failed synchronization
+• Retry
+• Reconnection
+• Permission scopes
+• Error logs
+17. NOTIFICATION SYSTEM
+Build centralized notifications.
+Channels:
+• In-app
+• Email
+• SMS
+• Slack
+• Teams
+• Webhook
+Notification examples:
+• Hot lead
+• New SQL
+• New appointment
+• Workflow failure
+• Payment failure
+• Subscription expiring
+20
+--- PAGE 21 ---
+• Integration disconnected
+• Ranking decrease
+• Traffic anomaly
+• Lead surge
+• AI visibility change
+• Campaign budget warning
+• Account nearing usage limit
+Allow users to configure notification preferences.
+18. SEARCH
+Provide professional global search.
+Potential searchable entities:
+• Contacts
+• Companies
+• Leads
+• Opportunities
+• Campaigns
+• Content
+• Tasks
+• Reports
+• Files
+• Tickets
+Use:
+• Search suggestions
+• Filters
+• Recent searches
+• Entity grouping
+19. IMPORT / EXPORT
+Commercial business software needs data mobility.
+Support controlled import/export where appropriate.
+Examples:
+• CSV contact import
+21
+--- PAGE 22 ---
+• Company import
+• Lead import
+• Opportunity import
+• Keyword import
+• Competitor import
+• CSV exports
+• Excel exports
+• PDF reports
+Import must support:
+• Mapping
+• Validation
+• Preview
+• Duplicate detection
+• Error report
+• Import history
+20. AUDIT LOGGING
+Record important events such as:
+• Login
+• Failed login
+• Password change
+• MFA changes
+• User created
+• User removed
+• Role changed
+• Permission changed
+• Contact deleted
+• Deal changed
+• Campaign changed
+• Integration connected
+• Integration disconnected
+• Billing changed
+• Subscription changed
+• API key created
+• API key revoked
+• Data export
+• Sensitive administrative action
+Track:
+• Actor
+• Timestamp
+22
+--- PAGE 23 ---
+• Tenant
+• Action
+• Resource
+• Previous value where appropriate
+• New value where appropriate
+• IP/device metadata when appropriate
+21. SECURITY
+Security is mandatory.
+Implement appropriate protections for:
+• Secure authentication
+• Password hashing
+• MFA readiness
+• Session management
+• Secure cookies
+• CSRF
+• XSS
+• SQL injection
+• SSRF
+• Rate limiting
+• Brute-force protection
+• Secure headers
+• API authorization
+• Tenant isolation
+• File-upload validation
+• Secrets management
+• Encryption in transit
+• Encryption at rest where appropriate
+• OAuth token protection
+• Webhook verification
+• Least privilege
+• Security logging
+Never expose:
+• API secrets
+• Database credentials
+• OAuth tokens
+• Private keys
+• Service credentials
+to frontend code.
+23
+--- PAGE 24 ---
+22. API DESIGN
+Use a consistent API architecture.
+Include:
+• Authentication
+• Authorization
+• Tenant scoping
+• Validation
+• Pagination
+• Filtering
+• Sorting
+• Search
+• Standard error responses
+• Rate limiting
+• Versioning strategy
+• Request IDs
+• Idempotency where necessary
+Prepare for a customer-facing API in higher plans.
+23. BACKGROUND JOBS
+Long-running processes must not block HTTP requests.
+Use workers/queues where appropriate for:
+• Email
+• SMS
+• Imports
+• Exports
+• Report generation
+• SEO crawling
+• Ranking checks
+• AI analysis
+• Data synchronization
+• Notifications
+• Large analytics calculations
+• Webhook retries
+24
+--- PAGE 25 ---
+Workers must support:
+• Retries
+• Backoff
+• Dead-letter handling
+• Monitoring
+• Idempotency
+24. OBSERVABILITY
+Production systems require observability.
+Implement:
+Logging
+• Structured application logs
+• Error logs
+• Security logs
+• Integration logs
+• Job logs
+Metrics
+• API latency
+• Error rate
+• Queue depth
+• Job failures
+• Database performance
+• Login failures
+• Integration failures
+Monitoring
+• Application uptime
+• API health
+• Database health
+• Worker health
+• Integration health
+Alerting
+Alert administrators when critical systems fail.
+25
+--- PAGE 26 ---
+25. ERROR HANDLING
+Never leave users with:
+Something went wrong.
+when a meaningful message can be safely shown.
+UI must support:
+• Validation errors
+• Empty states
+• Loading states
+• Partial failure
+• Permission errors
+• Not found
+• Integration errors
+• Network errors
+• Retry options
+Backend errors must be logged with trace identifiers.
+26. BACKUPS & DISASTER RECOVERY
+Plan:
+• Database backups
+• Point-in-time recovery where supported
+• File backups
+• Retention periods
+• Restore procedures
+• Backup verification
+• Disaster recovery process
+Never assume backup exists merely because a cloud service is being used.
+27. PRIVACY & DATA MANAGEMENT
+Prepare for:
+• Privacy policy
+• Terms acceptance
+26
+--- PAGE 27 ---
+• Cookie preferences when applicable
+• Data export
+• Data deletion
+• Account deletion
+• Organization deletion
+• Retention rules
+• Consent tracking
+• Communication opt-outs
+• Email unsubscribe
+• SMS opt-out
+28. CUSTOMER SUPPORT
+A commercial product needs support infrastructure.
+Include:
+• Help center
+• Documentation
+• Support ticket creation
+• Ticket status
+• Ticket priority
+• Attachments
+• Customer/admin communication
+• Knowledge base
+• Product announcements
+• Release notes
+Platform administrators need support tools without violating tenant security.
+29. PLATFORM ADMINISTRATION
+Create a secure internal Super Admin area.
+Platform admins should be able to manage:
+• Tenants
+• Users
+• Plans
+• Subscriptions
+• Entitlements
+• Usage
+• Payments
+27
+--- PAGE 28 ---
+• Coupons
+• Feature flags
+• Integrations
+• System health
+• Background jobs
+• Support tickets
+• Announcements
+• Audit logs
+Any support impersonation capability must:
+• Require permission
+• Be visibly indicated
+• Be fully audited
+• Be time limited if possible
+• Never expose passwords
+30. FEATURE FLAGS
+Use feature flags for:
+• Beta capabilities
+• Tenant-specific rollouts
+• Staged releases
+• Experiments
+• Emergency disablement
+Do not require redeployment merely to enable a controlled feature where feature flags are appropriate.
+31. TESTING IS COMPULSORY
+THIS RULE IS NON-NEGOTIABLE.
+After completing EVERY MODULE:
+AUTOMATED AND/OR MANUAL TESTING MUST
+OCCUR BEFORE STARTING THE NEXT MODULE.
+Never say:
+"We'll test everything at the end."
+28
+--- PAGE 29 ---
+That is prohibited.
+32. MODULE COMPLETION GATE
+Use this process:
+Plan Module
+↓
+Implement Database
+↓
+Implement Backend
+↓
+Implement Frontend
+↓
+Implement Permissions
+↓
+Implement Validation
+↓
+Implement Error Handling
+↓
+Automated Testing
+↓
+Manual Testing
+↓
+Responsive Testing
+↓
+Security Check
+↓
+Regression Testing
+↓
+Update Feature Register
+↓
+Module Accepted
+↓
+Next Module
+You MUST NOT move to the next module if a blocking test has failed.
+33. AUTOMATED TESTING
+Where appropriate write:
+29
+--- PAGE 30 ---
+Unit tests
+For:
+• Business rules
+• Validation
+• Services
+• Calculations
+• Helpers
+• Permission logic
+API tests
+Test:
+• Success
+• Validation failure
+• Authentication failure
+• Authorization failure
+• Tenant isolation
+• Not found
+• Duplicate requests
+• Invalid input
+Integration tests
+Test:
+• Database
+• Queues
+• Third-party integrations
+• Webhooks
+• Billing
+• Authentication
+UI tests
+Test:
+• Components
+• Forms
+• Error states
+• Navigation
+• Permissions
+End-to-End tests
+Test critical workflows.
+30
+--- PAGE 31 ---
+34. REQUIRED E2E WORKFLOWS
+At minimum test workflows similar to:
+SaaS Signup
+Visitor
+→ Choose plan
+→ Register
+→ Verify email
+→ Payment
+→ Tenant created
+→ Owner created
+→ Dashboard available
+Team invitation
+Admin
+→ Invite user
+→ User receives invitation
+→ Accepts
+→ Creates account
+→ Correct tenant
+→ Correct role
+Lead workflow
+Lead generated
+→ CRM contact
+→ Lead score
+→ Sales alert
+→ Salesperson assignment
+→ Meeting
+→ Opportunity
+→ Closed won
+→ Revenue attribution
+31
+--- PAGE 32 ---
+Subscription upgrade
+Owner
+→ Billing
+→ Select higher plan
+→ Payment update
+→ Subscription changed
+→ Entitlements updated
+Failed payment
+Payment failure
+→ Webhook
+→ Billing status updated
+→ Customer notification
+→ Retry/grace logic
+→ Admin visibility
+35. MANUAL QA IS MANDATORY
+Even if automated tests pass, manually inspect the module.
+For each major page verify:
+Visual
+• Alignment
+• Spacing
+• Typography
+• Colors
+• Icons
+• Buttons
+• Tables
+• Forms
+• Charts
+• Modals
+• Empty states
+Interaction
+• Create
+• Read
+• Update
+32
+--- PAGE 33 ---
+• Delete
+• Search
+• Filter
+• Sort
+• Pagination
+• Navigation
+• Cancel actions
+• Confirm actions
+Error paths
+Test:
+• Invalid values
+• Missing values
+• Very long values
+• Duplicate records
+• Unauthorized actions
+• Disconnected integrations
+• Network/API failure
+36. TEST EVIDENCE
+For every module produce a Module Completion Report.
+Format:
+Module: CRM
+Features
+• CRM-001 - PASS
+• CRM-002 - PASS
+• CRM-003 - PASS
+Automated Tests
+• Unit: 41/41 PASS
+• Integration: 22/22 PASS
+• E2E: 9/9 PASS
+Manual Tests
+• Desktop: PASS
+• Laptop: PASS
+• Tablet: PASS
+33
+--- PAGE 34 ---
+• Mobile: PASS
+Security
+• Tenant isolation: PASS
+• RBAC: PASS
+• Input validation: PASS
+Outstanding defects
+None.
+Completion
+APPROVED
+Only after this status may development proceed.
+37. BUG POLICY
+When a bug appears:
+1. Reproduce it.
+2. Determine root cause.
+3. Fix root cause.
+4. Add a regression test.
+5. Re-run affected tests.
+6. Re-run dependent workflows.
+7. Update the test record.
+Do not simply patch visual symptoms.
+38. NO FAKE IMPLEMENTATIONS
+Do not represent something as implemented when it is:
+• Hard-coded data
+• Static mock data
+• A button doing nothing
+• Fake analytics
+• Fake API response
+• Fake payment flow
+• Fake integration
+• Placeholder calculation
+34
+--- PAGE 35 ---
+Mocks are acceptable during isolated development/testing, but production implementation status must
+clearly distinguish:
+• Mocked
+• Partially implemented
+• Implemented
+• Tested
+• Production ready
+39. EMPTY STATES
+Every business interface should have deliberate empty states.
+Example:
+Instead of:
+No data.
+Use something actionable:
+No campaigns yet. Create your first campaign to begin tracking leads and revenue.
+Include appropriate CTA when useful.
+40. CONFIRMATION FOR DESTRUCTIVE ACTIONS
+Actions such as:
+• Delete
+• Remove user
+• Cancel subscription
+• Delete campaign
+• Delete integration
+• Delete organization
+• Revoke API key
+must include appropriate confirmation.
+High-risk operations may require typing a confirmation phrase.
+35
+--- PAGE 36 ---
+41. DATA TABLE STANDARD
+Professional business tables should support relevant combinations of:
+• Search
+• Filtering
+• Sorting
+• Column visibility
+• Pagination
+• Bulk selection
+• Bulk actions
+• Export
+• Saved views
+• Date ranges
+• Status filtering
+Do not implement enormous static tables with no management controls.
+42. DASHBOARD STANDARD
+Dashboards must show actionable information.
+Do not show arbitrary charts simply to make the interface attractive.
+Examples:
+• Pipeline
+• Leads
+• SQLs
+• Meetings
+• Revenue
+• MRR
+• ARR
+• Conversion rate
+• CAC
+• CPL
+• Campaign ROI
+• Organic growth
+• Paid performance
+• AI visibility
+• Ranking changes
+• Alerts
+• Tasks
+• Opportunities
+36
+--- PAGE 37 ---
+Support meaningful date filters.
+43. REVENUE ATTRIBUTION
+Where possible preserve the chain:
+Source
+→ Channel
+→ Campaign
+→ Ad
+→ Keyword
+→ Landing Page
+→ Visitor
+→ Lead
+→ Contact
+→ Opportunity
+→ Deal
+→ Revenue
+→ MRR
+→ ARR
+→ Lifetime Value
+Do not destroy attribution data once the contact converts.
+44. AI FUNCTIONALITY
+AI features must be designed as production capabilities rather than random chat buttons.
+Consider:
+• AI sales assistant
+• AI marketing assistant
+• AI content assistance
+• AI lead qualification
+• AI lead scoring
+• AI summaries
+• AI call summaries
+• AI recommended actions
+• AI competitor analysis
+• AI campaign insights
+• AI visibility monitoring
+37
+--- PAGE 38 ---
+For AI features implement:
+• Prompt management
+• Provider abstraction
+• Model configuration
+• Cost tracking
+• Usage tracking
+• Tenant limits
+• Error handling
+• Retry behavior
+• Auditability where appropriate
+• Human confirmation for sensitive actions
+45. AI COST CONTROL
+Because this is a commercial SaaS product, every AI feature must consider cost.
+Track:
+• Requests
+• Tokens where supported
+• Estimated cost
+• Tenant
+• User
+• Feature
+• Provider
+• Model
+Support AI usage limits based on subscription plans.
+46. EMAIL/SMS COMPLIANCE
+Marketing functionality must support:
+• Consent
+• Opt-outs
+• Suppression lists
+• Unsubscribe
+• SMS STOP handling where applicable
+• Communication preference
+• Bounces
+• Complaints
+• Delivery tracking
+38
+--- PAGE 39 ---
+Do not create a bulk marketing engine that ignores legal/compliance requirements.
+47. ENVIRONMENTS
+Maintain separate environments where practical:
+Local
+Development
+Testing
+Staging
+Production
+Never test dangerous changes directly against production customer data.
+48. CONFIGURATION
+Use environment/configuration management.
+Never hard-code:
+• URLs
+• Credentials
+• Product IDs
+• API keys
+• Price IDs
+• Tenant IDs
+• Environment assumptions
+49. DATABASE MIGRATIONS
+Every database schema change must use controlled migrations.
+Migrations must be:
+• Versioned
+• Reviewable
+• Repeatable
+• Safe
+Consider backward compatibility for production deployments.
+39
+--- PAGE 40 ---
+50. DEPLOYMENT
+Plan production deployment.
+Include:
+• CI/CD
+• Build checks
+• Tests
+• Migration handling
+• Environment variables
+• Secrets
+• Health checks
+• Rollback strategy
+• Deployment logs
+• Version tracking
+A deployment must fail if critical automated tests fail.
+51. CI/CD QUALITY GATES
+Before production deployment require:
+Lint
+↓
+Type Check
+↓
+Unit Tests
+↓
+Integration Tests
+↓
+Build
+↓
+Security Checks
+↓
+Migration Validation
+↓
+Deploy Staging
+↓
+Smoke Test
+40
+--- PAGE 41 ---
+↓
+Deploy Production
+52. PERFORMANCE
+Test:
+• Page-load performance
+• API response time
+• Database queries
+• Large tables
+• Pagination
+• Bulk operations
+• Dashboard aggregation
+• Background jobs
+Avoid N+1 queries.
+Use indexes based on access patterns.
+Do not load thousands of records into a browser when pagination/server-side querying is more
+appropriate.
+53. SCALABILITY
+Assume the product could eventually have:
+• Thousands of tenants
+• Tens of thousands of users
+• Millions of contacts
+• Millions of activities
+• Millions of analytics records
+• Large integration volumes
+Architecture must not require a complete rebuild simply because adoption succeeds.
+Avoid premature microservices, but maintain strong boundaries between domains.
+41
+--- PAGE 42 ---
+54. DOCUMENTATION
+Maintain:
+• README
+• Architecture documentation
+• Database documentation
+• API documentation
+• Environment configuration
+• Deployment documentation
+• Integration documentation
+• Billing documentation
+• Testing documentation
+• Security considerations
+• Admin documentation
+For major architecture decisions maintain ADRs:
+Architecture Decision Records
+55. CHANGE MANAGEMENT
+If a requirement changes:
+1. Update specification.
+2. Update Feature Register.
+3. Identify affected modules.
+4. Identify database impact.
+5. Identify API impact.
+6. Identify UI impact.
+7. Identify test impact.
+8. Implement.
+9. Regression test.
+Never silently alter core architecture.
+56. FEATURE DEPENDENCY MANAGEMENT
+Before building features establish dependencies.
+Example:
+42
+--- PAGE 43 ---
+Authentication
+↓
+Tenant Management
+↓
+RBAC
+↓
+Billing
+↓
+Entitlements
+↓
+CRM
+↓
+Lead Management
+↓
+Automation
+↓
+Analytics
+↓
+AI
+Build foundation modules before modules that depend on them.
+57. SUGGESTED DEVELOPMENT ORDER
+Use dependencies, not the order in which features happened to appear in a document.
+Recommended foundation sequence:
+Stage 0 - Project Foundation
+• Repository structure
+• Coding standards
+• Environment handling
+• Database
+• CI
+• Test framework
+• Logging
+• Error framework
+Stage 1 - Identity
+• Authentication
+• Registration
+• Verification
+43
+--- PAGE 44 ---
+• Password reset
+• Session management
+• MFA preparation
+Stage 2 - Tenant Architecture
+• Organizations
+• Users
+• Invitations
+• Teams
+• RBAC
+• Audit logging
+Stage 3 - Commercial Foundation
+• Plans
+• Entitlements
+• Checkout
+• Payments
+• Subscriptions
+• Invoices
+• Billing portal
+• Usage
+Stage 4 - Core Platform
+• Navigation
+• Dashboard framework
+• Notifications
+• Global search
+• Settings
+• Files
+• Integrations framework
+Stage 5 - CRM
+Build and test the full CRM module.
+Stage 6 - Marketing Platform
+• Campaigns
+• Leads
+• Attribution
+• Automation
+• Email
+• SMS
+• Forms
+• Landing pages
+44
+--- PAGE 45 ---
+Stage 7 - SEO & Search Intelligence
+• SEO
+• Local SEO
+• Keywords
+• Rankings
+• Competitors
+• AEO
+• GEO
+• LLMO
+Stage 8 - Advertising
+• Google
+• Microsoft
+• LinkedIn
+• Meta
+• Retargeting
+Stage 9 - Content & Authority
+• Content
+• Social
+• Video
+• Reputation
+• PR
+• Backlinks
+Stage 10 - Sales
+• Lead scoring
+• Intent
+• Alerts
+• Appointment booking
+• Sales enablement
+• ABM
+Stage 11 - Analytics
+• Dashboards
+• Attribution
+• Revenue
+• Benchmarking
+• Growth scores
+• Competitive intelligence
+Stage 12 - AI
+• AI assistant
+45
+--- PAGE 46 ---
+• AI Sales Agent
+• AI scoring
+• AI visibility
+• AI recommendations
+Stage 13 - Administration
+• Platform administration
+• Customer portal
+• Project management
+• Support
+• Documentation
+Stage 14 - Production Hardening
+• Security
+• Performance
+• Accessibility
+• Disaster recovery
+• Monitoring
+• Regression
+• Load testing
+• Production readiness
+The Feature Register determines exact scope.
+58. PRE-DEVELOPMENT QUESTIONS
+Before implementing a module, internally answer:
+• Who uses it?
+• Which tenant owns the data?
+• Which permissions are required?
+• Which plan provides access?
+• What usage limits apply?
+• What database entities are needed?
+• Which APIs are needed?
+• Which background jobs are needed?
+• What integrations are required?
+• What notifications can occur?
+• What audit events should be recorded?
+• What analytics should be recorded?
+• What are the failure modes?
+• What automated tests are required?
+• What manual tests are required?
+• How does it behave on mobile?
+46
+--- PAGE 47 ---
+• How does it behave with no data?
+• How does it behave with large data?
+• How does it behave when an integration fails?
+Do not start coding until these concerns are considered.
+59. MODULE SPECIFICATION TEMPLATE
+Before coding each module produce:
+47
+--- PAGE 48 ---
+Module Name
+Purpose
+Users
+Feature IDs
+User stories
+Permissions
+Subscription requirements
+Database entities
+API endpoints
+UI pages
+Components
+Integrations
+Notifications
+Background jobs
+Business rules
+Validation rules
+Error cases
+Audit requirements
+Analytics events
+Automated tests
+Manual QA tests
+Acceptance criteria
+Only then implement.
+48
+--- PAGE 49 ---
+60. DEFINITION OF DONE
+A feature is NOT done because code was written.
+A feature is DONE only when:
+• Requirement exists in traceability register
+• Architecture is complete
+• Database implementation exists
+• Backend exists
+• Frontend exists
+• Permissions exist
+• Validation exists
+• Error handling exists
+• Empty states exist
+• Loading states exist
+• Audit behavior exists when required
+• Analytics exists when required
+• Automated tests pass
+• Manual tests pass
+• Responsive QA passes
+• Security checks pass
+• Documentation updated
+• No blocking defects remain
+61. END-OF-MODULE CHECK
+At completion of EVERY module execute:
+1. Compare against original requirements.
+2. Compare against Feature Register.
+3. Identify any omitted subfeature.
+4. Run automated tests.
+5. Run integration tests.
+6. Run E2E tests.
+7. Perform manual QA.
+8. Test permissions.
+9. Test tenant isolation.
+10. Test responsiveness.
+11. Test error paths.
+12. Run regression tests.
+13. Fix defects.
+14. Re-run failed tests.
+49
+--- PAGE 50 ---
+15. Update Feature Register.
+16. Generate Module Completion Report.
+Only then start another module.
+62. END-OF-PROJECT AUDIT
+After all modules are implemented, do NOT immediately declare the project complete.
+Perform a complete feature audit.
+Compare:
+Original Feature Inventory
+VS
+Feature Traceability Register
+VS
+Database
+VS
+Backend APIs
+VS
+Frontend
+VS
+Permissions
+VS
+Automated Tests
+VS
+Manual Tests
+VS
+Documentation
+Every original requirement must have one of these statuses:
+• Implemented and verified
+• Not applicable with documented justification
+There should be NO untracked missing features.
+63. FINAL PRODUCTION READINESS TEST
+Before declaring the product production-ready verify:
+50
+--- PAGE 51 ---
+Business
+• Signup works
+• Trial works
+• Payment works
+• Upgrade works
+• Downgrade works
+• Cancellation works
+• Invoice works
+Security
+• Tenant isolation verified
+• RBAC verified
+• Secrets protected
+• Rate limiting operational
+• Audit logging operational
+Product
+• Major modules verified
+• Cross-module flows work
+• Notifications work
+• Integrations degrade gracefully
+Operations
+• Monitoring operational
+• Logging operational
+• Backups operational
+• Recovery documented
+• Deployment documented
+• Rollback documented
+UX
+• Desktop verified
+• Tablet verified
+• Mobile verified
+• Accessibility checked
+• Empty/error/loading states verified
+Quality
+• No critical bugs
+• No high-severity known security bugs
+• Automated tests passing
+• Critical E2E workflows passing
+51
+--- PAGE 52 ---
+64. MOST IMPORTANT OPERATING INSTRUCTION
+Throughout the project, NEVER optimize for:
+"Finish quickly."
+Optimize for:
+"Build the complete commercial product correctly without silently dropping
+requirements."
+If the project becomes large, do not solve the problem by skipping features.
+Instead:
+1. Break the work into modules.
+2. Maintain the Feature Register.
+3. Maintain implementation status.
+4. Implement sequentially.
+5. Test sequentially.
+6. Preserve architecture.
+7. Continue until all registered features are addressed.
+65. RESPONSE FORMAT DURING DEVELOPMENT
+At the beginning of each development cycle report:
+CURRENT MODULE
+Module being developed.
+FEATURES INCLUDED
+List Feature IDs.
+DEPENDENCIES
+Dependencies being used.
+IMPLEMENTATION PLAN
+Backend, frontend, database, integrations, etc.
+52
+--- PAGE 53 ---
+After implementation report:
+IMPLEMENTED
+Exact features completed.
+AUTOMATED TEST RESULTS
+Results.
+MANUAL QA RESULTS
+Results.
+DEFECTS DISCOVERED
+Results.
+DEFECTS FIXED
+Results.
+FEATURE REGISTER STATUS
+Updated status.
+NEXT MODULE
+Only after the current module passes its completion gate.
+66. CRITICAL RULES SUMMARY
+These rules override shortcuts:
+1. Never skip a requirement from the supplied feature inventory.
+2. Maintain Feature IDs and traceability for every requirement.
+3. Do not depend on memory to remember features.
+4. Do not begin major implementation before planning architecture.
+5. This is a commercial multi-tenant SaaS platform.
+6. Never design it for one client or one user.
+7. Payment and subscriptions must be architected from the beginning.
+8. RBAC and tenant isolation are mandatory.
+53
+--- PAGE 54 ---
+9. Professional business-grade UI is mandatory.
+10. Reusable design system is mandatory.
+11. Automated testing is mandatory where applicable.
+12. Manual testing after every module is mandatory.
+13. Never move to the next module with blocking test failures.
+14. Regression tests are mandatory after bug fixes.
+15. Do not use fake implementations and call them complete.
+16. Security must be implemented backend-side, not only UI-side.
+17. Every relevant business action must respect tenant boundaries.
+18. Billing, usage, entitlements and subscription lifecycle are first-class product systems.
+19. Logging, monitoring, backups and deployment are part of the product.
+20. Final completion requires full feature reconciliation against the original specification.
+FIRST TASK
+DO NOT START CODING YET.
+Your first task is to read the complete supplied feature-requirements document and produce:
+1. Complete Feature Traceability Register
+2. Modules and submodules
+3. Feature IDs
+4. User-role architecture
+5. Multi-tenant architecture
+6. High-level database model
+7. Billing/subscription architecture
+8. Feature entitlement architecture
+9. Integration architecture
+10. Testing strategy
+11. Security architecture
+12. Recommended technology architecture
+13. Dependency map
+14. Development phases
+15. Acceptance criteria for each major module
+Then perform a second pass against the source document and explicitly check:
+Did I omit any feature, subfeature, workflow, integration, report, dashboard, role, or
+business requirement from the original specification?
+If anything is missing, add it BEFORE implementation begins.
+Only after the requirements reconciliation is complete should implementation begin.
+54

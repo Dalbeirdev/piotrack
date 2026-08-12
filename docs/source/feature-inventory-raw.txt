@@ -1,0 +1,1235 @@
+--- PAGE 1 ---
+COMPETITOR PRODUCT BLUEPRINT
+Jumpfactor Competitor
+Complete Feature Inventory
+MSP marketing, revenue operations, AI visibility, automation, sales
+enablement, and attribution capabilities
+50 12 200+
+Capability areas Core product modules Individual features
+Purpose. A complete, structured inventory of the publicly visible capabilities needed to match or exceed
+Jumpfactor as an MSP-focused growth provider. It is designed as a product requirements and go-to-market
+planning document, not as a copy of Jumpfactor's proprietary systems.
+Scope note. This inventory reflects public-facing capabilities discussed in the competitive analysis. A
+vendor may also operate internal or proprietary features that are not publicly documented.
+Prepared: August 12, 2026
+MSP Growth Platform Feature Inventory | Page 1
+--- PAGE 2 ---
+Executive Summary
+The strongest competitive opportunity is not to build another generic digital marketing agency. The stronger
+product concept is an MSP Growth OS: a technology-enabled managed growth service that connects
+marketing activity directly to qualified pipeline, MRR, and closed revenue.
+Module Capability Primary outcome
+Research, ICP, positioning, goals,
+1 Strategy
+roadmap
+Identity, messaging, proof, sales
+2 Brand
+collateral
+MSP web design, CRO, maintenance,
+3 Website
+performance
+4 Search SEO, local SEO, technical SEO, Maps
+5 AI Search AEO, GEO, LLMO, AI visibility tracking
+Content, social, video, PR, links,
+6 Authority
+reputation
+Google, Bing, LinkedIn, Meta,
+7 Paid Media
+retargeting
+Lead generation, scoring, intent,
+8 Pipeline
+booking, ABM
+Contacts, opportunities, attribution,
+9 CRM
+lifecycle
+10 Automation Email, SMS, workflows, AI sales agent
+Enablement, proposals, training,
+11 Sales
+follow-up
+Dashboards, revenue attribution,
+12 Analytics
+benchmarks
+Recommended Competitive Position
+• Transparent pricing and clear packaged tiers.
+• Full-funnel revenue attribution from keyword and campaign to closed MRR.
+• AI visibility measurement across ChatGPT, Gemini, Perplexity, Copilot, and Google AI experiences.
+• AI-assisted sales qualification, follow-up, CRM updating, and appointment booking.
+• MSP-specific benchmark intelligence for CPL, conversion, pipeline, and sales velocity.
+• One unified dashboard for traffic, leads, SQLs, meetings, pipeline, MRR, revenue, and ROI.
+MSP Growth Platform Feature Inventory | Page 2
+--- PAGE 3 ---
+Detailed Feature Inventory
+The following 50 capability areas form the full competitor feature inventory. Each section can be treated as
+a product module, managed service workstream, or implementation backlog.
+1. Marketing Strategy & Research
+Research and assessment
+• MSP marketing assessment
+• Current marketing audit
+• Competitor analysis
+• Market competitiveness analysis
+• Total Addressable Market analysis
+• Ideal Customer Profile development
+• MSP buyer persona development
+• Buyer pain-point research
+• Buyer journey mapping
+• Search-intent research
+• Keyword opportunity analysis
+• Geographic market analysis
+• Vertical-market analysis
+• Service-line opportunity analysis
+• Competitive positioning research
+• Messaging analysis
+• Website conversion audit
+• SEO audit
+• PPC audit
+• Funnel audit
+• CRM and automation audit
+• Lead-generation gap analysis
+Planning and targets
+• Revenue opportunity modeling
+• Marketing roadmap creation
+• Quarterly campaign strategy
+• Campaign prioritization
+• Marketing KPI definition
+• Revenue and MRR goals
+• Lead-volume targets
+• Cost-per-lead targets
+• SQL targets
+• ROI targets
+2. MSP Branding
+Brand strategy
+• Brand discovery
+• Competitor brand analysis
+MSP Growth Platform Feature Inventory | Page 3
+--- PAGE 4 ---
+• Market positioning
+• Differentiator identification
+• Unique Selling Proposition development
+• Value proposition development
+• Brand positioning statement
+• ICP alignment
+• Premium-positioning strategy
+• Vertical-specific positioning
+• Service-specific positioning
+• Geographic positioning
+• Brand narrative
+• Brand story
+• Tone of voice
+• Messaging hierarchy
+• Elevator pitch
+• Tagline development
+Visual identity
+• Logo creation or refinement
+• Brand color palette
+• Typography
+• Imagery direction
+• Graphic style
+• Iconography
+• Website visual identity
+• Social-media branding
+• Presentation branding
+• Brand guidelines
+Sales branding
+• Pitch decks
+• One-pagers
+• Service sheets
+• Case-study templates
+• Proposal templates
+• Sales collateral
+• Social-proof assets
+• Testimonial assets
+• Executive presentations
+3. MSP Website Platform
+Website design
+• Custom MSP website
+• Responsive design
+• Mobile-first design
+• Tablet optimization
+• Desktop optimization
+• Cross-browser compatibility
+MSP Growth Platform Feature Inventory | Page 4
+--- PAGE 5 ---
+• Modern visual design
+• MSP-specific UX
+• Buyer-journey-oriented UX
+• Conversion-oriented layouts
+• Strategic navigation
+• Service-page architecture
+• Industry or vertical page architecture
+• Location-page architecture
+• Landing pages
+• Campaign landing pages
+Website conversion
+• Strategic CTAs
+• Book-a-call CTA
+• Contact forms
+• Consultation forms
+• Download forms
+• Lead magnets
+• Trust sections
+• Review sections
+• Testimonial sections
+• Client logo sections
+• Case-study sections
+• Awards and accreditation sections
+• Third-party proof
+• Conversion paths
+• Funnel-based navigation
+• Bottom-of-funnel offers
+• Conversion rate optimization
+• A/B testing
+• Multivariate testing
+• User-behavior analysis
+• Funnel optimization
+Website performance and maintenance
+• Fast page loading
+• Core Web Vitals optimization
+• Image optimization
+• Code optimization
+• Page-weight reduction
+• Caching and performance optimization
+• Mobile speed optimization
+• Technical monitoring
+• Ongoing maintenance
+• Website patching
+• Site-health monitoring
+• Performance monitoring
+• Continuous speed optimization
+• Continuous conversion optimization
+• SEO monitoring
+MSP Growth Platform Feature Inventory | Page 5
+--- PAGE 6 ---
+• Ranking monitoring
+• User-behavior monitoring
+• Continuous website improvement
+4. Technical SEO
+• Full technical SEO audit
+• Website crawling
+• Indexation analysis
+• Crawlability optimization
+• Metadata optimization
+• Title-tag optimization
+• Meta-description optimization
+• Heading optimization
+• URL optimization
+• Internal linking
+• Schema markup
+• Structured data
+• XML sitemap management
+• Robots.txt optimization
+• Canonicalization
+• Duplicate-content remediation
+• Broken-link remediation
+• Redirect management
+• Core Web Vitals optimization
+• Mobile SEO
+• Site-speed SEO
+• Site architecture optimization
+• Search Console monitoring
+• SEO penalty auditing
+• SEO penalty recovery
+• Backlink-profile auditing
+• Technical issue monitoring
+5. MSP Keyword SEO
+Keyword strategy should focus on high-intent commercial and service queries rather than a fixed small list
+of generic terms.
+• MSP keyword research
+• Buyer-intent keyword research
+• Commercial keyword targeting
+• Transactional keyword targeting
+• Service keywords
+• Industry keywords
+• Vertical keywords
+• Competitor keywords
+• Problem-based searches
+• Solution-based searches
+• Long-tail keywords
+• Bottom-funnel keywords
+MSP Growth Platform Feature Inventory | Page 6
+--- PAGE 7 ---
+• Keyword clustering
+• Keyword-to-page mapping
+• Content gap analysis
+• Ranking tracking
+• Competitor ranking tracking
+• Page-one ranking strategy
+• Top-three ranking strategy
+6. Local SEO
+• Google Business Profile optimization
+• Local keyword research
+• City keyword targeting
+• State and regional targeting
+• Service-area targeting
+• Location landing pages
+• City landing pages
+• Local service pages
+• Google Maps optimization
+• Map Pack optimization
+• Local citations
+• NAP consistency
+• Review optimization
+• Location-specific content
+• Local backlinks
+• Local authority building
+• Hyperlocal SEO
+• Multi-location SEO
+• Franchise-location SEO
+• Multi-market campaigns
+• Geo-specific funnels
+• Local rank tracking
+7. Content Marketing
+Written and authority content
+• Blog articles
+• Service pages
+• Location pages
+• Industry pages
+• Vertical pages
+• Comparison pages
+• Solution pages
+• Use-case pages
+• FAQ pages
+• Thought-leadership articles
+• Case studies
+• Customer success stories
+• Whitepapers
+MSP Growth Platform Feature Inventory | Page 7
+--- PAGE 8 ---
+• E-books
+• Guides
+• Checklists
+• Tip sheets
+• Reports
+• Research content
+• Statistics content
+• Pillar pages
+• Content clusters
+Funnel content
+• Top-of-funnel content
+• Middle-of-funnel content
+• Bottom-of-funnel content
+• Lead magnets
+• Downloadable assets
+• Consultation offers
+• Assessment offers
+• ROI assets
+• Conversion content
+Content optimization
+• SEO copywriting
+• Conversion copywriting
+• MSP-specific technical writing
+• Content refreshing
+• Content expansion
+• Keyword optimization
+• Internal linking
+• CTA optimization
+• Funnel mapping
+8. AEO - Answer Engine Optimization
+• Question research
+• Answer-first content
+• FAQ optimization
+• Featured-snippet targeting
+• Direct-answer optimization
+• Conversational query optimization
+• Entity optimization
+• Structured answers
+• Definition content
+• FAQ schema
+• Organization schema
+• Service schema
+• Location schema
+• Person or expert schema
+• Article schema
+• Review schema
+MSP Growth Platform Feature Inventory | Page 8
+--- PAGE 9 ---
+• Machine-readable content
+• Google AI Overview tracking
+• Google AI Overview optimization
+9. GEO - Generative Engine Optimization
+• ChatGPT visibility
+• Gemini visibility
+• Perplexity visibility
+• Microsoft Copilot visibility
+• Google AI Overview visibility
+• AI brand mentions
+• AI recommendations
+• AI citations
+• Competitor AI citations
+• Share of AI answers
+• City-specific AI recommendations
+• Service-specific AI recommendations
+• Vertical-specific AI recommendations
+• Citation-source analysis
+• Third-party citation optimization
+• Authority-source development
+10. LLM Optimization - LLMO
+• Machine-readable page structure
+• Semantic HTML
+• Structured data
+• Entity relationships
+• Organization information
+• Service taxonomy
+• Expertise signals
+• Person and expert profiles
+• Location relationships
+• Brand disambiguation
+• Structured FAQs
+• Citation-friendly content
+• Concise definitions
+• Fact-rich content
+• Original data
+• Knowledge graph development
+• LLM crawler accessibility
+• AI retrieval optimization
+11. Google Ads / PPC
+Search advertising
+• Google Search Ads
+• Bing and Microsoft Ads
+MSP Growth Platform Feature Inventory | Page 9
+--- PAGE 10 ---
+• Keyword campaigns
+• Brand campaigns
+• Competitor campaigns
+• Service campaigns
+• Location campaigns
+• Vertical campaigns
+• High-intent campaigns
+PPC management
+• PPC account audit
+• Keyword selection
+• Negative keywords
+• Bid management
+• AI-assisted bidding
+• Budget allocation
+• Ad copywriting
+• Ad extensions and assets
+• Landing-page creation
+• Conversion tracking
+• Call tracking
+• Campaign optimization
+• Quality Score improvement
+• Cost-per-lead optimization
+• ROAS optimization
+• Search-term analysis
+12. LinkedIn Advertising
+• LinkedIn Ads
+• Sponsored content
+• Job-title targeting
+• Company-size targeting
+• Industry targeting
+• Seniority targeting
+• Account targeting
+• CIO targeting
+• CTO targeting
+• CISO targeting
+• COO targeting
+• Business-owner targeting
+• Retargeting
+• ABM campaigns
+• Lead-gen forms
+• Content promotion
+• Case-study advertising
+13. Facebook / Meta Advertising
+• Facebook Ads
+• Retargeting
+MSP Growth Platform Feature Inventory | Page 10
+--- PAGE 11 ---
+• Awareness campaigns
+• Location targeting
+• Vertical targeting
+• Content amplification
+• Bottom-of-funnel campaigns
+• Proof and testimonial campaigns
+• Video advertising
+• Lead generation
+• Multi-platform retargeting
+14. Retargeting Engine
+• Website retargeting
+• Search retargeting
+• Display retargeting
+• LinkedIn retargeting
+• Facebook retargeting
+• Video retargeting
+• YouTube retargeting
+• Email retargeting
+• SMS re-engagement
+• Cross-channel retargeting
+• Behavior-based retargeting
+• Funnel-stage retargeting
+• Bottom-of-funnel retargeting
+• Geographic retargeting
+• Account-level retargeting
+• Conversion exclusions
+• Audience segmentation
+15. Social Media Management
+Channels
+• LinkedIn
+• Facebook
+• X / Twitter
+• YouTube
+• Other relevant industry platforms
+Management capabilities
+• Social strategy
+• Content calendar
+• Post writing
+• Graphic creation
+• Social scheduling
+• Thought leadership
+• Executive content
+• Educational posts
+• Case-study posts
+MSP Growth Platform Feature Inventory | Page 11
+--- PAGE 12 ---
+• Testimonials
+• Video posts
+• Lead-generation posts
+• Paid social
+• Sponsored posts
+• Community engagement
+• Comment management
+• Brand monitoring
+• Social listening
+• Reputation monitoring
+• Social analytics
+• Engagement reporting
+• Lead attribution
+16. Video Marketing
+• Video strategy
+• Short-form video
+• Long-form video
+• Client testimonials
+• Case-study videos
+• Educational videos
+• Thought-leadership videos
+• Executive videos
+• Service explainer videos
+• YouTube optimization
+• Video SEO
+• YouTube search ranking
+• Video landing pages
+• Video ads
+• Video retargeting
+• Personalized sales video
+• Video email
+• Conversion tracking
+17. Podcast / Multimedia Authority
+• Podcast appearances
+• Podcast production
+• Expert interviews
+• Webinar promotion
+• Video interviews
+• Multimedia repurposing
+• Executive thought leadership
+• YouTube distribution
+• Social clips
+• Blog transcription and repurposing
+MSP Growth Platform Feature Inventory | Page 12
+--- PAGE 13 ---
+18. Lead Generation
+• Inbound lead generation
+• Qualified lead generation
+• MQL generation
+• SQL generation
+• Booked meetings
+• Consultation requests
+• Assessment requests
+• Form leads
+• Phone-call leads
+• Organic leads
+• Paid leads
+• Social leads
+• Content leads
+• Referral attribution
+• Lead qualification
+• Lead routing
+• Lead segmentation
+• Buyer intent detection
+• Lead source tracking
+• Lead quality scoring
+• Lead lifecycle management
+• Lead-to-opportunity conversion
+• Lead-to-revenue attribution
+19. CRM
+• Contact database
+• Company database
+• Lead database
+• Account records
+• Contact records
+• Lead stages
+• Opportunity stages
+• Deal pipeline
+• Tasks
+• Notes
+• Calls
+• Emails
+• Meetings
+• Activities
+• Deal value
+• MRR field
+• ARR field
+• Contract term
+• Estimated lifetime value
+• Win and loss status
+• Lead source
+• Campaign attribution
+MSP Growth Platform Feature Inventory | Page 13
+--- PAGE 14 ---
+• Sales owner
+• Marketing owner
+• Automated lead assignment
+• Duplicate detection
+• Contact enrichment
+• CRM search
+• Filters
+• Saved views
+20. Marketing Automation
+Workflow automation
+• Trigger-based workflows
+• Form-submission workflows
+• Page-visit workflows
+• Email-engagement workflows
+• Content-download workflows
+• Lead-stage workflows
+• Deal-stage workflows
+• Buyer-intent workflows
+Nurturing
+• Automated nurture tracks
+• Drip campaigns
+• Top-of-funnel nurture
+• Middle-of-funnel nurture
+• Bottom-of-funnel nurture
+• Long-term nurture
+• Lost-opportunity nurture
+• Cold-lead reactivation
+• Existing-customer nurture
+Automated actions
+• Send email
+• Send SMS
+• Assign salesperson
+• Create task
+• Update CRM
+• Change lead score
+• Change lifecycle stage
+• Send notification
+• Add or remove list membership
+• Trigger retargeting audience
+• Schedule follow-up
+21. Email Marketing
+• Email campaign creation
+• HTML email templates
+MSP Growth Platform Feature Inventory | Page 14
+--- PAGE 15 ---
+• Plain-text sequences
+• Newsletter campaigns
+• Nurture emails
+• Follow-up emails
+• Sales emails
+• Re-engagement campaigns
+• Event campaigns
+• Lead-magnet sequences
+• Personalized email
+• Segmentation
+• Dynamic content
+• Behavioral triggers
+• A/B testing
+• Email analytics
+• Open tracking
+• Click tracking
+• Conversion attribution
+• Unsubscribe management
+22. SMS Automation
+• SMS nurturing
+• Appointment reminders
+• Sales alerts
+• Follow-up SMS
+• Re-engagement
+• Event reminders
+• Behavior-triggered texts
+• Opt-in and opt-out management
+23. Lead Scoring
+• Demographic scoring
+• Firmographic scoring
+• Behavioral scoring
+• Intent scoring
+• Page-view scoring
+• Service-page scoring
+• Pricing-page scoring
+• Email-engagement scoring
+• Download scoring
+• Repeat-visit scoring
+• Location scoring
+• Company-size scoring
+• Decision-maker scoring
+• Predictive lead scoring
+• AI lead scoring
+• Lead temperature
+• Hot, warm, and cold classification
+• SQL threshold
+MSP Growth Platform Feature Inventory | Page 15
+--- PAGE 16 ---
+• Automatic routing
+24. Buyer Intent Intelligence
+• Anonymous visitor identification
+• Company identification
+• Repeat visitor detection
+• High-intent page detection
+• Service interest detection
+• Bottom-funnel behavior detection
+• Intent scoring
+• Account activity
+• Content-consumption signals
+• Campaign engagement
+• Ad engagement
+• CRM activity
+• Buying-window signals
+• Sales alerts
+• Real-time alerts
+• Recommended next action
+25. Sales Alerts
+Example alert: a decision-maker visits a cybersecurity page repeatedly, views pricing, downloads a
+compliance guide, and crosses the high-intent lead-score threshold.
+• Instant email alert
+• SMS alert
+• CRM alert
+• Teams or Slack notification
+• High-intent alert
+• Repeat-visitor alert
+• Content-engagement alert
+• Bottom-funnel alert
+• Meeting-request alert
+26. AI Sales Agent
+• AI lead qualification
+• Website AI chatbot
+• AI conversation summaries
+• AI appointment booking
+• AI lead research
+• AI contact enrichment
+• AI account research
+• AI email creation
+• AI follow-up
+• AI objection handling
+• AI next-best-action recommendations
+• AI lead scoring
+MSP Growth Platform Feature Inventory | Page 16
+--- PAGE 17 ---
+• AI opportunity scoring
+• AI sales-call summaries
+• AI CRM updating
+• AI proposal assistance
+27. Appointment Booking
+• Calendar integration
+• Book-a-consultation widget
+• Salesperson availability
+• Round-robin assignment
+• Territory-based assignment
+• Qualification forms
+• Meeting reminders
+• Rescheduling
+• Cancellation management
+• Meeting source attribution
+• No-show workflow
+• Post-meeting follow-up
+28. ABM - Account-Based Marketing
+• Target account lists
+• Tier 1, Tier 2, and Tier 3 accounts
+• Account scoring
+• Company enrichment
+• Decision-maker identification
+• Buying committee mapping
+• Org-chart mapping
+• Multi-threading
+• Personalized campaigns
+• Personalized landing pages
+• Account-specific content
+• LinkedIn ABM
+• Email ABM
+• Retargeting
+• Personalized reports
+• Executive outreach
+• Video outreach
+• Account engagement scoring
+• Sales and marketing orchestration
+29. Sales Enablement
+• Pitch decks
+• Sales presentations
+• One-pagers
+• Battlecards
+• Competitive battlecards
+• Case studies
+MSP Growth Platform Feature Inventory | Page 17
+--- PAGE 18 ---
+• Testimonials
+• ROI calculators
+• Discovery scripts
+• Call scripts
+• Email templates
+• Follow-up templates
+• Objection-handling materials
+• Proposal templates
+• Vertical-specific collateral
+• Service-specific collateral
+• Proof libraries
+• Sales training
+• Buyer-persona guidance
+30. Reputation & Authority Management
+• Google reviews
+• Review acquisition
+• Review monitoring
+• Testimonial collection
+• Video testimonials
+• Clutch profile optimization
+• Industry-directory profiles
+• Awards
+• Certifications
+• Client logos
+• Case studies
+• Third-party articles
+• Media mentions
+• Public relations
+• Expert quotes
+• Thought leadership
+• Authority backlinks
+• Social proof
+• Proof-first landing pages
+31. Digital PR
+• Press releases
+• Journalist outreach
+• Expert commentary
+• Industry publications
+• Media pitching
+• Guest articles
+• Awards submissions
+• Partner announcements
+• Research stories
+• Executive thought leadership
+• Backlink acquisition
+• Brand mentions
+MSP Growth Platform Feature Inventory | Page 18
+--- PAGE 19 ---
+• Authority citations
+32. Link Building
+• Backlink audit
+• Toxic-link identification
+• Competitor backlink analysis
+• Outreach
+• Digital PR links
+• Industry links
+• Local links
+• Guest posts
+• Resource links
+• Partner links
+• Citation links
+• Authority-building links
+• Backlink monitoring
+33. Omnichannel Marketing
+The strategic goal is coordinated multi-touch orchestration: one prospect, multiple channel interactions, one
+CRM record, and one measurable revenue trail.
+• SEO
+• Google Maps
+• Google Ads
+• Bing or Microsoft Ads
+• LinkedIn
+• Facebook
+• X / Twitter
+• YouTube
+• Email
+• SMS
+• Video
+• Content
+• Retargeting
+• AI Search
+• Public relations
+• One prospect record coordinated across channels
+• Unified CRM identity and lifecycle
+• Unified revenue trail and attribution
+34. Funnel Management
+Top of funnel
+• SEO
+• Blogs
+• Social media
+• Video
+• Awareness ads
+MSP Growth Platform Feature Inventory | Page 19
+--- PAGE 20 ---
+• Thought leadership
+Middle of funnel
+• Guides
+• E-books
+• Webinars
+• Case studies
+• Retargeting
+• Email nurturing
+Bottom of funnel
+• Assessments
+• Consultation
+• Pricing conversation
+• Demo
+• Meeting
+• Case-study proof
+• ROI calculation
+Post-conversion
+• Lead scoring
+• Sales notification
+• Meeting booking
+• Follow-up
+• Pipeline tracking
+35. Analytics Dashboard
+Traffic metrics
+• Sessions
+• Users
+• Traffic sources
+• Organic traffic
+• Paid traffic
+• Social traffic
+• Referral traffic
+• Direct traffic
+SEO metrics
+• Keyword rankings
+• Top-three keywords
+• Page-one keywords
+• Map rankings
+• Organic clicks
+• Organic conversions
+• Search visibility
+PPC metrics
+• Impressions
+MSP Growth Platform Feature Inventory | Page 20
+--- PAGE 21 ---
+• Clicks
+• CTR
+• CPC
+• Spend
+• Conversions
+• CPL
+• ROAS
+Lead metrics
+• Leads
+• MQLs
+• SQLs
+• Meetings
+• Opportunities
+• Qualified pipeline
+Sales metrics
+• Proposals
+• Closed-won deals
+• Closed-lost deals
+• MRR
+• ARR
+• Contract value
+• Lifetime value
+36. Revenue Attribution
+The ideal attribution chain is: keyword or campaign -> page -> lead -> contact -> meeting -> opportunity ->
+proposal -> customer -> MRR -> lifetime revenue.
+• First-touch attribution
+• Last-touch attribution
+• Multi-touch attribution
+• Campaign attribution
+• Channel attribution
+• Keyword attribution
+• Landing-page attribution
+• Content attribution
+• Form attribution
+• Call attribution
+• Ad attribution
+• Sales attribution
+• MRR attribution
+• ARR attribution
+• Lifetime revenue attribution
+• Customer acquisition cost
+• Marketing ROI
+MSP Growth Platform Feature Inventory | Page 21
+--- PAGE 22 ---
+37. Call Tracking
+• Dynamic phone numbers
+• Marketing source tracking
+• Call recordings
+• Call transcription
+• AI summaries
+• Lead qualification
+• Call scoring
+• Keyword attribution
+• Campaign attribution
+• Salesperson attribution
+• Conversion tracking
+38. Conversion Rate Optimization
+• Landing-page optimization
+• CTA testing
+• Form optimization
+• Copy testing
+• Headline testing
+• Offer testing
+• Layout testing
+• UX testing
+• Multivariate testing
+• Heatmaps
+• User behavior analysis
+• Funnel analysis
+• Conversion-path analysis
+• Bounce-rate optimization
+• Meeting conversion optimization
+• Lead conversion optimization
+• Continuous CRO
+39. Client Portal
+• Client login
+• Dashboard
+• Campaign status
+• Project status
+• Tasks
+• Deliverables
+• Content approvals
+• Website approvals
+• Campaign approvals
+• Support requests
+• Tickets
+• Files
+• Reports
+• Meeting notes
+MSP Growth Platform Feature Inventory | Page 22
+--- PAGE 23 ---
+• Strategy roadmap
+• KPI dashboard
+• Lead dashboard
+• Revenue dashboard
+40. Project Management
+• Dedicated account strategist
+• Project manager
+• SEO specialist
+• PPC specialist
+• Developer
+• Designer
+• Copywriter
+• Automation specialist
+• Weekly sprint
+• Sprint planning
+• Deliverables
+• Deadlines
+• Approvals
+• Campaign backlog
+• Monthly review
+• Quarterly strategy review
+41. Training & Consulting
+• Marketing consulting
+• SEO consulting
+• Sales consulting
+• Executive strategy
+• Marketing-team training
+• SEO training
+• Sales training
+• Masterclasses
+• Workshops
+• Quarterly business reviews
+• Competitive reviews
+• Strategy reviews
+• Growth planning
+42. Multi-Location MSP Support
+• Multiple offices
+• Multiple Google Business Profiles
+• Location pages
+• Territory management
+• Local SEO per branch
+• Local PPC campaigns
+• Local reporting
+• Region-specific content
+MSP Growth Platform Feature Inventory | Page 23
+--- PAGE 24 ---
+• Franchise support
+• Brand consistency
+• Centralized marketing
+• Location-level attribution
+43. Vertical Marketing
+• Healthcare
+• Legal
+• Financial services
+• Manufacturing
+• Construction
+• Nonprofit
+• Education
+• Professional services
+• Government contractors
+• Retail
+• Accounting
+• Insurance
+• Vertical landing pages
+• Vertical content
+• Vertical ads
+• Vertical messaging
+• Vertical case studies
+• Vertical email sequences
+• Vertical-specific ABM
+• Compliance messaging
+44. Service-Specific MSP Campaigns
+• Managed IT
+• Co-managed IT
+• Cybersecurity
+• MSSP
+• SOC
+• SIEM
+• MDR
+• EDR
+• Cloud
+• Microsoft 365
+• Azure
+• Backup
+• Disaster recovery
+• Business continuity
+• VoIP
+• Help desk
+• IT consulting
+• vCIO
+• Compliance
+• CMMC
+MSP Growth Platform Feature Inventory | Page 24
+--- PAGE 25 ---
+• HIPAA
+• PCI
+• NIST
+• Zero Trust
+45. Lead Guarantee / Performance Model
+• Lead target
+• SQL target
+• Booked-meeting target
+• Guaranteed deliverables
+• Performance pricing
+• Pay-per-lead option
+• Lead-quality criteria
+• Lead replacement
+• Qualification criteria
+• Performance SLA
+• ROI review
+46. Proprietary Methodology
+Do not reuse Jumpfactor's proprietary naming. Build a distinct operating model that can be branded,
+trained, measured, and eventually protected as your own intellectual property.
+Example: P5 MSP Growth Engine
+• Position - define ICP, positioning, offer, and target market
+• Presence - SEO, AI Search, Maps, paid media, and social
+• Pipeline - website, landing pages, forms, and CRM
+• Pursuit - automation, retargeting, scoring, and sales follow-up
+• Profit - revenue attribution, MRR, and ROI
+47. Proprietary Data Layer
+Over time, the platform can build an anonymized MSP performance dataset that gives each client context
+for whether its funnel is below average, average, or top quartile.
+• Average MSP CPL benchmarks
+• Average conversion-rate benchmarks
+• CPC by service
+• CPC by city or region
+• SEO conversion rates
+• Lead-to-SQL rates
+• SQL-to-meeting rates
+• Meeting-to-proposal rates
+• Proposal-to-win rates
+• Average MRR
+• Customer acquisition cost
+• Time-to-close
+• Best-performing keywords
+• Best-performing offers
+MSP Growth Platform Feature Inventory | Page 25
+--- PAGE 26 ---
+• Best-performing verticals
+• Best-performing ads
+• Top-quartile performance benchmarking
+• Anonymized peer comparisons
+48. Competitive Intelligence
+• Competitor keyword tracking
+• Competitor PPC monitoring
+• Competitor ad monitoring
+• Competitor backlink tracking
+• Competitor content monitoring
+• Competitor Google Maps ranking
+• Competitor reviews
+• Competitor AI visibility
+• Competitor social performance
+• Market share of search
+• Share of AI recommendations
+• Share of voice
+• Competitive alerts
+49. MSP Growth Score
+A composite score creates a simple executive-level view of marketing and revenue maturity while still
+allowing drill-down into operational dimensions.
+• Overall 0-100 growth score
+• SEO score
+• Local SEO score
+• Website score
+• Authority score
+• AI Visibility score
+• Paid Media score
+• Content score
+• Conversion score
+• Automation score
+• Sales Velocity score
+• Prioritized action recommendations
+• Trend tracking over time
+50. AI Visibility Dashboard
+This can become a major 2026 differentiator by showing which MSPs are recommended, cited, or omitted
+for the commercial prompts that matter to buyers.
+• Prompt-level monitoring
+• ChatGPT result visibility
+• Gemini result visibility
+• Perplexity result visibility
+• Microsoft Copilot result visibility
+• Google AI result visibility
+MSP Growth Platform Feature Inventory | Page 26
+--- PAGE 27 ---
+• AI share of voice
+• Brand mention frequency
+• Citation frequency
+• Recommendation frequency
+• Competitor comparison
+• Service-level AI visibility
+• City-level AI visibility
+• Vertical-level AI visibility
+• Prompt library management
+• Trend reporting
+• Alerting when visibility changes
+Where to Outperform Jumpfactor
+Priority Differentiator What it means
+Publish clear tiers, deliverables, and
+1 Transparent packaging starting prices so buyers can self-
+qualify before a sales call.
+Make closed MRR and lifetime
+2 Revenue attribution revenue the primary reporting layer,
+not traffic and clicks.
+Measure and improve brand
+3 AI visibility recommendations across major AI
+answer and search experiences.
+Automate qualification, research,
+4 AI sales execution follow-up, CRM hygiene, and
+scheduling with human oversight.
+Use anonymized performance data to
+5 MSP benchmarks show where each MSP sits against
+peers and top-quartile operators.
+Bring search, paid, content, CRM,
+6 Unified operating system automation, pipeline, and ROI into one
+interface and one customer record.
+Recommended Product Definition
+MSP Growth OS
+- a technology-enabled managed growth service that connects marketing
+execution with sales operations and proves performance through qualified pipeline, MRR, revenue, and
+ROI.
+• Strategy and positioning establish the target market and offer.
+• Website, SEO, AI search, paid media, content, social, and PR create demand and authority.
+• CRM, intent data, lead scoring, automation, and an AI sales agent convert demand into meetings and
+opportunities.
+• Sales enablement and project management support execution through to close.
+• Analytics, attribution, competitive intelligence, and benchmarks demonstrate business impact and guide the
+next action.
+MSP Growth Platform Feature Inventory | Page 27
+--- PAGE 28 ---
+Public Source Reference Set
+The feature inventory was developed from Jumpfactor public pages referenced during the competitive
+analysis. URLs are included for traceability; individual claims and service descriptions may change over
+time.
+• https://www.jumpfactor.net/
+• https://www.jumpfactor.net/the-agency/
+• https://www.jumpfactor.net/msp-marketing/
+• https://www.jumpfactor.net/msp-inbound-marketing/
+• https://www.jumpfactor.net/msp-brand-strategy/
+• https://www.jumpfactor.net/msp-web-design/
+• https://www.jumpfactor.net/seo/
+• https://www.jumpfactor.net/msp-content-marketing/
+• https://www.jumpfactor.net/msp-aeo-geo-services/
+• https://www.jumpfactor.net/ppc/
+• https://www.jumpfactor.net/smm/
+• https://www.jumpfactor.net/msp-lead-generation/
+• https://www.jumpfactor.net/ma/
+• https://www.jumpfactor.net/account-based-marketing-tactics/
+MSP Growth Platform Feature Inventory | Page 28

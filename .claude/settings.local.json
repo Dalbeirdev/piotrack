@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "Read(//e/autotask/DPI-Autotask/**)",
+      "Read(//e/autotask/**)",
+      "Bash(python \"C:/Users/DALBEI~1/AppData/Local/Temp/claude/E--autotask-DPI-Autotask-piotrack/3e02c8a9-0a72-4af0-be56-d60c09e6acb9/scratchpad/extract_inv.py\")",
+      "Bash(python scripts/build_feature_register.py)",
+      "Bash(python -)",
+      "Bash(git add *)"
+    ]
+  }
+}
