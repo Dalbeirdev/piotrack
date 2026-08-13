@@ -11,7 +11,9 @@ use App\Models\Invitation;
 use App\Models\Organization;
 use App\Models\Plan;
 use App\Models\User;
+use App\Notifications\MemberJoinedNotification;
 use App\Support\AuditLogger;
+use App\Support\NotificationDispatcher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -27,6 +29,7 @@ class OrganizationService
         private AuditLogger $audit,
         private SubscriptionService $subscriptions,
         private UsageMeter $usage,
+        private NotificationDispatcher $notifications,
     ) {}
 
     /**
@@ -231,6 +234,11 @@ class OrganizationService
                 resourceType: 'invitation',
                 resourceId: (string) $invitation->id,
                 organizationId: $organization->id,
+            );
+
+            $this->notifications->toOrganizationOwners(
+                $organization,
+                new MemberJoinedNotification($user->email, $organization->name),
             );
 
             return $organization;

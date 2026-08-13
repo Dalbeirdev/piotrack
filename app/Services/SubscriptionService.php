@@ -13,7 +13,10 @@ use App\Models\Invoice;
 use App\Models\Organization;
 use App\Models\Plan;
 use App\Models\Subscription;
+use App\Notifications\PaymentFailedNotification;
+use App\Notifications\SubscriptionSuspendedNotification;
 use App\Support\AuditLogger;
+use App\Support\NotificationDispatcher;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -32,6 +35,7 @@ class SubscriptionService
         private UsageMeter $usage,
         private Entitlements $entitlements,
         private CouponService $coupons,
+        private NotificationDispatcher $notifications,
     ) {}
 
     /**
@@ -129,6 +133,27 @@ class SubscriptionService
     }
 
     /**
+     * Advance the billing period and issue a renewal invoice (BILL-012). Called
+     * by the scheduler when an active subscription reaches its period end.
+     */
+    public function renew(Subscription $subscription): void
+    {
+        $start = $subscription->current_period_end ?? now();
+        $end = $this->periodEnd($start, $subscription->interval);
+
+        $subscription->forceFill([
+            'status' => 'active',
+            'current_period_start' => $start,
+            'current_period_end' => $end,
+        ])->save();
+
+        $this->audit->log('subscription.renewed', context: ['plan' => $subscription->plan->code], resourceType: 'subscription', resourceId: (string) $subscription->id, organizationId: $subscription->organization_id);
+
+        $amount = $this->periodAmount($subscription);
+        $this->generatePaidInvoice($subscription, $amount, "{$subscription->plan->name} renewal ({$subscription->interval})", null);
+    }
+
+    /**
      * Change plan/interval with proration (BILL-013). Downgrades that would put
      * the organization over the new plan's limits are blocked.
      */
@@ -216,6 +241,11 @@ class SubscriptionService
         ])->save();
 
         $this->audit->log('subscription.past_due', resourceType: 'subscription', resourceId: (string) $subscription->id, organizationId: $subscription->organization_id);
+
+        $this->notifications->toOrganizationOwners(
+            $subscription->organization,
+            new PaymentFailedNotification($subscription->organization->name),
+        );
     }
 
     /**
@@ -227,6 +257,11 @@ class SubscriptionService
         $this->entitlements->forget($subscription->organization);
 
         $this->audit->log('subscription.suspended', resourceType: 'subscription', resourceId: (string) $subscription->id, organizationId: $subscription->organization_id);
+
+        $this->notifications->toOrganizationOwners(
+            $subscription->organization,
+            new SubscriptionSuspendedNotification($subscription->organization->name),
+        );
     }
 
     /**

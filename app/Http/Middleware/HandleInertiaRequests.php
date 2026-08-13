@@ -78,6 +78,9 @@ class HandleInertiaRequests extends Middleware
                 'features' => app(Entitlements::class)->features($currentOrganization),
                 'plan' => $currentOrganization->activeSubscription()?->plan->code,
             ] : ['features' => [], 'plan' => null],
+            'notifications' => [
+                'unread' => $user !== null ? $user->unreadNotifications()->count() : 0,
+            ],
         ]);
     }
 }

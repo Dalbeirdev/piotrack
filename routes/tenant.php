@@ -6,6 +6,7 @@ use App\Http\Controllers\Billing\CheckoutController;
 use App\Http\Controllers\Billing\InvoiceController;
 use App\Http\Controllers\Billing\SubscriptionController;
 use App\Http\Controllers\Settings\AuditLogController;
+use App\Http\Controllers\Settings\FileController;
 use App\Http\Controllers\Settings\InvitationController;
 use App\Http\Controllers\Settings\MemberController;
 use App\Http\Controllers\Settings\OrganizationSettingsController;
@@ -66,6 +67,16 @@ Route::middleware(['auth', 'verified', 'organization'])->group(function () {
     // Audit log viewer (also gated by the `audit_log` feature entitlement).
     Route::get('settings/audit-log', [AuditLogController::class, 'index'])
         ->middleware(['can:audit.view', 'entitlement:audit_log'])->name('audit.index');
+
+    // Files.
+    Route::get('settings/files', [FileController::class, 'index'])
+        ->middleware('can:files.view')->name('files.index');
+    Route::get('settings/files/{file}/download', [FileController::class, 'download'])
+        ->middleware('can:files.view')->name('files.download');
+    Route::post('settings/files', [FileController::class, 'store'])
+        ->middleware('can:files.manage')->name('files.store');
+    Route::delete('settings/files/{file}', [FileController::class, 'destroy'])
+        ->middleware('can:files.manage')->name('files.destroy');
 
     // Billing & subscriptions.
     Route::get('billing', [BillingController::class, 'index'])

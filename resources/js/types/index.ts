@@ -42,6 +42,7 @@ export interface SharedData {
     quote: { message: string; author: string };
     auth: Auth;
     entitlements: Entitlements;
+    notifications: { unread: number };
     [key: string]: unknown;
 }
 

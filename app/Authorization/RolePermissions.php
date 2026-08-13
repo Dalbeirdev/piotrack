@@ -34,6 +34,8 @@ class RolePermissions
                 Permission::TeamsView,
                 Permission::TeamsManage,
                 Permission::AuditView,
+                Permission::FilesView,
+                Permission::FilesManage,
             ],
             Role::SalesManager->value => [
                 Permission::OrganizationView,
@@ -41,18 +43,24 @@ class RolePermissions
                 Permission::TeamsView,
                 Permission::TeamsManage,
                 Permission::AuditView,
+                Permission::FilesView,
+                Permission::FilesManage,
             ],
             Role::MarketingUser->value => [
                 Permission::OrganizationView,
                 Permission::TeamsView,
+                Permission::FilesView,
+                Permission::FilesManage,
             ],
             Role::SalesRepresentative->value => [
                 Permission::OrganizationView,
                 Permission::TeamsView,
+                Permission::FilesView,
             ],
             Role::Analyst->value => [
                 Permission::OrganizationView,
                 Permission::AuditView,
+                Permission::FilesView,
             ],
             Role::BillingAdministrator->value => [
                 Permission::OrganizationView,
@@ -61,6 +69,7 @@ class RolePermissions
             ],
             Role::Viewer->value => [
                 Permission::OrganizationView,
+                Permission::FilesView,
             ],
         ];
     }

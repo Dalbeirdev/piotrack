@@ -10,6 +10,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -137,6 +138,26 @@ class User extends Authenticatable implements MustVerifyEmail
     // ---------------------------------------------------------------------
     // Authorization (RBAC — ADR-0002)
     // ---------------------------------------------------------------------
+
+    /**
+     * @return HasMany<NotificationPreference, $this>
+     */
+    public function notificationPreferences(): HasMany
+    {
+        return $this->hasMany(NotificationPreference::class);
+    }
+
+    /**
+     * Whether the user wants a given channel for a category. Defaults to on;
+     * only an explicit disabled preference turns a channel off.
+     */
+    public function wantsChannel(string $category, string $channel): bool
+    {
+        $preference = $this->notificationPreferences
+            ->first(fn (NotificationPreference $p) => $p->category === $category && $p->channel === $channel);
+
+        return $preference === null || $preference->enabled;
+    }
 
     public function platformRole(): ?Role
     {

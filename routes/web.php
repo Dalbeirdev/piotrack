@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Billing\WebhookController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\InvitationAcceptanceController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -29,9 +31,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Tenant-scoped surfaces require an active organization.
     Route::middleware('organization')->group(function () {
-        Route::get('dashboard', function () {
-            return Inertia::render('dashboard');
-        })->name('dashboard');
+        Route::get('dashboard', DashboardController::class)->name('dashboard');
+        Route::get('search', SearchController::class)->name('search');
     });
 });
 

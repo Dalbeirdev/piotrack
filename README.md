@@ -3,15 +3,17 @@
 Commercial multi-tenant SaaS platform for MSP growth: marketing execution connected to sales
 operations, proved by qualified pipeline, MRR, revenue and ROI.
 
-**Current phase: Stage 3 (Commercial Foundation) complete — foundation stages 0–3 done; next is
-Stage 4 (Core Platform).** Stack ([ADR-0001](docs/architecture/09-technology-stack.md)): Laravel 12 ·
-Inertia + React + TypeScript · PostgreSQL 16 · Redis · Stripe (abstracted). Phase plan:
+**Current phase: Stage 4 (Core Platform) backbone complete — next is the Stage 4 continuation
+(integrations framework, public API, design-system docs), then Stage 5 (CRM).**
+Stack ([ADR-0001](docs/architecture/09-technology-stack.md)): Laravel 12 · Inertia + React +
+TypeScript · PostgreSQL 16 · Redis · Stripe (abstracted). Phase plan:
 [dependency map & stages](docs/architecture/10-dependency-map-and-phases.md).
 
 Gate reports: [Stage 0 — Foundation](docs/qa/2026-08-12-stage-0-devx.md) ·
 [Stage 1 — Identity](docs/qa/2026-08-13-stage-1-auth.md) ·
 [Stage 2 — Tenancy](docs/qa/2026-08-13-stage-2-tenancy.md) ·
-[Stage 3 — Billing](docs/qa/2026-08-13-stage-3-billing.md).
+[Stage 3 — Billing](docs/qa/2026-08-13-stage-3-billing.md) ·
+[Stage 4 — Core Platform](docs/qa/2026-08-13-stage-4-core-platform.md).
 
 **Deploying to piotrack.com:** the app is production-ready for a first live preview on
 **Laravel Cloud** (managed PostgreSQL 16 + Redis, auto-TLS). Follow
@@ -26,7 +28,11 @@ and an organization-scoped audit viewer. Stage 3 delivers the commercial engine 
 plans, checkout, the subscription lifecycle (trial→active→past-due→suspended, upgrade/downgrade with
 proration, cancel/resume), invoices, coupons, a billing portal, provider-agnostic webhooks
 ([ADR-0003](docs/architecture/adr/ADR-0003-payment-provider-abstraction.md); a working manual driver
-plus an untested Stripe driver), and a central entitlement + usage-limit engine.
+plus an untested Stripe driver), and a central entitlement + usage-limit engine. Stage 4 adds the
+operational backbone — background jobs + a scheduler (which auto-renews subscriptions, expires
+trials, and enforces dunning), an in-app + email notification system with per-user preferences,
+tenant-scoped file storage, global ⌘K search, extended health checks, and a dashboard onboarding
+checklist.
 
 ## Development
 

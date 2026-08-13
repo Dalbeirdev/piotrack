@@ -34,6 +34,10 @@ enum Permission: string
     case BillingView = 'billing.view';
     case BillingManage = 'billing.manage';
 
+    // Files
+    case FilesView = 'files.view';
+    case FilesManage = 'files.manage';
+
     // Settings
     case SettingsManage = 'settings.manage';
 

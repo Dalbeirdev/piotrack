@@ -11,6 +11,7 @@ const accountNavItems: NavItem[] = [
     { title: 'Password', url: '/settings/password', icon: null },
     { title: 'Two-factor auth', url: '/settings/two-factor', icon: null },
     { title: 'API tokens', url: '/settings/api-tokens', icon: null },
+    { title: 'Notifications', url: '/settings/notifications', icon: null },
     { title: 'Appearance', url: '/settings/appearance', icon: null },
 ];
 
@@ -23,6 +24,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
         can('members.view') && { title: 'Members', url: '/settings/members', icon: null },
         can('teams.view') && { title: 'Teams', url: '/settings/teams', icon: null },
         can('billing.view') && { title: 'Billing', url: '/billing', icon: null },
+        can('files.view') && { title: 'Files', url: '/settings/files', icon: null },
         can('audit.view') && { title: 'Audit log', url: '/settings/audit-log', icon: null },
     ].filter(Boolean) as NavItem[];
 

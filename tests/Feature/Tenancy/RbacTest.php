@@ -17,9 +17,9 @@ it('grants an admin everything except deleting the organization', function () {
         ->and($admin)->toContain(Permission::TeamsManage->value);
 });
 
-it('limits a viewer to viewing the organization', function () {
+it('limits a viewer to read-only capabilities', function () {
     expect(RolePermissions::for(Role::Viewer->value))
-        ->toBe([Permission::OrganizationView->value]);
+        ->toEqualCanonicalizing([Permission::OrganizationView->value, Permission::FilesView->value]);
 });
 
 it('resolves permissions against the current organization only', function () {
