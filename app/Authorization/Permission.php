@@ -62,6 +62,15 @@ enum Permission: string
     case IntegrationsView = 'integrations.view';
     case IntegrationsManage = 'integrations.manage';
 
+    // Marketing
+    case MarketingView = 'marketing.view';
+    case MarketingListsManage = 'marketing.lists.manage';
+    case MarketingFormsManage = 'marketing.forms.manage';
+    case MarketingCampaignsManage = 'marketing.campaigns.manage';
+    case MarketingCampaignsSend = 'marketing.campaigns.send';
+    case MarketingAutomationManage = 'marketing.automation.manage';
+    case MarketingFunnelsView = 'marketing.funnels.view';
+
     // Settings
     case SettingsManage = 'settings.manage';
 

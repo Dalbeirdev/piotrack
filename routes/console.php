@@ -15,3 +15,8 @@ Schedule::command('subscriptions:process-renewals')->hourly()->withoutOverlappin
 Schedule::command('subscriptions:expire-trials')->hourly()->withoutOverlapping();
 Schedule::command('subscriptions:enforce-grace')->hourly()->withoutOverlapping();
 Schedule::command('subscriptions:notify-trial-ending')->dailyAt('09:00');
+
+// Marketing execution (Stage 6). Workflow drip delays and scheduled campaigns
+// are advanced frequently; each command dispatches per-tenant queued jobs.
+Schedule::command('marketing:process-workflows')->everyFiveMinutes()->withoutOverlapping();
+Schedule::command('marketing:send-scheduled-campaigns')->everyFiveMinutes()->withoutOverlapping();

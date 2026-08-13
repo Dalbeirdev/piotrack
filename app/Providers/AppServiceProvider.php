@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use App\Billing\Contracts\PaymentProvider;
 use App\Billing\PaymentProviderManager;
+use App\Messaging\Contracts\MailProvider;
+use App\Messaging\Contracts\SmsProvider;
+use App\Messaging\MessagingProviderManager;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Deal;
@@ -28,6 +31,17 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             PaymentProvider::class,
             fn ($app) => $app->make(PaymentProviderManager::class)->driver(),
+        );
+
+        // Resolve the active marketing email/SMS drivers (ADR-0004) wherever the
+        // MailProvider/SmsProvider contracts are type-hinted.
+        $this->app->bind(
+            MailProvider::class,
+            fn ($app) => $app->make(MessagingProviderManager::class)->mail(),
+        );
+        $this->app->bind(
+            SmsProvider::class,
+            fn ($app) => $app->make(MessagingProviderManager::class)->sms(),
         );
     }
 

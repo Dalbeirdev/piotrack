@@ -1,0 +1,118 @@
+<?php
+
+namespace App\Http\Controllers\Marketing;
+
+use App\Http\Controllers\Controller;
+use App\Models\Campaign;
+use App\Models\MarketingList;
+use App\Services\Marketing\CampaignService;
+use App\Support\AuditLogger;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Inertia\Inertia;
+use Inertia\Response;
+
+class CampaignController extends Controller
+{
+    public function __construct(
+        private CampaignService $campaigns,
+        private AuditLogger $audit,
+    ) {}
+
+    public function index(): Response
+    {
+        return Inertia::render('marketing/campaigns/index', [
+            'campaigns' => Campaign::with('list:id,name')->latest('id')->get()->map(fn (Campaign $c) => [
+                'id' => $c->id,
+                'name' => $c->name,
+                'channel' => $c->channel,
+                'status' => $c->status,
+                'list' => $c->list?->name,
+                'stat_sent' => $c->stat_sent,
+                'stat_opened' => $c->stat_opened,
+                'stat_clicked' => $c->stat_clicked,
+            ]),
+            'lists' => MarketingList::orderBy('name')->get(['id', 'name'])
+                ->map(fn ($l) => ['id' => $l->id, 'name' => $l->name]),
+        ]);
+    }
+
+    public function show(Campaign $campaign): Response
+    {
+        return Inertia::render('marketing/campaigns/show', [
+            'campaign' => [
+                'id' => $campaign->id,
+                'name' => $campaign->name,
+                'channel' => $campaign->channel,
+                'type' => $campaign->type,
+                'subject' => $campaign->subject,
+                'from_name' => $campaign->from_name,
+                'from_email' => $campaign->from_email,
+                'body_html' => $campaign->body_html,
+                'body_text' => $campaign->body_text,
+                'status' => $campaign->status,
+                'marketing_list_id' => $campaign->marketing_list_id,
+                'stats' => [
+                    'recipients' => $campaign->stat_recipients,
+                    'sent' => $campaign->stat_sent,
+                    'opened' => $campaign->stat_opened,
+                    'clicked' => $campaign->stat_clicked,
+                    'bounced' => $campaign->stat_bounced,
+                    'unsubscribed' => $campaign->stat_unsubscribed,
+                ],
+            ],
+            'lists' => MarketingList::orderBy('name')->get(['id', 'name'])
+                ->map(fn ($l) => ['id' => $l->id, 'name' => $l->name]),
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $campaign = Campaign::create($this->validateData($request));
+        $this->audit->log('campaign.created', context: ['name' => $campaign->name], resourceType: 'campaign', resourceId: (string) $campaign->id, organizationId: $campaign->organization_id);
+
+        return redirect()->route('marketing.campaigns.show', $campaign->id)->with('status', __('Campaign created.'));
+    }
+
+    public function update(Request $request, Campaign $campaign): RedirectResponse
+    {
+        abort_if($campaign->isSent(), 403, __('A sent campaign cannot be edited.'));
+        $campaign->update($this->validateData($request));
+
+        return back()->with('status', __('Campaign saved.'));
+    }
+
+    public function send(Campaign $campaign): RedirectResponse
+    {
+        $this->campaigns->send($campaign);
+
+        return back()->with('status', __('Campaign sent.'));
+    }
+
+    public function destroy(Campaign $campaign): RedirectResponse
+    {
+        $this->audit->log('campaign.deleted', context: ['name' => $campaign->name], resourceType: 'campaign', resourceId: (string) $campaign->id, organizationId: $campaign->organization_id);
+        $campaign->delete();
+
+        return redirect()->route('marketing.campaigns.index')->with('status', __('Campaign deleted.'));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function validateData(Request $request): array
+    {
+        return $request->validate([
+            'name' => ['required', 'string', 'max:150'],
+            'channel' => ['required', Rule::in(['email', 'sms'])],
+            'type' => ['nullable', 'string', 'max:40'],
+            'subject' => ['nullable', 'string', 'max:200'],
+            'from_name' => ['nullable', 'string', 'max:120'],
+            'from_email' => ['nullable', 'email', 'max:200'],
+            'body_html' => ['nullable', 'string', 'max:50000'],
+            'body_text' => ['nullable', 'string', 'max:5000'],
+            'marketing_list_id' => ['nullable', Rule::exists('marketing_lists', 'id')],
+        ]);
+    }
+}

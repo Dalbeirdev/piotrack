@@ -5,6 +5,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\InvitationAcceptanceController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\Public\EmailTrackingController;
+use App\Http\Controllers\Public\PublicFormController;
+use App\Http\Controllers\Public\PublicLandingPageController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,6 +20,19 @@ Route::get('health', HealthController::class)->name('health');
 
 // Public billing webhooks — verified by the provider driver, CSRF-exempt.
 Route::post('webhooks/{provider}', [WebhookController::class, 'handle'])->name('billing.webhook');
+
+/*
+ * Public marketing surfaces (Stage 6) — unauthenticated. Tenant is resolved from
+ * the form/page slug or the recipient token. POST endpoints are CSRF-exempt
+ * (see bootstrap/app.php) and throttled.
+ */
+Route::get('f/{slug}', [PublicFormController::class, 'show'])->name('public.form.show');
+Route::post('f/{slug}', [PublicFormController::class, 'submit'])->middleware('throttle:20,1')->name('public.form.submit');
+Route::get('p/{slug}', [PublicLandingPageController::class, 'show'])->name('public.landing.show');
+Route::get('e/o/{token}', [EmailTrackingController::class, 'open'])->name('public.track.open');
+Route::get('e/c/{token}', [EmailTrackingController::class, 'click'])->name('public.track.click');
+Route::get('e/u/{token}', [EmailTrackingController::class, 'unsubscribeShow'])->name('public.track.unsubscribe.show');
+Route::post('e/u/{token}', [EmailTrackingController::class, 'unsubscribe'])->middleware('throttle:20,1')->name('public.track.unsubscribe');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Organization lifecycle (no active organization required).
@@ -37,6 +53,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/crm.php';
+require __DIR__.'/marketing.php';
 require __DIR__.'/tenant.php';
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

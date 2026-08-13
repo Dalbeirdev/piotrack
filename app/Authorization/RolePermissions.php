@@ -39,6 +39,18 @@ class RolePermissions
             Permission::CrmLeadRead, Permission::CrmDealRead,
         ];
 
+        // Marketing permission groupings.
+        $marketingAll = array_values(array_filter($all, fn (Permission $p) => str_starts_with($p->value, 'marketing.')));
+        // Marketing users can build everything but not blast a send.
+        $marketingBuild = [
+            Permission::MarketingView,
+            Permission::MarketingListsManage,
+            Permission::MarketingFormsManage,
+            Permission::MarketingCampaignsManage,
+            Permission::MarketingAutomationManage,
+            Permission::MarketingFunnelsView,
+        ];
+
         return [
             Role::Owner->value => $all,
             Role::Admin->value => $adminExceptDelete,
@@ -53,6 +65,7 @@ class RolePermissions
                 Permission::IntegrationsView,
                 Permission::IntegrationsManage,
                 ...$crmAll,
+                ...$marketingAll,
             ],
             Role::SalesManager->value => [
                 Permission::OrganizationView,
@@ -65,6 +78,8 @@ class RolePermissions
                 Permission::IntegrationsView,
                 Permission::IntegrationsManage,
                 ...$crmAll,
+                Permission::MarketingView,
+                Permission::MarketingFunnelsView,
             ],
             Role::MarketingUser->value => [
                 Permission::OrganizationView,
@@ -73,6 +88,7 @@ class RolePermissions
                 Permission::FilesManage,
                 Permission::IntegrationsView,
                 ...$crmReadWrite,
+                ...$marketingBuild,
             ],
             Role::SalesRepresentative->value => [
                 Permission::OrganizationView,
@@ -80,6 +96,7 @@ class RolePermissions
                 Permission::FilesView,
                 Permission::IntegrationsView,
                 ...$crmReadWrite,
+                Permission::MarketingView,
             ],
             Role::Analyst->value => [
                 Permission::OrganizationView,
@@ -87,6 +104,8 @@ class RolePermissions
                 Permission::FilesView,
                 Permission::IntegrationsView,
                 ...$crmReadOnly,
+                Permission::MarketingView,
+                Permission::MarketingFunnelsView,
             ],
             Role::BillingAdministrator->value => [
                 Permission::OrganizationView,
@@ -98,6 +117,7 @@ class RolePermissions
                 Permission::FilesView,
                 Permission::IntegrationsView,
                 ...$crmReadOnly,
+                Permission::MarketingView,
             ],
         ];
     }

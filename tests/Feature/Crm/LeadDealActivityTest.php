@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Deal;
 use App\Models\Lead;
+use App\Models\Pipeline;
 use App\Support\CurrentOrganization;
 
 it('converts a lead into a contact, company and deal', function () {
@@ -62,7 +63,7 @@ it('blocks moving a deal to another pipeline stage', function () {
     app(CurrentOrganization::class)->set($orgA);
     $dealA = Deal::factory()->create(['organization_id' => $orgA->id]);
     app(CurrentOrganization::class)->set($orgB);
-    $stageB = App\Models\Pipeline::where('is_default', true)->first()->stages()->first();
+    $stageB = Pipeline::where('is_default', true)->first()->stages()->first();
     app(CurrentOrganization::class)->forget();
 
     $this->actingAs($ownerA)->patch(route('crm.deals.stage', $dealA->id), ['stage_id' => $stageB->id])

@@ -1,9 +1,12 @@
 <?php
 
 use App\Authorization\Role;
+use App\Billing\Entitlements;
+use App\Billing\Feature;
 use App\Models\AuditLog;
 use App\Models\Company;
 use App\Models\Contact;
+use App\Services\SubscriptionService;
 use App\Support\CurrentOrganization;
 
 it('lists, creates and shows contacts', function () {
@@ -79,10 +82,10 @@ it('keeps crm accessible on the free tier (crm is a baseline feature)', function
     [$org, $owner] = makeOrganization();
     // Even with no active subscription, the free fallback grants the crm
     // feature, so the entitlement:crm gate still allows access.
-    app(App\Services\SubscriptionService::class)->cancel($org->activeSubscription(), immediately: true);
-    app(App\Billing\Entitlements::class)->forget($org);
+    app(SubscriptionService::class)->cancel($org->activeSubscription(), immediately: true);
+    app(Entitlements::class)->forget($org);
 
-    expect(app(App\Billing\Entitlements::class)->feature($org, App\Billing\Feature::Crm))->toBeTrue();
+    expect(app(Entitlements::class)->feature($org, Feature::Crm))->toBeTrue();
     $this->actingAs($owner)->get(route('crm.contacts.index'))->assertOk();
 });
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Company;
 use App\Models\Contact;
 use App\Models\ImportJob;
 use App\Support\CurrentOrganization;
@@ -41,7 +42,7 @@ it('imports contacts and records history with an error report', function () {
         ->assertRedirect(route('crm.contacts.index'));
 
     expect(Contact::withoutGlobalScope('tenant')->where('email', 'ada@example.com')->exists())->toBeTrue()
-        ->and(App\Models\Company::withoutGlobalScope('tenant')->where('name', 'Analytical Engines')->exists())->toBeTrue();
+        ->and(Company::withoutGlobalScope('tenant')->where('name', 'Analytical Engines')->exists())->toBeTrue();
 
     $job = ImportJob::withoutGlobalScope('tenant')->latest('id')->first();
     // Ada + NoEmail (no email → not a duplicate) import; Bad email fails.

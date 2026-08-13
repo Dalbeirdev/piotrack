@@ -25,6 +25,7 @@ class Lead extends Model implements HasActivities
     protected $fillable = [
         'organization_id', 'first_name', 'last_name', 'email', 'phone', 'company_name',
         'source', 'campaign', 'status', 'owner_id', 'converted_contact_id', 'converted_deal_id', 'converted_at',
+        'lifecycle_stage', 'lead_score', 'segment',
     ];
 
     protected function casts(): array

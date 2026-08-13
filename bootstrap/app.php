@@ -32,7 +32,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->prepend(AssignRequestId::class);
 
         // Inbound billing webhooks authenticate via provider signature, not CSRF.
-        $middleware->validateCsrfTokens(except: ['webhooks/*']);
+        // Public marketing form submits + unsubscribes are unauthenticated,
+        // cross-origin capture endpoints protected by honeypot + throttling.
+        $middleware->validateCsrfTokens(except: ['webhooks/*', 'f/*', 'e/*']);
 
         $middleware->web(append: [
             SetCurrentOrganization::class,
