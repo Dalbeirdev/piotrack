@@ -10,7 +10,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property Carbon|null $expected_close_date
+ * @property Carbon|null $closed_at
+ */
 class Deal extends Model implements HasActivities
 {
     /** @use HasFactory<DealFactory> */

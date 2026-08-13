@@ -25,6 +25,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
         can('teams.view') && { title: 'Teams', url: '/settings/teams', icon: null },
         can('billing.view') && { title: 'Billing', url: '/billing', icon: null },
         can('files.view') && { title: 'Files', url: '/settings/files', icon: null },
+        can('integrations.view') && { title: 'Integrations', url: '/settings/integrations', icon: null },
         can('audit.view') && { title: 'Audit log', url: '/settings/audit-log', icon: null },
     ].filter(Boolean) as NavItem[];
 

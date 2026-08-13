@@ -50,6 +50,8 @@ class RolePermissions
                 Permission::AuditView,
                 Permission::FilesView,
                 Permission::FilesManage,
+                Permission::IntegrationsView,
+                Permission::IntegrationsManage,
                 ...$crmAll,
             ],
             Role::SalesManager->value => [
@@ -60,6 +62,8 @@ class RolePermissions
                 Permission::AuditView,
                 Permission::FilesView,
                 Permission::FilesManage,
+                Permission::IntegrationsView,
+                Permission::IntegrationsManage,
                 ...$crmAll,
             ],
             Role::MarketingUser->value => [
@@ -67,18 +71,21 @@ class RolePermissions
                 Permission::TeamsView,
                 Permission::FilesView,
                 Permission::FilesManage,
+                Permission::IntegrationsView,
                 ...$crmReadWrite,
             ],
             Role::SalesRepresentative->value => [
                 Permission::OrganizationView,
                 Permission::TeamsView,
                 Permission::FilesView,
+                Permission::IntegrationsView,
                 ...$crmReadWrite,
             ],
             Role::Analyst->value => [
                 Permission::OrganizationView,
                 Permission::AuditView,
                 Permission::FilesView,
+                Permission::IntegrationsView,
                 ...$crmReadOnly,
             ],
             Role::BillingAdministrator->value => [
@@ -89,6 +96,7 @@ class RolePermissions
             Role::Viewer->value => [
                 Permission::OrganizationView,
                 Permission::FilesView,
+                Permission::IntegrationsView,
                 ...$crmReadOnly,
             ],
         ];

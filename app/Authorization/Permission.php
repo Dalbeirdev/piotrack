@@ -58,6 +58,10 @@ enum Permission: string
     case CrmActivityManage = 'crm.activity.manage';
     case CrmImport = 'crm.import';
 
+    // Integrations
+    case IntegrationsView = 'integrations.view';
+    case IntegrationsManage = 'integrations.manage';
+
     // Settings
     case SettingsManage = 'settings.manage';
 

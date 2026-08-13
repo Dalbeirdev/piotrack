@@ -7,6 +7,7 @@ use App\Http\Controllers\Billing\InvoiceController;
 use App\Http\Controllers\Billing\SubscriptionController;
 use App\Http\Controllers\Settings\AuditLogController;
 use App\Http\Controllers\Settings\FileController;
+use App\Http\Controllers\Settings\IntegrationController;
 use App\Http\Controllers\Settings\InvitationController;
 use App\Http\Controllers\Settings\MemberController;
 use App\Http\Controllers\Settings\OrganizationSettingsController;
@@ -77,6 +78,23 @@ Route::middleware(['auth', 'verified', 'organization'])->group(function () {
         ->middleware('can:files.manage')->name('files.store');
     Route::delete('settings/files/{file}', [FileController::class, 'destroy'])
         ->middleware('can:files.manage')->name('files.destroy');
+
+    // Integrations / connectors (INTG). Viewing is read-only; connect/sync/
+    // disconnect require integrations.manage.
+    Route::get('settings/integrations', [IntegrationController::class, 'index'])
+        ->middleware('can:integrations.view')->name('integrations.index');
+    Route::middleware('can:integrations.manage')->group(function () {
+        Route::post('settings/integrations/connect', [IntegrationController::class, 'connect'])
+            ->name('integrations.connect');
+        Route::post('settings/integrations/{integration}/disconnect', [IntegrationController::class, 'disconnect'])
+            ->name('integrations.disconnect');
+        Route::post('settings/integrations/{integration}/reconnect', [IntegrationController::class, 'reconnect'])
+            ->name('integrations.reconnect');
+        Route::post('settings/integrations/{integration}/sync', [IntegrationController::class, 'sync'])
+            ->name('integrations.sync');
+        Route::post('settings/integrations/{integration}/queue-sync', [IntegrationController::class, 'queueSync'])
+            ->name('integrations.queue-sync');
+    });
 
     // Billing & subscriptions.
     Route::get('billing', [BillingController::class, 'index'])

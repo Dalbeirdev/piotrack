@@ -4,6 +4,7 @@ use App\Http\Middleware\AssignRequestId;
 use App\Http\Middleware\EnsureEntitled;
 use App\Http\Middleware\EnsureHasOrganization;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\SetApiOrganization;
 use App\Http\Middleware\SetCurrentOrganization;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -41,10 +42,15 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Tenant context MUST be established before route-model binding, so the
         // tenant scope is active when {team}/{invitation} are resolved —
-        // otherwise binding could load another tenant's record.
+        // otherwise binding could load another tenant's record. The API sets its
+        // tenant from a header, so its middleware is ordered the same way.
         $middleware->prependToPriorityList(
             before: SubstituteBindings::class,
             prepend: SetCurrentOrganization::class,
+        );
+        $middleware->prependToPriorityList(
+            before: SubstituteBindings::class,
+            prepend: SetApiOrganization::class,
         );
 
         $middleware->alias([

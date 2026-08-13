@@ -8,7 +8,10 @@ use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Deal;
 use App\Models\Lead;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -60,5 +63,10 @@ class AppServiceProvider extends ServiceProvider
         // RecordAuthEvents is wired by Laravel's listener auto-discovery
         // (app/Listeners, handle* methods) — do not ALSO subscribe it
         // manually, or every audit event is recorded twice.
+
+        // Public API rate limit (API-003): 60 requests/minute per token, falling
+        // back to the client IP for unauthenticated hits.
+        RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)
+            ->by($request->user()?->getAuthIdentifier() ?: $request->ip()));
     }
 }
