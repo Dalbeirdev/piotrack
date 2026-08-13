@@ -1,5 +1,7 @@
 <?php
 
+use App\Authorization\Role;
+
 it('health endpoint reports queue and storage checks', function () {
     $response = $this->get('/health');
 
@@ -25,7 +27,7 @@ it('surfaces an onboarding checklist derived from real state', function () {
 it('marks onboarding steps done as state changes', function () {
     [$org, $owner] = makeOrganization();
     subscribeOrganization($org, 'growth'); // choose_plan → done
-    addMember($org, App\Authorization\Role::Admin); // invite_team → done
+    addMember($org, Role::Admin); // invite_team → done
 
     $this->actingAs($owner)->get(route('dashboard'))->assertInertia(fn ($page) => $page
         ->where('onboarding.steps', fn ($steps) => collect($steps)->firstWhere('key', 'choose_plan')['done'] === true

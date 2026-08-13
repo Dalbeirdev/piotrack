@@ -1,8 +1,12 @@
 <?php
 
+use App\Authorization\Role;
 use App\Models\NotificationPreference;
 use App\Models\User;
+use App\Notifications\MemberJoinedNotification;
 use App\Notifications\PaymentFailedNotification;
+use App\Services\OrganizationService;
+use App\Services\SubscriptionService;
 use Illuminate\Support\Facades\Notification;
 
 it('delivers a platform notification via database and mail by default', function () {
@@ -38,7 +42,7 @@ it('sends payment-failure notifications to organization owners on past_due', fun
     [$org, $owner] = makeOrganization();
     subscribeOrganization($org, 'growth');
 
-    app(App\Services\SubscriptionService::class)->markPastDue($org->activeSubscription());
+    app(SubscriptionService::class)->markPastDue($org->activeSubscription());
 
     Notification::assertSentTo($owner, PaymentFailedNotification::class);
 });
@@ -46,13 +50,13 @@ it('sends payment-failure notifications to organization owners on past_due', fun
 it('notifies owners when a member joins', function () {
     Notification::fake();
     [$org, $owner] = makeOrganization();
-    $token = app(App\Services\OrganizationService::class)
-        ->invite($org, $owner, 'joiner@example.com', App\Authorization\Role::Viewer)['token'];
+    $token = app(OrganizationService::class)
+        ->invite($org, $owner, 'joiner@example.com', Role::Viewer)['token'];
     $joiner = User::factory()->create(['email' => 'joiner@example.com']);
 
     $this->actingAs($joiner)->post(route('invitations.accept', $token));
 
-    Notification::assertSentTo($owner, App\Notifications\MemberJoinedNotification::class);
+    Notification::assertSentTo($owner, MemberJoinedNotification::class);
 });
 
 it('marks notifications as read', function () {

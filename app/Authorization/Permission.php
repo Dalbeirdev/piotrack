@@ -38,6 +38,26 @@ enum Permission: string
     case FilesView = 'files.view';
     case FilesManage = 'files.manage';
 
+    // CRM
+    case CrmContactRead = 'crm.contact.read';
+    case CrmContactCreate = 'crm.contact.create';
+    case CrmContactUpdate = 'crm.contact.update';
+    case CrmContactDelete = 'crm.contact.delete';
+    case CrmCompanyRead = 'crm.company.read';
+    case CrmCompanyCreate = 'crm.company.create';
+    case CrmCompanyUpdate = 'crm.company.update';
+    case CrmCompanyDelete = 'crm.company.delete';
+    case CrmLeadRead = 'crm.lead.read';
+    case CrmLeadCreate = 'crm.lead.create';
+    case CrmLeadUpdate = 'crm.lead.update';
+    case CrmLeadDelete = 'crm.lead.delete';
+    case CrmDealRead = 'crm.deal.read';
+    case CrmDealCreate = 'crm.deal.create';
+    case CrmDealUpdate = 'crm.deal.update';
+    case CrmDealDelete = 'crm.deal.delete';
+    case CrmActivityManage = 'crm.activity.manage';
+    case CrmImport = 'crm.import';
+
     // Settings
     case SettingsManage = 'settings.manage';
 

@@ -1,0 +1,126 @@
+import Heading from '@/components/heading';
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { usePermissions } from '@/hooks/use-permissions';
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
+import { Head, Link, router, useForm } from '@inertiajs/react';
+import { FormEventHandler, useState } from 'react';
+
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Companies', href: '/crm/companies' }];
+
+type Company = { id: number; name: string; domain: string | null; industry: string | null; contacts_count: number; deals_count: number };
+type Paginated = { data: Company[]; links: { url: string | null; label: string; active: boolean }[]; total: number };
+
+export default function Companies({ companies, filters }: { companies: Paginated; filters: { search?: string } }) {
+    const { can } = usePermissions();
+    const [search, setSearch] = useState(filters.search ?? '');
+    const [open, setOpen] = useState(false);
+    const form = useForm({ name: '', domain: '', industry: '', website: '' });
+
+    const create: FormEventHandler = (e) => {
+        e.preventDefault();
+        form.post(route('crm.companies.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                form.reset();
+                setOpen(false);
+            },
+        });
+    };
+
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Companies" />
+            <div className="space-y-4 p-4">
+                <div className="flex items-center justify-between gap-2">
+                    <Heading title="Companies" description={`${companies.total} total`} />
+                    {can('crm.company.create') && (
+                        <Dialog open={open} onOpenChange={setOpen}>
+                            <DialogTrigger asChild>
+                                <Button>New company</Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogTitle>New company</DialogTitle>
+                                <form onSubmit={create} className="space-y-3">
+                                    <div className="grid gap-1">
+                                        <Label htmlFor="name">Name</Label>
+                                        <Input id="name" value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} />
+                                        <InputError message={form.errors.name} />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="grid gap-1">
+                                            <Label htmlFor="domain">Domain</Label>
+                                            <Input id="domain" value={form.data.domain} onChange={(e) => form.setData('domain', e.target.value)} />
+                                        </div>
+                                        <div className="grid gap-1">
+                                            <Label htmlFor="industry">Industry</Label>
+                                            <Input
+                                                id="industry"
+                                                value={form.data.industry}
+                                                onChange={(e) => form.setData('industry', e.target.value)}
+                                            />
+                                        </div>
+                                    </div>
+                                    <DialogFooter>
+                                        <Button type="submit" disabled={form.processing}>
+                                            Create
+                                        </Button>
+                                    </DialogFooter>
+                                </form>
+                            </DialogContent>
+                        </Dialog>
+                    )}
+                </div>
+
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        router.get(route('crm.companies.index'), { search }, { preserveState: true, replace: true });
+                    }}
+                    className="flex gap-2"
+                >
+                    <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search name or domain…" className="max-w-sm" />
+                    <Button type="submit" variant="outline">
+                        Search
+                    </Button>
+                </form>
+
+                {companies.data.length === 0 ? (
+                    <p className="text-muted-foreground text-sm">No companies yet.</p>
+                ) : (
+                    <div className="overflow-x-auto rounded-lg border">
+                        <table className="w-full text-left text-sm">
+                            <thead className="bg-muted/50 text-muted-foreground">
+                                <tr>
+                                    <th className="p-3 font-medium">Name</th>
+                                    <th className="p-3 font-medium">Industry</th>
+                                    <th className="p-3 text-center font-medium">Contacts</th>
+                                    <th className="p-3 text-center font-medium">Deals</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y">
+                                {companies.data.map((c) => (
+                                    <tr key={c.id} className="hover:bg-muted/40">
+                                        <td className="p-3">
+                                            <Link href={route('crm.companies.show', c.id)} className="font-medium hover:underline">
+                                                {c.name}
+                                            </Link>
+                                            {c.domain && <span className="text-muted-foreground"> · {c.domain}</span>}
+                                        </td>
+                                        <td className="text-muted-foreground p-3">{c.industry ?? '—'}</td>
+                                        <td className="p-3 text-center">{c.contacts_count}</td>
+                                        <td className="p-3 text-center">{c.deals_count}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+            </div>
+        </AppLayout>
+    );
+}

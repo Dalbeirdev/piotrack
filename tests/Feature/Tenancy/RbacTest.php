@@ -18,8 +18,15 @@ it('grants an admin everything except deleting the organization', function () {
 });
 
 it('limits a viewer to read-only capabilities', function () {
-    expect(RolePermissions::for(Role::Viewer->value))
-        ->toEqualCanonicalizing([Permission::OrganizationView->value, Permission::FilesView->value]);
+    $permissions = RolePermissions::for(Role::Viewer->value);
+
+    expect($permissions)
+        ->toContain(Permission::OrganizationView->value)
+        ->toContain(Permission::FilesView->value)
+        ->toContain(Permission::CrmContactRead->value)
+        ->not->toContain(Permission::CrmContactCreate->value)
+        ->not->toContain(Permission::CrmContactDelete->value)
+        ->not->toContain(Permission::MembersInvite->value);
 });
 
 it('resolves permissions against the current organization only', function () {

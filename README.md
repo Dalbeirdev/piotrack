@@ -3,8 +3,8 @@
 Commercial multi-tenant SaaS platform for MSP growth: marketing execution connected to sales
 operations, proved by qualified pipeline, MRR, revenue and ROI.
 
-**Current phase: Stage 4 (Core Platform) backbone complete — next is the Stage 4 continuation
-(integrations framework, public API, design-system docs), then Stage 5 (CRM).**
+**Current phase: Stage 5 (CRM) complete — next is Stage 6 (Marketing Platform); the Stage 4
+continuation (integrations framework, public API, design-system docs) remains sequenced.**
 Stack ([ADR-0001](docs/architecture/09-technology-stack.md)): Laravel 12 · Inertia + React +
 TypeScript · PostgreSQL 16 · Redis · Stripe (abstracted). Phase plan:
 [dependency map & stages](docs/architecture/10-dependency-map-and-phases.md).
@@ -13,7 +13,8 @@ Gate reports: [Stage 0 — Foundation](docs/qa/2026-08-12-stage-0-devx.md) ·
 [Stage 1 — Identity](docs/qa/2026-08-13-stage-1-auth.md) ·
 [Stage 2 — Tenancy](docs/qa/2026-08-13-stage-2-tenancy.md) ·
 [Stage 3 — Billing](docs/qa/2026-08-13-stage-3-billing.md) ·
-[Stage 4 — Core Platform](docs/qa/2026-08-13-stage-4-core-platform.md).
+[Stage 4 — Core Platform](docs/qa/2026-08-13-stage-4-core-platform.md) ·
+[Stage 5 — CRM](docs/qa/2026-08-14-stage-5-crm.md).
 
 **Deploying to piotrack.com:** the app is production-ready for a first live preview on
 **Laravel Cloud** (managed PostgreSQL 16 + Redis, auto-TLS). Follow
@@ -32,7 +33,9 @@ plus an untested Stripe driver), and a central entitlement + usage-limit engine.
 operational backbone — background jobs + a scheduler (which auto-renews subscriptions, expires
 trials, and enforces dunning), an in-app + email notification system with per-user preferences,
 tenant-scoped file storage, global ⌘K search, extended health checks, and a dashboard onboarding
-checklist.
+checklist. Stage 5 is the CRM — companies, contacts, leads, deals with a pipeline kanban board, a
+polymorphic activity timeline, lead conversion, duplicate detection, CSV import/export, and search,
+all tenant-scoped and permission-gated.
 
 ## Development
 

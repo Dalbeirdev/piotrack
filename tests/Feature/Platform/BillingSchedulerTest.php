@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\AuditLog;
+use App\Notifications\TrialEndingNotification;
+use Illuminate\Support\Facades\Notification;
 
 /*
  * Closes the Stage 3 recurring-billing debt (BILL-011/012/016/017) via the
@@ -64,11 +66,11 @@ it('suspends a past-due subscription whose grace has elapsed', function () {
 });
 
 it('notifies owners of a trial ending soon', function () {
-    Illuminate\Support\Facades\Notification::fake();
+    Notification::fake();
     [$org, $owner] = makeOrganization();
     $org->activeSubscription()->forceFill(['trial_ends_at' => now()->addDays(2)])->save();
 
     $this->artisan('subscriptions:notify-trial-ending')->assertSuccessful();
 
-    Illuminate\Support\Facades\Notification::assertSentTo($owner, App\Notifications\TrialEndingNotification::class);
+    Notification::assertSentTo($owner, TrialEndingNotification::class);
 });

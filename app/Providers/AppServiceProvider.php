@@ -4,6 +4,11 @@ namespace App\Providers;
 
 use App\Billing\Contracts\PaymentProvider;
 use App\Billing\PaymentProviderManager;
+use App\Models\Company;
+use App\Models\Contact;
+use App\Models\Deal;
+use App\Models\Lead;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -34,6 +39,15 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->isProduction()) {
             URL::forceScheme('https');
         }
+
+        // Stable polymorphic aliases for CRM activity subjects (non-strict map;
+        // unmapped models such as User fall back to their class name).
+        Relation::morphMap([
+            'contact' => Contact::class,
+            'company' => Company::class,
+            'lead' => Lead::class,
+            'deal' => Deal::class,
+        ]);
 
         // AUTH-003: platform password policy. Length over composition (NIST-aligned);
         // breached-password check only in production to keep tests/local offline.

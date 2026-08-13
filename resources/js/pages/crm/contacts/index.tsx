@@ -1,0 +1,174 @@
+import Heading from '@/components/heading';
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { usePermissions } from '@/hooks/use-permissions';
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
+import { Head, Link, router, useForm } from '@inertiajs/react';
+import { FormEventHandler, useState } from 'react';
+
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Contacts', href: '/crm/contacts' }];
+
+type Contact = { id: number; name: string; email: string | null; title: string | null; company: string | null; owner: string | null };
+type Paginated = { data: Contact[]; links: { url: string | null; label: string; active: boolean }[]; total: number };
+
+export default function Contacts({ contacts, filters }: { contacts: Paginated; filters: { search?: string; owner?: number } }) {
+    const { can } = usePermissions();
+    const [search, setSearch] = useState(filters.search ?? '');
+    const [open, setOpen] = useState(false);
+    const form = useForm({ first_name: '', last_name: '', email: '', title: '', phone: '', company_id: '' });
+
+    const submitSearch: FormEventHandler = (e) => {
+        e.preventDefault();
+        router.get(route('crm.contacts.index'), { search }, { preserveState: true, replace: true });
+    };
+
+    const create: FormEventHandler = (e) => {
+        e.preventDefault();
+        form.post(route('crm.contacts.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                form.reset();
+                setOpen(false);
+            },
+        });
+    };
+
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Contacts" />
+            <div className="space-y-4 p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <Heading title="Contacts" description={`${contacts.total} total`} />
+                    <div className="flex gap-2">
+                        {can('crm.contact.read') && (
+                            <Button variant="outline" asChild>
+                                <a href={route('crm.contacts.export')}>Export CSV</a>
+                            </Button>
+                        )}
+                        {can('crm.import') && (
+                            <Button variant="outline" asChild>
+                                <Link href={route('crm.contacts.import')}>Import</Link>
+                            </Button>
+                        )}
+                        {can('crm.contact.create') && (
+                            <Dialog open={open} onOpenChange={setOpen}>
+                                <DialogTrigger asChild>
+                                    <Button>New contact</Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogTitle>New contact</DialogTitle>
+                                    <form onSubmit={create} className="space-y-3">
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="grid gap-1">
+                                                <Label htmlFor="first_name">First name</Label>
+                                                <Input
+                                                    id="first_name"
+                                                    value={form.data.first_name}
+                                                    onChange={(e) => form.setData('first_name', e.target.value)}
+                                                />
+                                                <InputError message={form.errors.first_name} />
+                                            </div>
+                                            <div className="grid gap-1">
+                                                <Label htmlFor="last_name">Last name</Label>
+                                                <Input
+                                                    id="last_name"
+                                                    value={form.data.last_name}
+                                                    onChange={(e) => form.setData('last_name', e.target.value)}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="grid gap-1">
+                                            <Label htmlFor="email">Email</Label>
+                                            <Input
+                                                id="email"
+                                                type="email"
+                                                value={form.data.email}
+                                                onChange={(e) => form.setData('email', e.target.value)}
+                                            />
+                                            <InputError message={form.errors.email} />
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="grid gap-1">
+                                                <Label htmlFor="title">Title</Label>
+                                                <Input id="title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} />
+                                            </div>
+                                            <div className="grid gap-1">
+                                                <Label htmlFor="phone">Phone</Label>
+                                                <Input id="phone" value={form.data.phone} onChange={(e) => form.setData('phone', e.target.value)} />
+                                            </div>
+                                        </div>
+                                        <DialogFooter>
+                                            <Button type="submit" disabled={form.processing}>
+                                                Create
+                                            </Button>
+                                        </DialogFooter>
+                                    </form>
+                                </DialogContent>
+                            </Dialog>
+                        )}
+                    </div>
+                </div>
+
+                <form onSubmit={submitSearch} className="flex gap-2">
+                    <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search name or email…" className="max-w-sm" />
+                    <Button type="submit" variant="outline">
+                        Search
+                    </Button>
+                </form>
+
+                {contacts.data.length === 0 ? (
+                    <p className="text-muted-foreground text-sm">No contacts yet. Create your first contact or import a CSV.</p>
+                ) : (
+                    <div className="overflow-x-auto rounded-lg border">
+                        <table className="w-full text-left text-sm">
+                            <thead className="bg-muted/50 text-muted-foreground">
+                                <tr>
+                                    <th className="p-3 font-medium">Name</th>
+                                    <th className="p-3 font-medium">Email</th>
+                                    <th className="p-3 font-medium">Company</th>
+                                    <th className="p-3 font-medium">Owner</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y">
+                                {contacts.data.map((c) => (
+                                    <tr key={c.id} className="hover:bg-muted/40">
+                                        <td className="p-3">
+                                            <Link href={route('crm.contacts.show', c.id)} className="font-medium hover:underline">
+                                                {c.name}
+                                            </Link>
+                                            {c.title && <span className="text-muted-foreground"> · {c.title}</span>}
+                                        </td>
+                                        <td className="text-muted-foreground p-3">{c.email}</td>
+                                        <td className="text-muted-foreground p-3">{c.company ?? '—'}</td>
+                                        <td className="text-muted-foreground p-3">{c.owner ?? '—'}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+
+                {contacts.links.length > 3 && (
+                    <div className="flex flex-wrap gap-1">
+                        {contacts.links.map((link, i) =>
+                            link.url ? (
+                                <Link
+                                    key={i}
+                                    href={link.url}
+                                    className={`rounded px-3 py-1 text-sm ${link.active ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'}`}
+                                    dangerouslySetInnerHTML={{ __html: link.label }}
+                                />
+                            ) : (
+                                <span key={i} className="text-muted-foreground px-3 py-1 text-sm" dangerouslySetInnerHTML={{ __html: link.label }} />
+                            ),
+                        )}
+                    </div>
+                )}
+            </div>
+        </AppLayout>
+    );
+}

@@ -30,6 +30,7 @@ class OrganizationService
         private SubscriptionService $subscriptions,
         private UsageMeter $usage,
         private NotificationDispatcher $notifications,
+        private CrmProvisioner $crm,
     ) {}
 
     /**
@@ -65,6 +66,9 @@ class OrganizationService
             if ($trialPlan !== null) {
                 $this->subscriptions->startTrial($organization, $trialPlan);
             }
+
+            // Provision a default sales pipeline so deals can be created at once.
+            $this->crm->createDefaultPipeline($organization);
 
             return $organization;
         });

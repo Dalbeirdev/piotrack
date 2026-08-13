@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Company;
+use App\Models\Contact;
+use App\Models\Deal;
 use App\Models\File;
 use App\Models\Invoice;
 use App\Models\Organization;
@@ -38,6 +41,43 @@ class GlobalSearch
                 'subtitle' => null,
                 'url' => route('billing.index'),
             ])->all());
+        }
+
+        if (Gate::forUser($user)->allows('crm.contact.read')) {
+            $contacts = Contact::query()
+                ->where(fn ($q) => $q->where('first_name', 'like', $like)->orWhere('last_name', 'like', $like)->orWhere('email', 'like', $like))
+                ->limit(5)->get();
+            if ($contacts->isNotEmpty()) {
+                $groups[] = $this->group('Contacts', $contacts->map(fn (Contact $c) => [
+                    'title' => $c->fullName(),
+                    'subtitle' => $c->email,
+                    'url' => route('crm.contacts.show', $c->id),
+                ])->all());
+            }
+        }
+
+        if (Gate::forUser($user)->allows('crm.company.read')) {
+            $companies = Company::query()
+                ->where(fn ($q) => $q->where('name', 'like', $like)->orWhere('domain', 'like', $like))
+                ->limit(5)->get();
+            if ($companies->isNotEmpty()) {
+                $groups[] = $this->group('Companies', $companies->map(fn (Company $c) => [
+                    'title' => $c->name,
+                    'subtitle' => $c->domain,
+                    'url' => route('crm.companies.show', $c->id),
+                ])->all());
+            }
+        }
+
+        if (Gate::forUser($user)->allows('crm.deal.read')) {
+            $deals = Deal::where('name', 'like', $like)->limit(5)->get();
+            if ($deals->isNotEmpty()) {
+                $groups[] = $this->group('Deals', $deals->map(fn (Deal $d) => [
+                    'title' => $d->name,
+                    'subtitle' => ucfirst($d->status),
+                    'url' => route('crm.deals.show', $d->id),
+                ])->all());
+            }
         }
 
         if (Gate::forUser($user)->allows('members.view')) {

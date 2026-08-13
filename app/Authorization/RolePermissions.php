@@ -25,6 +25,20 @@ class RolePermissions
             fn (Permission $p) => $p !== Permission::OrganizationDelete,
         ));
 
+        // CRM permission groupings.
+        $crmAll = array_values(array_filter($all, fn (Permission $p) => str_starts_with($p->value, 'crm.')));
+        $crmReadWrite = [
+            Permission::CrmContactRead, Permission::CrmContactCreate, Permission::CrmContactUpdate,
+            Permission::CrmCompanyRead, Permission::CrmCompanyCreate, Permission::CrmCompanyUpdate,
+            Permission::CrmLeadRead, Permission::CrmLeadCreate, Permission::CrmLeadUpdate,
+            Permission::CrmDealRead, Permission::CrmDealCreate, Permission::CrmDealUpdate,
+            Permission::CrmActivityManage,
+        ];
+        $crmReadOnly = [
+            Permission::CrmContactRead, Permission::CrmCompanyRead,
+            Permission::CrmLeadRead, Permission::CrmDealRead,
+        ];
+
         return [
             Role::Owner->value => $all,
             Role::Admin->value => $adminExceptDelete,
@@ -36,6 +50,7 @@ class RolePermissions
                 Permission::AuditView,
                 Permission::FilesView,
                 Permission::FilesManage,
+                ...$crmAll,
             ],
             Role::SalesManager->value => [
                 Permission::OrganizationView,
@@ -45,22 +60,26 @@ class RolePermissions
                 Permission::AuditView,
                 Permission::FilesView,
                 Permission::FilesManage,
+                ...$crmAll,
             ],
             Role::MarketingUser->value => [
                 Permission::OrganizationView,
                 Permission::TeamsView,
                 Permission::FilesView,
                 Permission::FilesManage,
+                ...$crmReadWrite,
             ],
             Role::SalesRepresentative->value => [
                 Permission::OrganizationView,
                 Permission::TeamsView,
                 Permission::FilesView,
+                ...$crmReadWrite,
             ],
             Role::Analyst->value => [
                 Permission::OrganizationView,
                 Permission::AuditView,
                 Permission::FilesView,
+                ...$crmReadOnly,
             ],
             Role::BillingAdministrator->value => [
                 Permission::OrganizationView,
@@ -70,6 +89,7 @@ class RolePermissions
             Role::Viewer->value => [
                 Permission::OrganizationView,
                 Permission::FilesView,
+                ...$crmReadOnly,
             ],
         ];
     }
