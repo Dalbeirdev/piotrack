@@ -1,0 +1,93 @@
+<?php
+
+namespace App\Billing;
+
+/**
+ * The code source of truth for the plan catalog (BILL-001). Seeded into the
+ * plans/plan_prices/plan_entitlements tables by PlanSeeder / `billing:sync-plans`,
+ * which remain the runtime source (configurable, admin-editable in Stage 13).
+ *
+ * Amounts are minor units (cents). Annual amounts are the full yearly price
+ * (already discounted vs. 12× monthly). A `null` limit means unlimited.
+ */
+class PlanCatalog
+{
+    public const DEFAULT_TRIAL_PLAN = 'growth';
+
+    public const TRIAL_DAYS = 14;
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public static function plans(): array
+    {
+        return [
+            [
+                'code' => 'starter',
+                'name' => 'Starter',
+                'description' => 'For a single practitioner getting started.',
+                'sort_order' => 1,
+                'prices' => ['monthly' => 4900, 'annual' => 47000],
+                'features' => [Feature::Crm],
+                'limits' => [Limit::Members->value => 3, Limit::Contacts->value => 1000],
+            ],
+            [
+                'code' => 'growth',
+                'name' => 'Growth',
+                'description' => 'For growing MSP marketing teams.',
+                'sort_order' => 2,
+                'prices' => ['monthly' => 14900, 'annual' => 143000],
+                'features' => [Feature::Crm, Feature::Seo, Feature::Automation, Feature::Teams, Feature::AuditLog],
+                'limits' => [Limit::Members->value => 10, Limit::Contacts->value => 10000],
+            ],
+            [
+                'code' => 'professional',
+                'name' => 'Professional',
+                'description' => 'Full-funnel marketing and sales operations.',
+                'sort_order' => 3,
+                'prices' => ['monthly' => 34900, 'annual' => 335000],
+                'features' => [
+                    Feature::Crm, Feature::Seo, Feature::Automation, Feature::Teams,
+                    Feature::AuditLog, Feature::AiVisibility, Feature::Api,
+                ],
+                'limits' => [Limit::Members->value => 25, Limit::Contacts->value => 50000],
+            ],
+            [
+                'code' => 'agency',
+                'name' => 'Agency',
+                'description' => 'For agencies managing many MSP clients.',
+                'sort_order' => 4,
+                'prices' => ['monthly' => 74900, 'annual' => 719000],
+                'features' => [
+                    Feature::Crm, Feature::Seo, Feature::Automation, Feature::Teams,
+                    Feature::AuditLog, Feature::AiVisibility, Feature::Api, Feature::WhiteLabel,
+                ],
+                'limits' => [Limit::Members->value => 100],
+            ],
+            [
+                'code' => 'enterprise',
+                'name' => 'Enterprise',
+                'description' => 'Custom scale, security and support.',
+                'sort_order' => 5,
+                'is_custom_priced' => true,
+                'prices' => [],
+                'features' => Feature::cases(),
+                'limits' => [], // all unlimited
+            ],
+        ];
+    }
+
+    /**
+     * The most restrictive baseline used when an organization has no active
+     * subscription (free fallback).
+     *
+     * @return array{features: list<string>, limits: array<string, int|null>}
+     */
+    public static function freeFallback(): array
+    {
+        return [
+            'features' => [Feature::Crm->value],
+            'limits' => [Limit::Members->value => 1],
+        ];
+    }
+}

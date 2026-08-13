@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Billing\Entitlements;
 use App\Support\CurrentOrganization;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
@@ -71,6 +72,12 @@ class HandleInertiaRequests extends Middleware
                     ? $user->roleIn($currentOrganization)?->value
                     : null,
             ],
+            // Plan feature entitlements for UX gating / upgrade prompts (the
+            // backend `entitlement:` middleware is the security boundary).
+            'entitlements' => ($user !== null && $currentOrganization !== null) ? [
+                'features' => app(Entitlements::class)->features($currentOrganization),
+                'plan' => $currentOrganization->activeSubscription()?->plan->code,
+            ] : ['features' => [], 'plan' => null],
         ]);
     }
 }

@@ -1,9 +1,13 @@
 <?php
 
 use App\Authorization\Role;
+use App\Billing\Entitlements;
 use App\Models\Organization;
+use App\Models\Plan;
 use App\Models\User;
 use App\Services\OrganizationService;
+use App\Services\SubscriptionService;
+use Database\Seeders\PlanSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -20,6 +24,9 @@ use Tests\TestCase;
 
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
+    // Seed the plan catalog so organization creation (which starts a trial) and
+    // all billing/entitlement resolution have plans available.
+    ->beforeEach(fn () => test()->seed(PlanSeeder::class))
     ->in('Feature');
 
 /*
@@ -89,4 +96,14 @@ function addMember(Organization $organization, Role $role): User
     $user->forceFill(['current_organization_id' => $organization->id])->save();
 
     return $user->refresh();
+}
+
+/**
+ * Subscribe an organization to a plan (immediate manual checkout).
+ */
+function subscribeOrganization(Organization $organization, string $planCode, string $interval = 'monthly'): void
+{
+    $plan = Plan::where('code', $planCode)->firstOrFail();
+    app(SubscriptionService::class)->checkout($organization, $plan, $interval, 1, null);
+    app(Entitlements::class)->forget($organization);
 }

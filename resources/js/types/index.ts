@@ -32,10 +32,16 @@ export interface NavItem {
     isActive?: boolean;
 }
 
+export interface Entitlements {
+    features: Record<string, boolean>;
+    plan: string | null;
+}
+
 export interface SharedData {
     name: string;
     quote: { message: string; author: string };
     auth: Auth;
+    entitlements: Entitlements;
     [key: string]: unknown;
 }
 

@@ -56,6 +56,8 @@ class RolePermissions
             ],
             Role::BillingAdministrator->value => [
                 Permission::OrganizationView,
+                Permission::BillingView,
+                Permission::BillingManage,
             ],
             Role::Viewer->value => [
                 Permission::OrganizationView,

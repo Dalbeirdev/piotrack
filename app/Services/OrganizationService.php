@@ -3,8 +3,13 @@
 namespace App\Services;
 
 use App\Authorization\Role;
+use App\Billing\Entitlements;
+use App\Billing\Limit;
+use App\Billing\PlanCatalog;
+use App\Billing\UsageMeter;
 use App\Models\Invitation;
 use App\Models\Organization;
+use App\Models\Plan;
 use App\Models\User;
 use App\Support\AuditLogger;
 use Illuminate\Support\Facades\DB;
@@ -18,11 +23,15 @@ use Illuminate\Validation\ValidationException;
  */
 class OrganizationService
 {
-    public function __construct(private AuditLogger $audit) {}
+    public function __construct(
+        private AuditLogger $audit,
+        private SubscriptionService $subscriptions,
+        private UsageMeter $usage,
+    ) {}
 
     /**
      * Create an organization and make the creator its Owner. Sets it as the
-     * creator's current organization.
+     * creator's current organization and starts a trial on the default plan.
      */
     public function create(User $user, string $name): Organization
     {
@@ -47,6 +56,12 @@ class OrganizationService
                 resourceId: (string) $organization->id,
                 organizationId: $organization->id,
             );
+
+            // Start a trial on the default plan when the catalog is available.
+            $trialPlan = Plan::where('code', PlanCatalog::DEFAULT_TRIAL_PLAN)->first();
+            if ($trialPlan !== null) {
+                $this->subscriptions->startTrial($organization, $trialPlan);
+            }
 
             return $organization;
         });
@@ -112,6 +127,16 @@ class OrganizationService
         if ($organization->members()->where('email', $email)->exists()) {
             throw ValidationException::withMessages([
                 'email' => __('That person is already a member of this organization.'),
+            ]);
+        }
+
+        // Enforce the plan's member seat limit (ENTL-007). Seats consumed =
+        // active members + pending invitations.
+        if (! $this->usage->withinLimit($organization, Limit::Members)) {
+            $limit = app(Entitlements::class)->limit($organization, Limit::Members);
+
+            throw ValidationException::withMessages([
+                'email' => __('Your plan is limited to :n members. Upgrade to invite more.', ['n' => $limit]),
             ]);
         }
 

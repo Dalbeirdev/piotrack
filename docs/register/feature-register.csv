@@ -1017,32 +1017,32 @@ ONBD-011,ONBD,Customer Onboarding,Setup wizard,Integration connection wizard,Mas
 ONBD-012,ONBD,Customer Onboarding,Setup wizard,Initial audit trigger on completion,Master Prompt,§6,Planned,Pending,Pending,Pending,Pending,,
 ONBD-013,ONBD,Customer Onboarding,UX,Progress indicator and setup checklist,Master Prompt,§6,Planned,Pending,Pending,Pending,Pending,,
 ONBD-014,ONBD,Customer Onboarding,UX,Leave and resume onboarding later,Master Prompt,§6,Planned,Pending,Pending,Pending,Pending,,
-BILL-001,BILL,Billing & Subscriptions,Plans,"Configurable plan catalog (Starter, Growth, Professional, Agency, Enterprise)",Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-002,BILL,Billing & Subscriptions,Pricing,Monthly and annual pricing with annual discount,Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-003,BILL,Billing & Subscriptions,Pricing,Per-user pricing support,Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-004,BILL,Billing & Subscriptions,Pricing,Usage-based pricing support,Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-005,BILL,Billing & Subscriptions,Pricing,Add-ons,Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-006,BILL,Billing & Subscriptions,Pricing,Custom enterprise pricing,Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-007,BILL,Billing & Subscriptions,Pricing,Coupons / promo codes,Master Prompt,"§7, §29",Planned,Pending,Pending,Pending,Pending,,
-BILL-008,BILL,Billing & Subscriptions,Checkout,"Checkout flow: billing details, company details, tax info, promo code, payment method, order summary",Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-009,BILL,Billing & Subscriptions,Checkout,Invoice / receipt generation,Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-010,BILL,Billing & Subscriptions,Provider,Payment-provider abstraction layer (Stripe first),Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-011,BILL,Billing & Subscriptions,Lifecycle,Trial and trial expiration handling,Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-012,BILL,Billing & Subscriptions,Lifecycle,Subscription activation and renewal,Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-013,BILL,Billing & Subscriptions,Lifecycle,Upgrade / downgrade with proration,Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-014,BILL,Billing & Subscriptions,Lifecycle,Quantity changes and add-on changes,Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-015,BILL,Billing & Subscriptions,Lifecycle,"Cancellation, scheduled cancellation, reactivation",Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-016,BILL,Billing & Subscriptions,Lifecycle,"Failed payment handling, dunning, grace periods",Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-017,BILL,Billing & Subscriptions,Lifecycle,Suspended and expired subscription states,Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-018,BILL,Billing & Subscriptions,Portal,"Billing portal: plan, usage, payment method, invoices, history, billing contact, tax details, cancel",Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-BILL-019,BILL,Billing & Subscriptions,Webhooks,"Billing webhook processing (authenticated, idempotent, logged, retry-safe)",Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,
-ENTL-001,ENTL,Feature Entitlements & Usage Limits,Entitlements,Central entitlement service (Plan → Entitlements → Limits → Subscription → Feature Access),Master Prompt,§8,Planned,Pending,Pending,Pending,Pending,,
-ENTL-002,ENTL,Feature Entitlements & Usage Limits,Entitlements,Plan/feature entitlement matrix administration,Master Prompt,"§8, §29",Planned,Pending,Pending,Pending,Pending,,
-ENTL-003,ENTL,Feature Entitlements & Usage Limits,Entitlements,Feature gating API for backend and frontend,Master Prompt,§8,Planned,Pending,Pending,Pending,Pending,,
-ENTL-004,ENTL,Feature Entitlements & Usage Limits,Limits,"Usage limits: users, contacts, leads, emails, SMS, AI credits, keywords, competitors, locations, websites, storage, API calls, automations, workflow executions, reports, data retention",Master Prompt,§9,Planned,Pending,Pending,Pending,Pending,,
-ENTL-005,ENTL,Feature Entitlements & Usage Limits,Metering,Usage metering and aggregation per tenant,Master Prompt,§9,Planned,Pending,Pending,Pending,Pending,,
-ENTL-006,ENTL,Feature Entitlements & Usage Limits,Metering,"Usage display: current, allowance, remaining, overages",Master Prompt,§9,Planned,Pending,Pending,Pending,Pending,,
-ENTL-007,ENTL,Feature Entitlements & Usage Limits,Metering,Limit enforcement and overage handling,Master Prompt,§9,Planned,Pending,Pending,Pending,Pending,,
+BILL-001,BILL,Billing & Subscriptions,Plans,"Configurable plan catalog (Starter, Growth, Professional, Agency, Enterprise)",Master Prompt,§7,Tested,Done,Done,Done,Pending,,5-plan catalog (code->DB via PlanSeeder/billing:sync-plans); pricing page
+BILL-002,BILL,Billing & Subscriptions,Pricing,Monthly and annual pricing with annual discount,Master Prompt,§7,Tested,Done,Done,Done,Pending,,Monthly + annual prices with annual discount; interval toggle
+BILL-003,BILL,Billing & Subscriptions,Pricing,Per-user pricing support,Master Prompt,§7,Partially Implemented,Done,Pending,Done,Pending,,plan_prices.per_seat + subscription quantity + prorated quantity changes tested; no per-seat-priced plan seeded yet
+BILL-004,BILL,Billing & Subscriptions,Pricing,Usage-based pricing support,Master Prompt,§7,Partially Implemented,Done,Pending,Done,Pending,,Usage metering + counters implemented (ENTL); usage-based/overage billing not yet (needs metered charge run)
+BILL-005,BILL,Billing & Subscriptions,Pricing,Add-ons,Master Prompt,§7,Planned,Pending,Pending,Pending,Pending,,Add-ons not implemented; deferred (no add-on schema/UI yet)
+BILL-006,BILL,Billing & Subscriptions,Pricing,Custom enterprise pricing,Master Prompt,§7,Tested,Done,Done,Done,Pending,,Custom-priced Enterprise plan; checkout rejects (422) + Contact sales CTA
+BILL-007,BILL,Billing & Subscriptions,Pricing,Coupons / promo codes,Master Prompt,"§7, §29",Tested,Done,Done,Done,Pending,,"Coupons: percent+amount, validity (active/expiry/redemptions), applied to invoice, redeemed"
+BILL-008,BILL,Billing & Subscriptions,Checkout,"Checkout flow: billing details, company details, tax info, promo code, payment method, order summary",Master Prompt,§7,Partially Implemented,Done,Done,Done,Pending,,Checkout: order summary + promo tested; billing/company/tax captured via billing profile; card entry is provider-hosted (Stripe) / manual
+BILL-009,BILL,Billing & Subscriptions,Checkout,Invoice / receipt generation,Master Prompt,§7,Tested,Done,Done,Done,Pending,,Invoice + line items generated; detail/receipt page
+BILL-010,BILL,Billing & Subscriptions,Provider,Payment-provider abstraction layer (Stripe first),Master Prompt,§7,Tested,Done,Pending,Done,Pending,,"PaymentProvider abstraction + manual driver tested + swappable; Stripe driver implemented but UNTESTED (requires credentials, ADR-0003)"
+BILL-011,BILL,Billing & Subscriptions,Lifecycle,Trial and trial expiration handling,Master Prompt,§7,Partially Implemented,Done,Pending,Done,Pending,,Trial start tested; expire() + past->expired implemented; automatic trial-expiry sweep (scheduler) pending Stage 4 jobs
+BILL-012,BILL,Billing & Subscriptions,Lifecycle,Subscription activation and renewal,Master Prompt,§7,Partially Implemented,Done,Pending,Done,Pending,,Activation tested; recurring renewal charge needs scheduler/provider webhook (manual driver has no auto-renew)
+BILL-013,BILL,Billing & Subscriptions,Lifecycle,Upgrade / downgrade with proration,Master Prompt,§7,Tested,Done,Done,Done,Pending,,Upgrade/downgrade with proration; downgrade blocked when over member limit
+BILL-014,BILL,Billing & Subscriptions,Lifecycle,Quantity changes and add-on changes,Master Prompt,§7,Tested,Done,Done,Done,Pending,,Quantity (seat) changes with proration invoice
+BILL-015,BILL,Billing & Subscriptions,Lifecycle,"Cancellation, scheduled cancellation, reactivation",Master Prompt,§7,Tested,Done,Done,Done,Pending,,Cancel (scheduled + immediate) + resume
+BILL-016,BILL,Billing & Subscriptions,Lifecycle,"Failed payment handling, dunning, grace periods",Master Prompt,§7,Tested,Done,Pending,Done,Pending,,Failed payment -> past_due with grace window (via webhook + markPastDue)
+BILL-017,BILL,Billing & Subscriptions,Lifecycle,Suspended and expired subscription states,Master Prompt,§7,Tested,Done,Pending,Done,Pending,,Suspended (via webhook) + expired states
+BILL-018,BILL,Billing & Subscriptions,Portal,"Billing portal: plan, usage, payment method, invoices, history, billing contact, tax details, cancel",Master Prompt,§7,Partially Implemented,Done,Done,Done,Pending,,"Portal: plan, usage, invoices, change plan, cancel/resume, billing profile (contact/tax) tested; payment-method mgmt is provider-hosted (pending Stripe)"
+BILL-019,BILL,Billing & Subscriptions,Webhooks,"Billing webhook processing (authenticated, idempotent, logged, retry-safe)",Master Prompt,§7,Tested,Done,Pending,Done,Pending,,"Webhook endpoint: signature-verified, idempotent (billing_events), retry-safe; manual + stripe verifiers"
+ENTL-001,ENTL,Feature Entitlements & Usage Limits,Entitlements,Central entitlement service (Plan → Entitlements → Limits → Subscription → Feature Access),Master Prompt,§8,Tested,Done,Pending,Done,Pending,,Entitlements service: Plan->Entitlements->Limits->Subscription->Feature; free fallback; cached
+ENTL-002,ENTL,Feature Entitlements & Usage Limits,Entitlements,Plan/feature entitlement matrix administration,Master Prompt,"§8, §29",Partially Implemented,Done,Pending,Done,Pending,,plan_entitlements matrix seeded from catalog; admin editing UI arrives with platform admin (Stage 13)
+ENTL-003,ENTL,Feature Entitlements & Usage Limits,Entitlements,Feature gating API for backend and frontend,Master Prompt,§8,Tested,Done,Done,Done,Pending,,Feature gating: entitlement: middleware (backend) + entitlements shared to Inertia (frontend)
+ENTL-004,ENTL,Feature Entitlements & Usage Limits,Limits,"Usage limits: users, contacts, leads, emails, SMS, AI credits, keywords, competitors, locations, websites, storage, API calls, automations, workflow executions, reports, data retention",Master Prompt,§9,Partially Implemented,Done,Pending,Done,Pending,,"Limit registry covers users/contacts/emails/etc.; members enforced now, others resolve + metered as modules land"
+ENTL-005,ENTL,Feature Entitlements & Usage Limits,Metering,Usage metering and aggregation per tenant,Master Prompt,§9,Tested,Done,Pending,Done,Pending,,UsageMeter: live meters (members) + counter meters per period
+ENTL-006,ENTL,Feature Entitlements & Usage Limits,Metering,"Usage display: current, allowance, remaining, overages",Master Prompt,§9,Tested,Done,Done,Done,Pending,,Portal usage bars: current/allowance/remaining; unlimited handling
+ENTL-007,ENTL,Feature Entitlements & Usage Limits,Metering,Limit enforcement and overage handling,Master Prompt,§9,Tested,Done,Pending,Done,Pending,,Member seat limit enforced on invite; downgrade-over-limit blocked
 DSGN-001,DSGN,Design System & UX Standards,Foundations,"Color, typography, spacing and icon token system",Master Prompt,§11,Planned,Pending,Pending,Pending,Pending,,
 DSGN-002,DSGN,Design System & UX Standards,Components,"Reusable component library (buttons, forms, tables, modals, charts, toasts, etc.)",Master Prompt,§11,Planned,Pending,Pending,Pending,Pending,,
 DSGN-003,DSGN,Design System & UX Standards,Standards,Responsive behavior verified: large desktop → mobile,Master Prompt,§12,Planned,Pending,Pending,Pending,Pending,,
@@ -1073,7 +1073,7 @@ AUDIT-001,AUDIT,Audit Logging,Framework,"Central audit log (actor, tenant, actio
 AUDIT-002,AUDIT,Audit Logging,Coverage,"Security events: logins, failed logins, password/MFA changes",Master Prompt,§20,Tested,Done,Pending,Done,Pending,,Stage 1 security events (login/failed/password/MFA) recorded
 AUDIT-003,AUDIT,Audit Logging,Coverage,"Admin events: user/role/permission changes, API keys, impersonation",Master Prompt,§20,Tested,Done,Pending,Done,Pending,,"Admin events: org/member/role/team changes, API keys, invitations"
 AUDIT-004,AUDIT,Audit Logging,Coverage,"Data events: deletes, deal changes, campaign changes, exports",Master Prompt,§20,Partially Implemented,Done,Pending,Pending,Pending,,Delete/change events for tenancy entities recorded; CRM/campaign data events arrive with those modules
-AUDIT-005,AUDIT,Audit Logging,Coverage,Billing and subscription change events,Master Prompt,§20,Planned,Pending,Pending,Pending,Pending,,
+AUDIT-005,AUDIT,Audit Logging,Coverage,Billing and subscription change events,Master Prompt,§20,Tested,Done,Pending,Done,Pending,,"Billing/subscription events audited (subscription.*, invoice.*, coupon.applied, billing.profile_updated)"
 AUDIT-006,AUDIT,Audit Logging,Access,Audit log viewer with filters (org + platform level),Master Prompt,"§20, §29",Tested,Done,Done,Done,Pending,,Org-scoped audit viewer with action/actor filters + pagination; permission-gated; platform-level view in Stage 13
 SEC-001,SEC,Security,AppSec,"CSRF, XSS, SQL-injection and SSRF protections",Master Prompt,§21,Planned,Pending,Pending,Pending,Pending,,
 SEC-002,SEC,Security,AppSec,Secure headers and API rate limiting,Master Prompt,§21,Planned,Pending,Pending,Pending,Pending,,

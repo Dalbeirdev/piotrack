@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Billing\BillingController;
+use App\Http\Controllers\Billing\BillingProfileController;
+use App\Http\Controllers\Billing\CheckoutController;
+use App\Http\Controllers\Billing\InvoiceController;
+use App\Http\Controllers\Billing\SubscriptionController;
 use App\Http\Controllers\Settings\AuditLogController;
 use App\Http\Controllers\Settings\InvitationController;
 use App\Http\Controllers\Settings\MemberController;
@@ -42,21 +47,42 @@ Route::middleware(['auth', 'verified', 'organization'])->group(function () {
     Route::delete('settings/members/invitations/{invitation}', [InvitationController::class, 'destroy'])
         ->middleware('can:members.invite')->name('invitations.destroy');
 
-    // Teams.
-    Route::get('settings/teams', [TeamController::class, 'index'])
-        ->middleware('can:teams.view')->name('teams.index');
-    Route::post('settings/teams', [TeamController::class, 'store'])
-        ->middleware('can:teams.manage')->name('teams.store');
-    Route::patch('settings/teams/{team}', [TeamController::class, 'update'])
-        ->middleware('can:teams.manage')->name('teams.update');
-    Route::delete('settings/teams/{team}', [TeamController::class, 'destroy'])
-        ->middleware('can:teams.manage')->name('teams.destroy');
-    Route::post('settings/teams/{team}/members', [TeamController::class, 'addMember'])
-        ->middleware('can:teams.manage')->name('teams.members.add');
-    Route::delete('settings/teams/{team}/members/{member}', [TeamController::class, 'removeMember'])
-        ->middleware('can:teams.manage')->name('teams.members.remove');
+    // Teams (also gated by the `teams` feature entitlement).
+    Route::middleware('entitlement:teams')->group(function () {
+        Route::get('settings/teams', [TeamController::class, 'index'])
+            ->middleware('can:teams.view')->name('teams.index');
+        Route::post('settings/teams', [TeamController::class, 'store'])
+            ->middleware('can:teams.manage')->name('teams.store');
+        Route::patch('settings/teams/{team}', [TeamController::class, 'update'])
+            ->middleware('can:teams.manage')->name('teams.update');
+        Route::delete('settings/teams/{team}', [TeamController::class, 'destroy'])
+            ->middleware('can:teams.manage')->name('teams.destroy');
+        Route::post('settings/teams/{team}/members', [TeamController::class, 'addMember'])
+            ->middleware('can:teams.manage')->name('teams.members.add');
+        Route::delete('settings/teams/{team}/members/{member}', [TeamController::class, 'removeMember'])
+            ->middleware('can:teams.manage')->name('teams.members.remove');
+    });
 
-    // Audit log viewer.
+    // Audit log viewer (also gated by the `audit_log` feature entitlement).
     Route::get('settings/audit-log', [AuditLogController::class, 'index'])
-        ->middleware('can:audit.view')->name('audit.index');
+        ->middleware(['can:audit.view', 'entitlement:audit_log'])->name('audit.index');
+
+    // Billing & subscriptions.
+    Route::get('billing', [BillingController::class, 'index'])
+        ->middleware('can:billing.view')->name('billing.index');
+    Route::get('billing/plans', [BillingController::class, 'plans'])
+        ->middleware('can:billing.view')->name('billing.plans');
+    Route::get('billing/invoices', [InvoiceController::class, 'index'])
+        ->middleware('can:billing.view')->name('billing.invoices.index');
+    Route::get('billing/invoices/{invoice}', [InvoiceController::class, 'show'])
+        ->middleware('can:billing.view')->name('billing.invoices.show');
+
+    Route::middleware('can:billing.manage')->group(function () {
+        Route::get('billing/checkout', [CheckoutController::class, 'show'])->name('billing.checkout.show');
+        Route::post('billing/checkout', [CheckoutController::class, 'store'])->name('billing.checkout.store');
+        Route::patch('billing/subscription', [SubscriptionController::class, 'update'])->name('billing.subscription.update');
+        Route::post('billing/subscription/cancel', [SubscriptionController::class, 'cancel'])->name('billing.subscription.cancel');
+        Route::post('billing/subscription/resume', [SubscriptionController::class, 'resume'])->name('billing.subscription.resume');
+        Route::patch('billing/profile', [BillingProfileController::class, 'update'])->name('billing.profile.update');
+    });
 });

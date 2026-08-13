@@ -100,13 +100,13 @@ it('scopes the audit log viewer to the current organization', function () {
     [$orgA, $ownerA] = makeOrganization('A');
     [$orgB, $ownerB] = makeOrganization('B');
 
-    // Each creation logged an organization.created event for its own org.
+    // Org A's creation logged organization.created (+ subscription.trial_started).
     $response = $this->actingAs($ownerA)->get(route('audit.index'));
 
     $response->assertOk()->assertInertia(fn ($page) => $page
-        ->where('logs.data', fn ($logs) => collect($logs)->every(
-            fn ($log) => str_contains($log['action'], 'organization') || $log['actor']['email'] === $ownerA->email,
-        )),
+        ->where('logs.data', fn ($logs) => collect($logs)->isNotEmpty()
+            // Any actor shown is org A's owner (or a system event with no actor).
+            && collect($logs)->every(fn ($log) => ($log['actor']['email'] ?? $ownerA->email) === $ownerA->email)),
     );
 
     // B's owner never appears in A's audit log.

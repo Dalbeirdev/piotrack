@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Billing\WebhookController;
 use App\Http\Controllers\HealthController;
 use App\Http\Controllers\InvitationAcceptanceController;
 use App\Http\Controllers\OrganizationController;
@@ -11,6 +12,9 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('health', HealthController::class)->name('health');
+
+// Public billing webhooks — verified by the provider driver, CSRF-exempt.
+Route::post('webhooks/{provider}', [WebhookController::class, 'handle'])->name('billing.webhook');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Organization lifecycle (no active organization required).

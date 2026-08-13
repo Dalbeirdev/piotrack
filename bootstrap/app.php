@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AssignRequestId;
+use App\Http\Middleware\EnsureEntitled;
 use App\Http\Middleware\EnsureHasOrganization;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\SetCurrentOrganization;
@@ -29,6 +30,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->prepend(AssignRequestId::class);
 
+        // Inbound billing webhooks authenticate via provider signature, not CSRF.
+        $middleware->validateCsrfTokens(except: ['webhooks/*']);
+
         $middleware->web(append: [
             SetCurrentOrganization::class,
             HandleInertiaRequests::class,
@@ -45,6 +49,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'organization' => EnsureHasOrganization::class,
+            'entitlement' => EnsureEntitled::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

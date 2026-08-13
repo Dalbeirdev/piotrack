@@ -30,6 +30,10 @@ enum Permission: string
     case RolesView = 'roles.view';
     case AuditView = 'audit.view';
 
+    // Billing
+    case BillingView = 'billing.view';
+    case BillingManage = 'billing.manage';
+
     // Settings
     case SettingsManage = 'settings.manage';
 

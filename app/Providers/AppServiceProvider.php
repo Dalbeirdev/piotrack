@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Billing\Contracts\PaymentProvider;
+use App\Billing\PaymentProviderManager;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -13,7 +15,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Resolve the active payment provider (ADR-0003) wherever the
+        // PaymentProvider contract is type-hinted.
+        $this->app->bind(
+            PaymentProvider::class,
+            fn ($app) => $app->make(PaymentProviderManager::class)->driver(),
+        );
     }
 
     /**
