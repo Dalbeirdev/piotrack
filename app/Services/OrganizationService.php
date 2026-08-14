@@ -12,7 +12,9 @@ use App\Models\Organization;
 use App\Models\Plan;
 use App\Models\User;
 use App\Notifications\MemberJoinedNotification;
+use App\Services\Web\TaxonomyService;
 use App\Support\AuditLogger;
+use App\Support\CurrentOrganization;
 use App\Support\NotificationDispatcher;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -31,6 +33,8 @@ class OrganizationService
         private UsageMeter $usage,
         private NotificationDispatcher $notifications,
         private CrmProvisioner $crm,
+        private TaxonomyService $taxonomy,
+        private CurrentOrganization $current,
     ) {}
 
     /**
@@ -69,6 +73,12 @@ class OrganizationService
 
             // Provision a default sales pipeline so deals can be created at once.
             $this->crm->createDefaultPipeline($organization);
+
+            // Seed the MSP service-line and vertical taxonomies (Stage 15) so
+            // pages and campaigns have something to target from day one. The
+            // service reads the current tenant, so scope it explicitly here.
+            $this->current->set($organization);
+            $this->taxonomy->provision();
 
             return $organization;
         });

@@ -79,6 +79,9 @@ class RolePermissions
         ];
         $deliveryReadOnly = [Permission::SupportView, Permission::ProjectsView, Permission::StrategyView];
 
+        // Website platform + taxonomy (Stage 15).
+        $webAll = [Permission::WebView, Permission::WebPagesManage, Permission::WebTaxonomyManage];
+
         return [
             Role::Owner->value => $all,
             Role::Admin->value => $adminExceptDelete,
@@ -101,6 +104,7 @@ class RolePermissions
                 ...$analyticsAll,
                 ...$aiAll,
                 ...$deliveryAll,
+                ...$webAll,
             ],
             Role::SalesManager->value => [
                 Permission::OrganizationView,
@@ -122,6 +126,7 @@ class RolePermissions
                 ...$analyticsAll,
                 ...$aiAll,
                 ...$deliveryAll,
+                Permission::WebView,
             ],
             Role::MarketingUser->value => [
                 Permission::OrganizationView,
@@ -146,6 +151,7 @@ class RolePermissions
                 Permission::ProjectsManage,
                 Permission::StrategyView,
                 Permission::StrategyManage,
+                ...$webAll,
             ],
             Role::SalesRepresentative->value => [
                 Permission::OrganizationView,
@@ -185,6 +191,7 @@ class RolePermissions
                 Permission::AiView,
                 Permission::AiAgentUse,
                 ...$deliveryReadOnly,
+                Permission::WebView,
             ],
             Role::BillingAdministrator->value => [
                 Permission::OrganizationView,
@@ -204,6 +211,7 @@ class RolePermissions
                 Permission::AnalyticsView,
                 Permission::AiView,
                 ...$deliveryReadOnly,
+                Permission::WebView,
             ],
             // The client portal role is deliberately minimal: portal access and
             // approving its own deliverables. No CRM, marketing, sales,

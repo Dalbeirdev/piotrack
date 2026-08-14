@@ -22,6 +22,7 @@ import {
     FlaskConical,
     Gauge,
     GitBranch,
+    Globe,
     Handshake,
     KeyRound,
     Layers,
@@ -102,6 +103,11 @@ export function AppSidebar() {
         can('content.view') && { title: 'Outreach', url: '/content/outreach', icon: Send },
     ].filter(Boolean) as NavItem[];
 
+    const websiteNavItems: NavItem[] = [
+        can('web.view') && { title: 'Pages', url: '/website', icon: Globe },
+        can('web.view') && { title: 'Taxonomy & Locations', url: '/website/taxonomy', icon: MapPin },
+    ].filter(Boolean) as NavItem[];
+
     const salesNavItems: NavItem[] = [
         can('sales.view') && { title: 'Dashboard', url: '/sales', icon: Gauge },
         can('sales.view') && { title: 'Scoring', url: '/sales/scoring', icon: Flame },
@@ -163,6 +169,7 @@ export function AppSidebar() {
                 {seoNavItems.length > 0 && <NavMain items={seoNavItems} label="SEO" />}
                 {adsNavItems.length > 0 && <NavMain items={adsNavItems} label="Advertising" />}
                 {contentNavItems.length > 0 && <NavMain items={contentNavItems} label="Content" />}
+                {websiteNavItems.length > 0 && <NavMain items={websiteNavItems} label="Website" />}
                 {salesNavItems.length > 0 && <NavMain items={salesNavItems} label="Sales" />}
                 {analyticsNavItems.length > 0 && <NavMain items={analyticsNavItems} label="Analytics" />}
                 {aiNavItems.length > 0 && <NavMain items={aiNavItems} label="AI" />}

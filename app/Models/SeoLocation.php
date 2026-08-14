@@ -13,6 +13,9 @@ class SeoLocation extends Model
     protected $fillable = [
         'organization_id', 'name', 'street', 'city', 'region', 'postal_code',
         'country', 'phone', 'website',
+        // Multi-location (MLOC): a branch belongs to a sales territory, may map
+        // to its own Google Business Profile, and can be deactivated.
+        'territory', 'gbp_place_id', 'is_active',
     ];
 
     /**

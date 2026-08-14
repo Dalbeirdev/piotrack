@@ -9,6 +9,7 @@ use App\Http\Controllers\Public\EmailTrackingController;
 use App\Http\Controllers\Public\PublicBookingController;
 use App\Http\Controllers\Public\PublicFormController;
 use App\Http\Controllers\Public\PublicLandingPageController;
+use App\Http\Controllers\Public\PublicSitePageController;
 use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -36,6 +37,9 @@ Route::get('e/u/{token}', [EmailTrackingController::class, 'unsubscribeShow'])->
 Route::post('e/u/{token}', [EmailTrackingController::class, 'unsubscribe'])->middleware('throttle:20,1')->name('public.track.unsubscribe');
 
 // Public appointment booking (Stage 10).
+// Published website pages (Stage 15). Draft pages 404.
+Route::get('s/{slug}', [PublicSitePageController::class, 'show'])->name('public.page.show');
+
 Route::get('b/{slug}', [PublicBookingController::class, 'show'])->name('public.booking.show');
 Route::post('b/{slug}', [PublicBookingController::class, 'book'])->middleware('throttle:20,1')->name('public.booking.book');
 
@@ -66,6 +70,7 @@ require __DIR__.'/sales.php';
 require __DIR__.'/analytics.php';
 require __DIR__.'/ai.php';
 require __DIR__.'/delivery.php';
+require __DIR__.'/web-platform.php';
 require __DIR__.'/platform.php';
 require __DIR__.'/tenant.php';
 require __DIR__.'/settings.php';

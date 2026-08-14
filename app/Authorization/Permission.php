@@ -131,6 +131,11 @@ enum Permission: string
     // Client portal
     case PortalAccess = 'portal.access';
 
+    // Website platform, service lines, verticals and locations (Stage 15)
+    case WebView = 'web.view';
+    case WebPagesManage = 'web.pages.manage';
+    case WebTaxonomyManage = 'web.taxonomy.manage';
+
     // Settings
     case SettingsManage = 'settings.manage';
 
