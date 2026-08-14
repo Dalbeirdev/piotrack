@@ -83,6 +83,13 @@ enum Permission: string
     case AdsCampaignsManage = 'ads.campaigns.manage';
     case AdsRetargetingManage = 'ads.retargeting.manage';
 
+    // Content & authority
+    case ContentView = 'content.view';
+    case ContentPiecesManage = 'content.pieces.manage';
+    case ContentSocialManage = 'content.social.manage';
+    case ContentReputationManage = 'content.reputation.manage';
+    case ContentOutreachManage = 'content.outreach.manage';
+
     // Settings
     case SettingsManage = 'settings.manage';
 

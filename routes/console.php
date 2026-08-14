@@ -24,3 +24,6 @@ Schedule::command('marketing:send-scheduled-campaigns')->everyFiveMinutes()->wit
 // Advertising metrics refresh (Stage 8) — pull daily performance for active
 // campaigns; each dispatches per-tenant queued jobs.
 Schedule::command('ads:refresh-metrics')->dailyAt('06:00')->withoutOverlapping();
+
+// Social publishing (Stage 9) — publish scheduled posts whose time has arrived.
+Schedule::command('content:publish-due-posts')->everyFiveMinutes()->withoutOverlapping();

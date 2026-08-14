@@ -18,8 +18,12 @@ import {
     Mail,
     MapPin,
     Megaphone,
+    PenLine,
     Search,
+    Send,
+    Share2,
     Sparkles,
+    Star,
     Target,
     UserPlus,
     Users,
@@ -65,6 +69,14 @@ export function AppSidebar() {
         can('ads.view') && { title: 'Retargeting', url: '/ads/retargeting', icon: Users },
     ].filter(Boolean) as NavItem[];
 
+    const contentNavItems: NavItem[] = [
+        can('content.view') && { title: 'Dashboard', url: '/content', icon: PenLine },
+        can('content.view') && { title: 'Content', url: '/content/pieces', icon: FileText },
+        can('content.view') && { title: 'Social', url: '/content/social', icon: Share2 },
+        can('content.view') && { title: 'Reputation', url: '/content/reputation', icon: Star },
+        can('content.view') && { title: 'Outreach', url: '/content/outreach', icon: Send },
+    ].filter(Boolean) as NavItem[];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -77,6 +89,7 @@ export function AppSidebar() {
                 {marketingNavItems.length > 0 && <NavMain items={marketingNavItems} label="Marketing" />}
                 {seoNavItems.length > 0 && <NavMain items={seoNavItems} label="SEO" />}
                 {adsNavItems.length > 0 && <NavMain items={adsNavItems} label="Advertising" />}
+                {contentNavItems.length > 0 && <NavMain items={contentNavItems} label="Content" />}
             </SidebarContent>
 
             <SidebarFooter>

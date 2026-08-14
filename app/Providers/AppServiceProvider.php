@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use App\Billing\Contracts\PaymentProvider;
 use App\Billing\PaymentProviderManager;
+use App\Content\ContentProviderManager;
+use App\Content\Contracts\ReviewProvider;
+use App\Content\Contracts\SocialProvider;
 use App\Messaging\Contracts\MailProvider;
 use App\Messaging\Contracts\SmsProvider;
 use App\Messaging\MessagingProviderManager;
@@ -55,6 +58,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             AiSearchProvider::class,
             fn ($app) => $app->make(SeoProviderManager::class)->ai(),
+        );
+
+        // Resolve the active social / review drivers (ADR-0007).
+        $this->app->bind(
+            SocialProvider::class,
+            fn ($app) => $app->make(ContentProviderManager::class)->social(),
+        );
+        $this->app->bind(
+            ReviewProvider::class,
+            fn ($app) => $app->make(ContentProviderManager::class)->review(),
         );
     }
 

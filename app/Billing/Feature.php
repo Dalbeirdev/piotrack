@@ -11,6 +11,7 @@ enum Feature: string
 {
     case Crm = 'crm';
     case Marketing = 'marketing';
+    case Content = 'content';
     case Seo = 'seo';
     case Advertising = 'advertising';
     case Automation = 'automation';
