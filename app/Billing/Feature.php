@@ -12,6 +12,7 @@ enum Feature: string
     case Crm = 'crm';
     case Marketing = 'marketing';
     case Seo = 'seo';
+    case Advertising = 'advertising';
     case Automation = 'automation';
     case AuditLog = 'audit_log';
     case AiVisibility = 'ai_visibility';

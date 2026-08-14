@@ -20,6 +20,7 @@ import {
     Megaphone,
     Search,
     Sparkles,
+    Target,
     UserPlus,
     Users,
     Workflow,
@@ -58,6 +59,12 @@ export function AppSidebar() {
         can('seo.view') && { title: 'Schema', url: '/seo/schema', icon: Code },
     ].filter(Boolean) as NavItem[];
 
+    const adsNavItems: NavItem[] = [
+        can('ads.view') && { title: 'Dashboard', url: '/ads', icon: Megaphone },
+        can('ads.view') && { title: 'Campaigns', url: '/ads/campaigns', icon: Target },
+        can('ads.view') && { title: 'Retargeting', url: '/ads/retargeting', icon: Users },
+    ].filter(Boolean) as NavItem[];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -69,6 +76,7 @@ export function AppSidebar() {
                 {crmNavItems.length > 0 && <NavMain items={crmNavItems} label="CRM" />}
                 {marketingNavItems.length > 0 && <NavMain items={marketingNavItems} label="Marketing" />}
                 {seoNavItems.length > 0 && <NavMain items={seoNavItems} label="SEO" />}
+                {adsNavItems.length > 0 && <NavMain items={adsNavItems} label="Advertising" />}
             </SidebarContent>
 
             <SidebarFooter>

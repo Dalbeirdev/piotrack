@@ -54,6 +54,9 @@ class RolePermissions
         // SEO permission grouping.
         $seoAll = array_values(array_filter($all, fn (Permission $p) => str_starts_with($p->value, 'seo.')));
 
+        // Advertising permission grouping.
+        $adsAll = array_values(array_filter($all, fn (Permission $p) => str_starts_with($p->value, 'ads.')));
+
         return [
             Role::Owner->value => $all,
             Role::Admin->value => $adminExceptDelete,
@@ -70,6 +73,7 @@ class RolePermissions
                 ...$crmAll,
                 ...$marketingAll,
                 ...$seoAll,
+                ...$adsAll,
             ],
             Role::SalesManager->value => [
                 Permission::OrganizationView,
@@ -85,6 +89,7 @@ class RolePermissions
                 Permission::MarketingView,
                 Permission::MarketingFunnelsView,
                 Permission::SeoView,
+                Permission::AdsView,
             ],
             Role::MarketingUser->value => [
                 Permission::OrganizationView,
@@ -95,6 +100,7 @@ class RolePermissions
                 ...$crmReadWrite,
                 ...$marketingBuild,
                 ...$seoAll,
+                ...$adsAll,
             ],
             Role::SalesRepresentative->value => [
                 Permission::OrganizationView,
@@ -104,6 +110,7 @@ class RolePermissions
                 ...$crmReadWrite,
                 Permission::MarketingView,
                 Permission::SeoView,
+                Permission::AdsView,
             ],
             Role::Analyst->value => [
                 Permission::OrganizationView,
@@ -115,6 +122,7 @@ class RolePermissions
                 Permission::MarketingFunnelsView,
                 Permission::SeoView,
                 Permission::SeoAuditsManage,
+                Permission::AdsView,
             ],
             Role::BillingAdministrator->value => [
                 Permission::OrganizationView,
@@ -128,6 +136,7 @@ class RolePermissions
                 ...$crmReadOnly,
                 Permission::MarketingView,
                 Permission::SeoView,
+                Permission::AdsView,
             ],
         ];
     }

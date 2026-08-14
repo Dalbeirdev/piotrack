@@ -1,0 +1,43 @@
+<?php
+
+use App\Http\Controllers\Advertising\AdDashboardController;
+use App\Http\Controllers\Advertising\AdGroupController;
+use App\Http\Controllers\Advertising\CampaignController;
+use App\Http\Controllers\Advertising\RetargetingController;
+use Illuminate\Support\Facades\Route;
+
+/*
+ * Advertising (Stage 8). Requires an authenticated, verified user with an active
+ * organization on a plan that includes the `advertising` feature; actions are
+ * gated by ads.* permissions. Route-model binding is tenant-scoped.
+ */
+Route::middleware(['auth', 'verified', 'organization', 'entitlement:advertising'])
+    ->prefix('ads')->name('ads.')->group(function () {
+
+        Route::get('/', AdDashboardController::class)->middleware('can:ads.view')->name('dashboard');
+
+        // Campaigns.
+        Route::get('campaigns', [CampaignController::class, 'index'])->middleware('can:ads.view')->name('campaigns.index');
+        Route::post('campaigns', [CampaignController::class, 'store'])->middleware('can:ads.campaigns.manage')->name('campaigns.store');
+        Route::get('campaigns/{campaign}', [CampaignController::class, 'show'])->middleware('can:ads.view')->name('campaigns.show');
+        Route::patch('campaigns/{campaign}', [CampaignController::class, 'update'])->middleware('can:ads.campaigns.manage')->name('campaigns.update');
+        Route::post('campaigns/{campaign}/status', [CampaignController::class, 'status'])->middleware('can:ads.campaigns.manage')->name('campaigns.status');
+        Route::post('campaigns/{campaign}/refresh-metrics', [CampaignController::class, 'refreshMetrics'])->middleware('can:ads.campaigns.manage')->name('campaigns.refresh-metrics');
+        Route::delete('campaigns/{campaign}', [CampaignController::class, 'destroy'])->middleware('can:ads.campaigns.manage')->name('campaigns.destroy');
+
+        // Ad groups + nested ads + keywords.
+        Route::middleware('can:ads.campaigns.manage')->group(function () {
+            Route::post('campaigns/{campaign}/groups', [AdGroupController::class, 'storeGroup'])->name('groups.store');
+            Route::delete('groups/{group}', [AdGroupController::class, 'destroyGroup'])->name('groups.destroy');
+            Route::post('groups/{group}/ads', [AdGroupController::class, 'storeAd'])->name('ads.store');
+            Route::delete('ads/{ad}', [AdGroupController::class, 'destroyAd'])->name('ads.destroy');
+            Route::post('groups/{group}/keywords', [AdGroupController::class, 'storeKeyword'])->name('keywords.store');
+            Route::delete('keywords/{keyword}', [AdGroupController::class, 'destroyKeyword'])->name('keywords.destroy');
+        });
+
+        // Retargeting audiences.
+        Route::get('retargeting', [RetargetingController::class, 'index'])->middleware('can:ads.view')->name('retargeting.index');
+        Route::post('retargeting', [RetargetingController::class, 'store'])->middleware('can:ads.retargeting.manage')->name('retargeting.store');
+        Route::post('retargeting/{audience}/rebuild', [RetargetingController::class, 'rebuild'])->middleware('can:ads.retargeting.manage')->name('retargeting.rebuild');
+        Route::delete('retargeting/{audience}', [RetargetingController::class, 'destroy'])->middleware('can:ads.retargeting.manage')->name('retargeting.destroy');
+    });

@@ -78,6 +78,11 @@ enum Permission: string
     case SeoLocalManage = 'seo.local.manage';
     case SeoAiManage = 'seo.ai.manage';
 
+    // Advertising
+    case AdsView = 'ads.view';
+    case AdsCampaignsManage = 'ads.campaigns.manage';
+    case AdsRetargetingManage = 'ads.retargeting.manage';
+
     // Settings
     case SettingsManage = 'settings.manage';
 

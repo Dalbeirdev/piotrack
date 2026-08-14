@@ -47,8 +47,8 @@ class PlanCatalog
                 'sort_order' => 3,
                 'prices' => ['monthly' => 34900, 'annual' => 335000],
                 'features' => [
-                    Feature::Crm, Feature::Marketing, Feature::Seo, Feature::Automation, Feature::Teams,
-                    Feature::AuditLog, Feature::AiVisibility, Feature::Api,
+                    Feature::Crm, Feature::Marketing, Feature::Seo, Feature::Advertising, Feature::Automation,
+                    Feature::Teams, Feature::AuditLog, Feature::AiVisibility, Feature::Api,
                 ],
                 'limits' => [Limit::Members->value => 25, Limit::Contacts->value => 50000, Limit::Emails->value => 100000],
             ],
@@ -59,8 +59,8 @@ class PlanCatalog
                 'sort_order' => 4,
                 'prices' => ['monthly' => 74900, 'annual' => 719000],
                 'features' => [
-                    Feature::Crm, Feature::Marketing, Feature::Seo, Feature::Automation, Feature::Teams,
-                    Feature::AuditLog, Feature::AiVisibility, Feature::Api, Feature::WhiteLabel,
+                    Feature::Crm, Feature::Marketing, Feature::Seo, Feature::Advertising, Feature::Automation,
+                    Feature::Teams, Feature::AuditLog, Feature::AiVisibility, Feature::Api, Feature::WhiteLabel,
                 ],
                 'limits' => [Limit::Members->value => 100, Limit::Emails->value => 500000],
             ],

@@ -20,3 +20,7 @@ Schedule::command('subscriptions:notify-trial-ending')->dailyAt('09:00');
 // are advanced frequently; each command dispatches per-tenant queued jobs.
 Schedule::command('marketing:process-workflows')->everyFiveMinutes()->withoutOverlapping();
 Schedule::command('marketing:send-scheduled-campaigns')->everyFiveMinutes()->withoutOverlapping();
+
+// Advertising metrics refresh (Stage 8) — pull daily performance for active
+// campaigns; each dispatches per-tenant queued jobs.
+Schedule::command('ads:refresh-metrics')->dailyAt('06:00')->withoutOverlapping();
