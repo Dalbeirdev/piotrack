@@ -27,3 +27,6 @@ Schedule::command('ads:refresh-metrics')->dailyAt('06:00')->withoutOverlapping()
 
 // Social publishing (Stage 9) — publish scheduled posts whose time has arrived.
 Schedule::command('content:publish-due-posts')->everyFiveMinutes()->withoutOverlapping();
+
+// Booking reminders (Stage 10) — notify owners of meetings in the next 24 hours.
+Schedule::command('sales:send-booking-reminders')->dailyAt('08:00')->withoutOverlapping();

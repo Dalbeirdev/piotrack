@@ -85,6 +85,14 @@ class Contact extends Model implements HasActivities
     }
 
     /**
+     * @return HasMany<IntentSignal, $this>
+     */
+    public function intentSignals(): HasMany
+    {
+        return $this->hasMany(IntentSignal::class);
+    }
+
+    /**
      * @param  Builder<Contact>  $query
      * @return Builder<Contact>
      */

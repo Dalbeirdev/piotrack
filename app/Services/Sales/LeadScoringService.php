@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Services\Sales;
+
+use App\Models\Contact;
+use App\Models\ScoringRule;
+use App\Support\AuditLogger;
+
+/**
+ * Rules-based lead scoring (LSCR). Sums the points of every matched active rule
+ * (demographic/firmographic/behavioral/intent) into the contact's lead_score,
+ * derives a temperature (hot/warm/cold), and promotes the lifecycle to `sql`
+ * once the SQL threshold is reached.
+ */
+class LeadScoringService
+{
+    public const HOT = 60;
+
+    public const WARM = 30;
+
+    public const SQL_THRESHOLD = 50;
+
+    public function __construct(
+        private IntentService $intent,
+        private AuditLogger $audit,
+    ) {}
+
+    public function scoreContact(Contact $contact): int
+    {
+        $total = 0;
+
+        foreach (ScoringRule::where('is_active', true)->get() as $rule) {
+            if ($this->matches($rule, $contact)) {
+                $total += $rule->points;
+            }
+        }
+
+        return max(0, $total);
+    }
+
+    public function apply(Contact $contact): Contact
+    {
+        $score = $this->scoreContact($contact);
+        $updates = ['lead_score' => $score];
+
+        if ($score >= self::SQL_THRESHOLD && ! in_array($contact->lifecycle_stage, ['sql', 'opportunity', 'customer'], true)) {
+            $updates['lifecycle_stage'] = 'sql';
+        }
+
+        $contact->update($updates);
+
+        return $contact;
+    }
+
+    public function temperature(int $score): string
+    {
+        return $score >= self::HOT ? 'hot' : ($score >= self::WARM ? 'warm' : 'cold');
+    }
+
+    public function recomputeAll(): int
+    {
+        $contacts = Contact::all();
+
+        foreach ($contacts as $contact) {
+            $this->apply($contact);
+        }
+
+        $this->audit->log('sales.scoring.recomputed', context: ['contacts' => $contacts->count()]);
+
+        return $contacts->count();
+    }
+
+    private function matches(ScoringRule $rule, Contact $contact): bool
+    {
+        $actual = $this->attributeValue($rule->attribute, $contact);
+
+        return match ($rule->operator) {
+            'equals' => (string) $actual === (string) $rule->value,
+            'contains' => $rule->value !== null && str_contains(mb_strtolower((string) $actual), mb_strtolower($rule->value)),
+            'gte' => (float) $actual >= (float) $rule->value,
+            'is_true' => (bool) $actual,
+            default => false,
+        };
+    }
+
+    private function attributeValue(string $attribute, Contact $contact): mixed
+    {
+        return match ($attribute) {
+            'lifecycle_stage' => $contact->lifecycle_stage,
+            'lead_source' => $contact->lead_source,
+            'title' => $contact->title,
+            'email_opt_in' => $contact->email_opt_in,
+            'has_company' => $contact->company_id !== null,
+            'intent_score' => $this->intent->intentScore($contact),
+            default => null,
+        };
+    }
+}

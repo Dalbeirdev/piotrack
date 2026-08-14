@@ -6,6 +6,7 @@ use App\Http\Controllers\HealthController;
 use App\Http\Controllers\InvitationAcceptanceController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\Public\EmailTrackingController;
+use App\Http\Controllers\Public\PublicBookingController;
 use App\Http\Controllers\Public\PublicFormController;
 use App\Http\Controllers\Public\PublicLandingPageController;
 use App\Http\Controllers\SearchController;
@@ -34,6 +35,10 @@ Route::get('e/c/{token}', [EmailTrackingController::class, 'click'])->name('publ
 Route::get('e/u/{token}', [EmailTrackingController::class, 'unsubscribeShow'])->name('public.track.unsubscribe.show');
 Route::post('e/u/{token}', [EmailTrackingController::class, 'unsubscribe'])->middleware('throttle:20,1')->name('public.track.unsubscribe');
 
+// Public appointment booking (Stage 10).
+Route::get('b/{slug}', [PublicBookingController::class, 'show'])->name('public.booking.show');
+Route::post('b/{slug}', [PublicBookingController::class, 'book'])->middleware('throttle:20,1')->name('public.booking.book');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     // Organization lifecycle (no active organization required).
     Route::get('organizations/create', [OrganizationController::class, 'create'])->name('organizations.create');
@@ -57,6 +62,7 @@ require __DIR__.'/marketing.php';
 require __DIR__.'/seo.php';
 require __DIR__.'/advertising.php';
 require __DIR__.'/content.php';
+require __DIR__.'/sales.php';
 require __DIR__.'/tenant.php';
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

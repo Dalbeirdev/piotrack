@@ -5,11 +5,16 @@ import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from '@/compone
 import { usePermissions } from '@/hooks/use-permissions';
 import { type NavItem } from '@/types';
 import {
+    Bell,
+    BookOpen,
     Building2,
+    CalendarClock,
     Code,
     FileSearch,
     FileText,
     Filter,
+    Flame,
+    Gauge,
     Handshake,
     KeyRound,
     LayoutGrid,
@@ -19,6 +24,7 @@ import {
     MapPin,
     Megaphone,
     PenLine,
+    Radar,
     Search,
     Send,
     Share2,
@@ -77,6 +83,16 @@ export function AppSidebar() {
         can('content.view') && { title: 'Outreach', url: '/content/outreach', icon: Send },
     ].filter(Boolean) as NavItem[];
 
+    const salesNavItems: NavItem[] = [
+        can('sales.view') && { title: 'Dashboard', url: '/sales', icon: Gauge },
+        can('sales.view') && { title: 'Scoring', url: '/sales/scoring', icon: Flame },
+        can('sales.view') && { title: 'Intent', url: '/sales/intent', icon: Radar },
+        can('sales.view') && { title: 'Alerts', url: '/sales/alerts', icon: Bell },
+        can('sales.view') && { title: 'Booking', url: '/sales/booking', icon: CalendarClock },
+        can('sales.view') && { title: 'Enablement', url: '/sales/enablement', icon: BookOpen },
+        can('sales.view') && { title: 'Accounts', url: '/sales/accounts', icon: Building2 },
+    ].filter(Boolean) as NavItem[];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -90,6 +106,7 @@ export function AppSidebar() {
                 {seoNavItems.length > 0 && <NavMain items={seoNavItems} label="SEO" />}
                 {adsNavItems.length > 0 && <NavMain items={adsNavItems} label="Advertising" />}
                 {contentNavItems.length > 0 && <NavMain items={contentNavItems} label="Content" />}
+                {salesNavItems.length > 0 && <NavMain items={salesNavItems} label="Sales" />}
             </SidebarContent>
 
             <SidebarFooter>

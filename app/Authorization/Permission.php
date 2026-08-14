@@ -90,6 +90,14 @@ enum Permission: string
     case ContentReputationManage = 'content.reputation.manage';
     case ContentOutreachManage = 'content.outreach.manage';
 
+    // Sales
+    case SalesView = 'sales.view';
+    case SalesScoringManage = 'sales.scoring.manage';
+    case SalesAlertsManage = 'sales.alerts.manage';
+    case SalesBookingManage = 'sales.booking.manage';
+    case SalesEnablementManage = 'sales.enablement.manage';
+    case SalesAccountsManage = 'sales.accounts.manage';
+
     // Settings
     case SettingsManage = 'settings.manage';
 

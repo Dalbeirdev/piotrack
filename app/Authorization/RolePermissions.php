@@ -60,6 +60,9 @@ class RolePermissions
         // Content & authority permission grouping.
         $contentAll = array_values(array_filter($all, fn (Permission $p) => str_starts_with($p->value, 'content.')));
 
+        // Sales permission grouping.
+        $salesAll = array_values(array_filter($all, fn (Permission $p) => str_starts_with($p->value, 'sales.')));
+
         return [
             Role::Owner->value => $all,
             Role::Admin->value => $adminExceptDelete,
@@ -78,6 +81,7 @@ class RolePermissions
                 ...$seoAll,
                 ...$adsAll,
                 ...$contentAll,
+                ...$salesAll,
             ],
             Role::SalesManager->value => [
                 Permission::OrganizationView,
@@ -95,6 +99,7 @@ class RolePermissions
                 Permission::SeoView,
                 Permission::AdsView,
                 Permission::ContentView,
+                ...$salesAll,
             ],
             Role::MarketingUser->value => [
                 Permission::OrganizationView,
@@ -107,6 +112,7 @@ class RolePermissions
                 ...$seoAll,
                 ...$adsAll,
                 ...$contentAll,
+                Permission::SalesView,
             ],
             Role::SalesRepresentative->value => [
                 Permission::OrganizationView,
@@ -118,6 +124,8 @@ class RolePermissions
                 Permission::SeoView,
                 Permission::AdsView,
                 Permission::ContentView,
+                Permission::SalesView,
+                Permission::SalesBookingManage,
             ],
             Role::Analyst->value => [
                 Permission::OrganizationView,
@@ -131,6 +139,7 @@ class RolePermissions
                 Permission::SeoAuditsManage,
                 Permission::AdsView,
                 Permission::ContentView,
+                Permission::SalesView,
             ],
             Role::BillingAdministrator->value => [
                 Permission::OrganizationView,
@@ -146,6 +155,7 @@ class RolePermissions
                 Permission::SeoView,
                 Permission::AdsView,
                 Permission::ContentView,
+                Permission::SalesView,
             ],
         ];
     }
