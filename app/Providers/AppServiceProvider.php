@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Analytics\CallProviderManager;
+use App\Analytics\Contracts\CallProvider;
 use App\Billing\Contracts\PaymentProvider;
 use App\Billing\PaymentProviderManager;
 use App\Content\ContentProviderManager;
@@ -68,6 +70,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             ReviewProvider::class,
             fn ($app) => $app->make(ContentProviderManager::class)->review(),
+        );
+
+        // Resolve the active call-tracking driver (CALL).
+        $this->app->bind(
+            CallProvider::class,
+            fn ($app) => $app->make(CallProviderManager::class)->driver(),
         );
     }
 

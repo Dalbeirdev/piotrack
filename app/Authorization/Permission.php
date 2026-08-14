@@ -98,6 +98,13 @@ enum Permission: string
     case SalesEnablementManage = 'sales.enablement.manage';
     case SalesAccountsManage = 'sales.accounts.manage';
 
+    // Analytics
+    case AnalyticsView = 'analytics.view';
+    case AnalyticsCallsManage = 'analytics.calls.manage';
+    case AnalyticsExperimentsManage = 'analytics.experiments.manage';
+    case AnalyticsCompetitorsManage = 'analytics.competitors.manage';
+    case AnalyticsGrowthScoreManage = 'analytics.growth-score.manage';
+
     // Settings
     case SettingsManage = 'settings.manage';
 

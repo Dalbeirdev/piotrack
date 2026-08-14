@@ -30,3 +30,6 @@ Schedule::command('content:publish-due-posts')->everyFiveMinutes()->withoutOverl
 
 // Booking reminders (Stage 10) — notify owners of meetings in the next 24 hours.
 Schedule::command('sales:send-booking-reminders')->dailyAt('08:00')->withoutOverlapping();
+
+// Growth-score snapshots (Stage 11) — one per organization per day, for trend tracking.
+Schedule::command('analytics:snapshot-growth-scores')->dailyAt('02:00')->withoutOverlapping();

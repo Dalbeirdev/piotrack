@@ -1,0 +1,151 @@
+import Heading from '@/components/heading';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import AppLayout from '@/layouts/app-layout';
+import { type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
+
+const breadcrumbs: BreadcrumbItem[] = [{ title: 'Attribution', href: '/analytics/attribution' }];
+
+type Journey = {
+    id: number;
+    name: string;
+    first_touch: string;
+    last_touch: string;
+    multi_touch: Record<string, number>;
+};
+
+function money(cents: number): string {
+    return `$${(cents / 100).toFixed(2)}`;
+}
+
+function share(value: number, total: number): string {
+    return total > 0 ? `${Math.round((value / total) * 100)}%` : '—';
+}
+
+function RevenueTable({ rows, label, empty }: { rows: [string, number][]; label: string; empty: string }) {
+    const total = rows.reduce((sum, [, revenue]) => sum + revenue, 0);
+
+    return (
+        <div>
+            <h3 className="mb-2 text-sm font-medium">{label}</h3>
+            {rows.length === 0 ? (
+                <p className="text-muted-foreground text-sm">{empty}</p>
+            ) : (
+                <div className="overflow-x-auto rounded-lg border">
+                    <table className="w-full text-left text-sm">
+                        <thead className="bg-muted/50 text-muted-foreground">
+                            <tr>
+                                <th className="p-3 font-medium">Bucket</th>
+                                <th className="p-3 text-center font-medium">Revenue</th>
+                                <th className="p-3 text-center font-medium">Share</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y">
+                            {rows.map(([bucket, revenue]) => (
+                                <tr key={bucket} className="hover:bg-muted/40">
+                                    <td className="p-3 font-medium">{bucket}</td>
+                                    <td className="p-3 text-center">{money(revenue)}</td>
+                                    <td className="text-muted-foreground p-3 text-center">{share(revenue, total)}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default function Attribution({
+    channels,
+    campaigns,
+    cac,
+    roi,
+    journeys,
+}: {
+    channels: Record<string, number>;
+    campaigns: Record<string, number>;
+    cac: number;
+    roi: number;
+    journeys: Journey[];
+}) {
+    const summary: { label: string; value: string }[] = [
+        { label: 'Customer acquisition cost', value: money(cac) },
+        { label: 'Marketing ROI', value: `${roi}x` },
+    ];
+
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Attribution" />
+            <div className="space-y-6 p-4">
+                <Heading title="Attribution" description="Revenue credited to channels and campaigns, with per-prospect touch models" />
+
+                <div className="grid grid-cols-1 gap-3 sm:max-w-md sm:grid-cols-2">
+                    {summary.map((card) => (
+                        <Card key={card.label}>
+                            <CardContent className="p-4">
+                                <p className="text-muted-foreground text-sm">{card.label}</p>
+                                <p className="text-2xl font-semibold">{card.value}</p>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
+
+                <RevenueTable
+                    rows={Object.entries(channels)}
+                    label="Revenue by channel"
+                    empty="No attributed revenue yet. Channels appear here once deals are won."
+                />
+
+                <RevenueTable
+                    rows={Object.entries(campaigns)}
+                    label="Revenue by campaign"
+                    empty="No campaign revenue yet. Campaigns appear here once deals are won."
+                />
+
+                <div>
+                    <h3 className="mb-2 text-sm font-medium">Prospect journeys</h3>
+                    {journeys.length === 0 ? (
+                        <p className="text-muted-foreground text-sm">No contacts yet. Journeys appear here once prospects are captured.</p>
+                    ) : (
+                        <div className="overflow-x-auto rounded-lg border">
+                            <table className="w-full text-left text-sm">
+                                <thead className="bg-muted/50 text-muted-foreground">
+                                    <tr>
+                                        <th className="p-3 font-medium">Contact</th>
+                                        <th className="p-3 font-medium">First touch</th>
+                                        <th className="p-3 font-medium">Last touch</th>
+                                        <th className="p-3 font-medium">Multi-touch credit</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y">
+                                    {journeys.map((journey) => (
+                                        <tr key={journey.id} className="hover:bg-muted/40">
+                                            <td className="p-3 font-medium">{journey.name}</td>
+                                            <td className="p-3">
+                                                <Badge variant="outline">{journey.first_touch}</Badge>
+                                            </td>
+                                            <td className="p-3">
+                                                <Badge variant="outline">{journey.last_touch}</Badge>
+                                            </td>
+                                            <td className="p-3">
+                                                <div className="flex flex-wrap gap-1">
+                                                    {Object.entries(journey.multi_touch).map(([channel, credit]) => (
+                                                        <Badge key={channel} variant="secondary">
+                                                            {channel} {Math.round(credit * 100)}%
+                                                        </Badge>
+                                                    ))}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </AppLayout>
+    );
+}

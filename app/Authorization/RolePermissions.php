@@ -63,6 +63,9 @@ class RolePermissions
         // Sales permission grouping.
         $salesAll = array_values(array_filter($all, fn (Permission $p) => str_starts_with($p->value, 'sales.')));
 
+        // Analytics permission grouping.
+        $analyticsAll = array_values(array_filter($all, fn (Permission $p) => str_starts_with($p->value, 'analytics.')));
+
         return [
             Role::Owner->value => $all,
             Role::Admin->value => $adminExceptDelete,
@@ -82,6 +85,7 @@ class RolePermissions
                 ...$adsAll,
                 ...$contentAll,
                 ...$salesAll,
+                ...$analyticsAll,
             ],
             Role::SalesManager->value => [
                 Permission::OrganizationView,
@@ -100,6 +104,7 @@ class RolePermissions
                 Permission::AdsView,
                 Permission::ContentView,
                 ...$salesAll,
+                ...$analyticsAll,
             ],
             Role::MarketingUser->value => [
                 Permission::OrganizationView,
@@ -113,6 +118,9 @@ class RolePermissions
                 ...$adsAll,
                 ...$contentAll,
                 Permission::SalesView,
+                Permission::AnalyticsView,
+                Permission::AnalyticsExperimentsManage,
+                Permission::AnalyticsGrowthScoreManage,
             ],
             Role::SalesRepresentative->value => [
                 Permission::OrganizationView,
@@ -126,6 +134,7 @@ class RolePermissions
                 Permission::ContentView,
                 Permission::SalesView,
                 Permission::SalesBookingManage,
+                Permission::AnalyticsView,
             ],
             Role::Analyst->value => [
                 Permission::OrganizationView,
@@ -156,6 +165,7 @@ class RolePermissions
                 Permission::AdsView,
                 Permission::ContentView,
                 Permission::SalesView,
+                Permission::AnalyticsView,
             ],
         ];
     }

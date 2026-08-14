@@ -14,23 +14,31 @@ import {
     FileText,
     Filter,
     Flame,
+    FlaskConical,
     Gauge,
+    GitBranch,
     Handshake,
     KeyRound,
+    Layers,
     LayoutGrid,
     LayoutTemplate,
+    LineChart,
     List,
     Mail,
     MapPin,
     Megaphone,
     PenLine,
+    Phone,
     Radar,
+    Scale,
     Search,
     Send,
     Share2,
     Sparkles,
     Star,
+    Swords,
     Target,
+    TrendingUp,
     UserPlus,
     Users,
     Workflow,
@@ -93,6 +101,17 @@ export function AppSidebar() {
         can('sales.view') && { title: 'Accounts', url: '/sales/accounts', icon: Building2 },
     ].filter(Boolean) as NavItem[];
 
+    const analyticsNavItems: NavItem[] = [
+        can('analytics.view') && { title: 'Dashboard', url: '/analytics', icon: LineChart },
+        can('analytics.view') && { title: 'Attribution', url: '/analytics/attribution', icon: GitBranch },
+        can('analytics.view') && { title: 'Growth Score', url: '/analytics/growth-score', icon: TrendingUp },
+        can('analytics.view') && { title: 'Benchmarks', url: '/analytics/benchmarks', icon: Scale },
+        can('analytics.view') && { title: 'Omnichannel', url: '/analytics/omnichannel', icon: Layers },
+        can('analytics.view') && { title: 'Calls', url: '/analytics/calls', icon: Phone },
+        can('analytics.view') && { title: 'Experiments', url: '/analytics/experiments', icon: FlaskConical },
+        can('analytics.view') && { title: 'Competitors', url: '/analytics/competitors', icon: Swords },
+    ].filter(Boolean) as NavItem[];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -107,6 +126,7 @@ export function AppSidebar() {
                 {adsNavItems.length > 0 && <NavMain items={adsNavItems} label="Advertising" />}
                 {contentNavItems.length > 0 && <NavMain items={contentNavItems} label="Content" />}
                 {salesNavItems.length > 0 && <NavMain items={salesNavItems} label="Sales" />}
+                {analyticsNavItems.length > 0 && <NavMain items={analyticsNavItems} label="Analytics" />}
             </SidebarContent>
 
             <SidebarFooter>
