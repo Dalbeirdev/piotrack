@@ -93,6 +93,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Policy/terms acceptances recorded for this person (PRIV-001).
+     *
+     * @return HasMany<PolicyAcceptance, $this>
+     */
+    public function policyAcceptances(): HasMany
+    {
+        return $this->hasMany(PolicyAcceptance::class);
+    }
+
+    /**
      * @return BelongsTo<Organization, $this>
      */
     public function currentOrganization(): BelongsTo

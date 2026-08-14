@@ -5,6 +5,7 @@ namespace App\Services\Seo;
 use App\Models\SeoAudit;
 use App\Seo\AuditResult;
 use App\Support\AuditLogger;
+use App\Support\UrlGuard;
 use DOMDocument;
 use DOMXPath;
 use Illuminate\Support\Facades\Http;
@@ -18,16 +19,29 @@ use Throwable;
  */
 class TechnicalSeoAuditor
 {
-    public function __construct(private AuditLogger $audit) {}
+    public function __construct(
+        private AuditLogger $audit,
+        private UrlGuard $urls,
+    ) {}
 
     /**
      * Fetch and audit a URL, persisting the result. A fetch failure records a
      * failed audit rather than throwing.
+     *
+     * The URL comes from a tenant, so it is SSRF-guarded before any request is
+     * made (SEC-001): without that check this method would happily fetch cloud
+     * metadata or internal services on the caller's behalf.
      */
     public function crawl(string $url): SeoAudit
     {
         try {
-            $response = Http::timeout(15)->get($url);
+            $this->urls->assertFetchable($url);
+
+            $response = Http::timeout(15)
+                // A redirect to a private address would sidestep the pre-flight
+                // check, so redirects are not followed.
+                ->withoutRedirecting()
+                ->get($url);
             $status = $response->status();
 
             if ($response->failed()) {

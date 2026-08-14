@@ -48,7 +48,8 @@ it('crawls a URL and persists a scored audit', function () {
     Http::fake(['*' => Http::response(seoGoodHtml(), 200)]);
 
     app(CurrentOrganization::class)->set($org);
-    $audit = app(TechnicalSeoAuditor::class)->crawl('https://acme.test/services');
+    // A public IP literal: no DNS, and it exercises the SSRF guard's allow path.
+    $audit = app(TechnicalSeoAuditor::class)->crawl('https://93.184.216.34/services');
     app(CurrentOrganization::class)->forget();
 
     expect($audit->score)->toBeGreaterThan(90)
@@ -62,7 +63,7 @@ it('records a failed audit when the page cannot be fetched', function () {
     Http::fake(['*' => Http::response('', 500)]);
 
     app(CurrentOrganization::class)->set($org);
-    $audit = app(TechnicalSeoAuditor::class)->crawl('https://down.test/');
+    $audit = app(TechnicalSeoAuditor::class)->crawl('https://93.184.216.34/down');
     app(CurrentOrganization::class)->forget();
 
     expect($audit->score)->toBe(0)
@@ -74,7 +75,7 @@ it('runs an audit from the controller and audits it', function () {
     [$org, $owner] = makeOrganization();
     Http::fake(['*' => Http::response(seoGoodHtml(), 200)]);
 
-    $this->actingAs($owner)->post(route('seo.audits.store'), ['url' => 'https://acme.test/services'])->assertRedirect();
+    $this->actingAs($owner)->post(route('seo.audits.store'), ['url' => 'https://93.184.216.34/services'])->assertRedirect();
 
     expect(SeoAudit::withoutGlobalScope('tenant')->count())->toBe(1);
     expect(AuditLog::withoutGlobalScope('tenant')->where('action', 'seo.audit.run')->exists())->toBeTrue();

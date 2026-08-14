@@ -4,6 +4,7 @@ use App\Http\Middleware\AssignRequestId;
 use App\Http\Middleware\EnsureEntitled;
 use App\Http\Middleware\EnsureHasOrganization;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SetApiOrganization;
 use App\Http\Middleware\SetCurrentOrganization;
 use Illuminate\Foundation\Application;
@@ -30,6 +31,9 @@ return Application::configure(basePath: dirname(__DIR__))
             | Request::HEADER_X_FORWARDED_AWS_ELB);
 
         $middleware->prepend(AssignRequestId::class);
+
+        // Baseline security headers on every response, API and web alike (SEC-002).
+        $middleware->append(SecurityHeaders::class);
 
         // Inbound billing webhooks authenticate via provider signature, not CSRF.
         // Public marketing form submits + unsubscribes are unauthenticated,
