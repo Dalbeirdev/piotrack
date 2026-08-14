@@ -51,6 +51,9 @@ class RolePermissions
             Permission::MarketingFunnelsView,
         ];
 
+        // SEO permission grouping.
+        $seoAll = array_values(array_filter($all, fn (Permission $p) => str_starts_with($p->value, 'seo.')));
+
         return [
             Role::Owner->value => $all,
             Role::Admin->value => $adminExceptDelete,
@@ -66,6 +69,7 @@ class RolePermissions
                 Permission::IntegrationsManage,
                 ...$crmAll,
                 ...$marketingAll,
+                ...$seoAll,
             ],
             Role::SalesManager->value => [
                 Permission::OrganizationView,
@@ -80,6 +84,7 @@ class RolePermissions
                 ...$crmAll,
                 Permission::MarketingView,
                 Permission::MarketingFunnelsView,
+                Permission::SeoView,
             ],
             Role::MarketingUser->value => [
                 Permission::OrganizationView,
@@ -89,6 +94,7 @@ class RolePermissions
                 Permission::IntegrationsView,
                 ...$crmReadWrite,
                 ...$marketingBuild,
+                ...$seoAll,
             ],
             Role::SalesRepresentative->value => [
                 Permission::OrganizationView,
@@ -97,6 +103,7 @@ class RolePermissions
                 Permission::IntegrationsView,
                 ...$crmReadWrite,
                 Permission::MarketingView,
+                Permission::SeoView,
             ],
             Role::Analyst->value => [
                 Permission::OrganizationView,
@@ -106,6 +113,8 @@ class RolePermissions
                 ...$crmReadOnly,
                 Permission::MarketingView,
                 Permission::MarketingFunnelsView,
+                Permission::SeoView,
+                Permission::SeoAuditsManage,
             ],
             Role::BillingAdministrator->value => [
                 Permission::OrganizationView,
@@ -118,6 +127,7 @@ class RolePermissions
                 Permission::IntegrationsView,
                 ...$crmReadOnly,
                 Permission::MarketingView,
+                Permission::SeoView,
             ],
         ];
     }

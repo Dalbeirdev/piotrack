@@ -4,7 +4,26 @@ import { OrganizationSwitcher } from '@/components/organization-switcher';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from '@/components/ui/sidebar';
 import { usePermissions } from '@/hooks/use-permissions';
 import { type NavItem } from '@/types';
-import { Building2, FileText, Filter, Handshake, LayoutGrid, LayoutTemplate, List, Mail, Megaphone, UserPlus, Users, Workflow } from 'lucide-react';
+import {
+    Building2,
+    Code,
+    FileSearch,
+    FileText,
+    Filter,
+    Handshake,
+    KeyRound,
+    LayoutGrid,
+    LayoutTemplate,
+    List,
+    Mail,
+    MapPin,
+    Megaphone,
+    Search,
+    Sparkles,
+    UserPlus,
+    Users,
+    Workflow,
+} from 'lucide-react';
 
 export function AppSidebar() {
     const { can } = usePermissions();
@@ -30,6 +49,15 @@ export function AppSidebar() {
           ]
         : [];
 
+    const seoNavItems: NavItem[] = [
+        can('seo.view') && { title: 'Dashboard', url: '/seo', icon: Search },
+        can('seo.view') && { title: 'Audit', url: '/seo/audits', icon: FileSearch },
+        can('seo.view') && { title: 'Keywords', url: '/seo/keywords', icon: KeyRound },
+        can('seo.view') && { title: 'Local', url: '/seo/local', icon: MapPin },
+        can('seo.view') && { title: 'AI Visibility', url: '/seo/ai-visibility', icon: Sparkles },
+        can('seo.view') && { title: 'Schema', url: '/seo/schema', icon: Code },
+    ].filter(Boolean) as NavItem[];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -40,6 +68,7 @@ export function AppSidebar() {
                 <NavMain items={mainNavItems} />
                 {crmNavItems.length > 0 && <NavMain items={crmNavItems} label="CRM" />}
                 {marketingNavItems.length > 0 && <NavMain items={marketingNavItems} label="Marketing" />}
+                {seoNavItems.length > 0 && <NavMain items={seoNavItems} label="SEO" />}
             </SidebarContent>
 
             <SidebarFooter>

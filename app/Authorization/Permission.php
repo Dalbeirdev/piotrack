@@ -71,6 +71,13 @@ enum Permission: string
     case MarketingAutomationManage = 'marketing.automation.manage';
     case MarketingFunnelsView = 'marketing.funnels.view';
 
+    // SEO & search intelligence
+    case SeoView = 'seo.view';
+    case SeoAuditsManage = 'seo.audits.manage';
+    case SeoKeywordsManage = 'seo.keywords.manage';
+    case SeoLocalManage = 'seo.local.manage';
+    case SeoAiManage = 'seo.ai.manage';
+
     // Settings
     case SettingsManage = 'settings.manage';
 

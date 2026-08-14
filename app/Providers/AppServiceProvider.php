@@ -11,6 +11,9 @@ use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Deal;
 use App\Models\Lead;
+use App\Seo\Contracts\AiSearchProvider;
+use App\Seo\Contracts\RankProvider;
+use App\Seo\SeoProviderManager;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\Request;
@@ -42,6 +45,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             SmsProvider::class,
             fn ($app) => $app->make(MessagingProviderManager::class)->sms(),
+        );
+
+        // Resolve the active SEO rank / AI-search drivers (ADR-0005).
+        $this->app->bind(
+            RankProvider::class,
+            fn ($app) => $app->make(SeoProviderManager::class)->rank(),
+        );
+        $this->app->bind(
+            AiSearchProvider::class,
+            fn ($app) => $app->make(SeoProviderManager::class)->ai(),
         );
     }
 
