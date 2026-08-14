@@ -105,6 +105,12 @@ enum Permission: string
     case AnalyticsCompetitorsManage = 'analytics.competitors.manage';
     case AnalyticsGrowthScoreManage = 'analytics.growth-score.manage';
 
+    // AI
+    case AiView = 'ai.view';
+    case AiAgentUse = 'ai.agent.use';
+    case AiActionsApprove = 'ai.actions.approve';
+    case AiPromptsManage = 'ai.prompts.manage';
+
     // Settings
     case SettingsManage = 'settings.manage';
 

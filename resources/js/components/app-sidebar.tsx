@@ -7,9 +7,12 @@ import { type NavItem } from '@/types';
 import {
     Bell,
     BookOpen,
+    Bot,
     Building2,
     CalendarClock,
     Code,
+    Eye,
+    FileCode,
     FileSearch,
     FileText,
     Filter,
@@ -27,6 +30,7 @@ import {
     Mail,
     MapPin,
     Megaphone,
+    MessagesSquare,
     PenLine,
     Phone,
     Radar,
@@ -34,6 +38,7 @@ import {
     Search,
     Send,
     Share2,
+    ShieldCheck,
     Sparkles,
     Star,
     Swords,
@@ -112,6 +117,15 @@ export function AppSidebar() {
         can('analytics.view') && { title: 'Competitors', url: '/analytics/competitors', icon: Swords },
     ].filter(Boolean) as NavItem[];
 
+    const aiNavItems: NavItem[] = [
+        can('ai.view') && { title: 'Dashboard', url: '/ai', icon: Sparkles },
+        can('ai.view') && { title: 'Agent', url: '/ai/agent', icon: Bot },
+        can('ai.view') && { title: 'Conversations', url: '/ai/conversations', icon: MessagesSquare },
+        can('ai.view') && { title: 'Approvals', url: '/ai/actions', icon: ShieldCheck },
+        can('ai.view') && { title: 'Prompts', url: '/ai/prompts', icon: FileCode },
+        can('ai.view') && { title: 'Visibility', url: '/ai/visibility', icon: Eye },
+    ].filter(Boolean) as NavItem[];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -127,6 +141,7 @@ export function AppSidebar() {
                 {contentNavItems.length > 0 && <NavMain items={contentNavItems} label="Content" />}
                 {salesNavItems.length > 0 && <NavMain items={salesNavItems} label="Sales" />}
                 {analyticsNavItems.length > 0 && <NavMain items={analyticsNavItems} label="Analytics" />}
+                {aiNavItems.length > 0 && <NavMain items={aiNavItems} label="AI" />}
             </SidebarContent>
 
             <SidebarFooter>

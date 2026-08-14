@@ -64,6 +64,7 @@ require __DIR__.'/advertising.php';
 require __DIR__.'/content.php';
 require __DIR__.'/sales.php';
 require __DIR__.'/analytics.php';
+require __DIR__.'/ai.php';
 require __DIR__.'/tenant.php';
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

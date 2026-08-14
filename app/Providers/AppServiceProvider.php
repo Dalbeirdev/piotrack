@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Ai\AiProviderManager;
+use App\Ai\Contracts\AiProvider;
 use App\Analytics\CallProviderManager;
 use App\Analytics\Contracts\CallProvider;
 use App\Billing\Contracts\PaymentProvider;
@@ -76,6 +78,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             CallProvider::class,
             fn ($app) => $app->make(CallProviderManager::class)->driver(),
+        );
+
+        // Resolve the active language-model driver (ADR-0008). Feature code never
+        // uses this directly — every call goes through AiGateway.
+        $this->app->bind(
+            AiProvider::class,
+            fn ($app) => $app->make(AiProviderManager::class)->driver(),
         );
     }
 

@@ -33,3 +33,6 @@ Schedule::command('sales:send-booking-reminders')->dailyAt('08:00')->withoutOver
 
 // Growth-score snapshots (Stage 11) — one per organization per day, for trend tracking.
 Schedule::command('analytics:snapshot-growth-scores')->dailyAt('02:00')->withoutOverlapping();
+
+// AI-visibility monitoring (Stage 12) — run each tenant's prompt library daily.
+Schedule::command('ai:run-visibility-checks')->dailyAt('03:00')->withoutOverlapping();

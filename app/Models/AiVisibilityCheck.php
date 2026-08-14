@@ -18,14 +18,15 @@ class AiVisibilityCheck extends Model
     use BelongsToTenant;
 
     protected $fillable = [
-        'organization_id', 'prompt', 'engine', 'brand', 'mentioned', 'position',
-        'cited_sources', 'competitors', 'share_of_answer', 'checked_at',
+        'organization_id', 'ai_prompt_id', 'prompt', 'engine', 'brand', 'mentioned', 'recommended',
+        'position', 'cited_sources', 'competitors', 'share_of_answer', 'checked_at',
     ];
 
     protected function casts(): array
     {
         return [
             'mentioned' => 'boolean',
+            'recommended' => 'boolean',
             'cited_sources' => 'array',
             'competitors' => 'array',
             'checked_at' => 'datetime',

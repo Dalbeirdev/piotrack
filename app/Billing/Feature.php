@@ -16,6 +16,7 @@ enum Feature: string
     case Advertising = 'advertising';
     case Sales = 'sales';
     case Analytics = 'analytics';
+    case Ai = 'ai';
     case Automation = 'automation';
     case AuditLog = 'audit_log';
     case AiVisibility = 'ai_visibility';

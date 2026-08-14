@@ -48,9 +48,13 @@ class PlanCatalog
                 'prices' => ['monthly' => 34900, 'annual' => 335000],
                 'features' => [
                     Feature::Crm, Feature::Marketing, Feature::Content, Feature::Seo, Feature::Advertising, Feature::Sales,
-                    Feature::Analytics, Feature::Automation, Feature::Teams, Feature::AuditLog, Feature::AiVisibility, Feature::Api,
+                    Feature::Analytics, Feature::Ai, Feature::Automation, Feature::Teams, Feature::AuditLog,
+                    Feature::AiVisibility, Feature::Api,
                 ],
-                'limits' => [Limit::Members->value => 25, Limit::Contacts->value => 50000, Limit::Emails->value => 100000],
+                'limits' => [
+                    Limit::Members->value => 25, Limit::Contacts->value => 50000,
+                    Limit::Emails->value => 100000, Limit::AiCredits->value => 5000,
+                ],
             ],
             [
                 'code' => 'agency',
@@ -60,10 +64,13 @@ class PlanCatalog
                 'prices' => ['monthly' => 74900, 'annual' => 719000],
                 'features' => [
                     Feature::Crm, Feature::Marketing, Feature::Content, Feature::Seo, Feature::Advertising, Feature::Sales,
-                    Feature::Analytics, Feature::Automation, Feature::Teams, Feature::AuditLog, Feature::AiVisibility,
-                    Feature::Api, Feature::WhiteLabel,
+                    Feature::Analytics, Feature::Ai, Feature::Automation, Feature::Teams, Feature::AuditLog,
+                    Feature::AiVisibility, Feature::Api, Feature::WhiteLabel,
                 ],
-                'limits' => [Limit::Members->value => 100, Limit::Emails->value => 500000],
+                'limits' => [
+                    Limit::Members->value => 100, Limit::Emails->value => 500000,
+                    Limit::AiCredits->value => 20000,
+                ],
             ],
             [
                 'code' => 'enterprise',

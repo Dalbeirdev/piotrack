@@ -66,6 +66,9 @@ class RolePermissions
         // Analytics permission grouping.
         $analyticsAll = array_values(array_filter($all, fn (Permission $p) => str_starts_with($p->value, 'analytics.')));
 
+        // AI permission grouping.
+        $aiAll = array_values(array_filter($all, fn (Permission $p) => str_starts_with($p->value, 'ai.')));
+
         return [
             Role::Owner->value => $all,
             Role::Admin->value => $adminExceptDelete,
@@ -86,6 +89,7 @@ class RolePermissions
                 ...$contentAll,
                 ...$salesAll,
                 ...$analyticsAll,
+                ...$aiAll,
             ],
             Role::SalesManager->value => [
                 Permission::OrganizationView,
@@ -105,6 +109,7 @@ class RolePermissions
                 Permission::ContentView,
                 ...$salesAll,
                 ...$analyticsAll,
+                ...$aiAll,
             ],
             Role::MarketingUser->value => [
                 Permission::OrganizationView,
@@ -121,6 +126,8 @@ class RolePermissions
                 Permission::AnalyticsView,
                 Permission::AnalyticsExperimentsManage,
                 Permission::AnalyticsGrowthScoreManage,
+                Permission::AiView,
+                Permission::AiAgentUse,
             ],
             Role::SalesRepresentative->value => [
                 Permission::OrganizationView,
@@ -135,6 +142,8 @@ class RolePermissions
                 Permission::SalesView,
                 Permission::SalesBookingManage,
                 Permission::AnalyticsView,
+                Permission::AiView,
+                Permission::AiAgentUse,
             ],
             Role::Analyst->value => [
                 Permission::OrganizationView,
@@ -149,6 +158,11 @@ class RolePermissions
                 Permission::AdsView,
                 Permission::ContentView,
                 Permission::SalesView,
+                Permission::AnalyticsView,
+                Permission::AnalyticsExperimentsManage,
+                Permission::AnalyticsGrowthScoreManage,
+                Permission::AiView,
+                Permission::AiAgentUse,
             ],
             Role::BillingAdministrator->value => [
                 Permission::OrganizationView,
@@ -166,6 +180,7 @@ class RolePermissions
                 Permission::ContentView,
                 Permission::SalesView,
                 Permission::AnalyticsView,
+                Permission::AiView,
             ],
         ];
     }

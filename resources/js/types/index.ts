@@ -43,7 +43,13 @@ export interface SharedData {
     auth: Auth;
     entitlements: Entitlements;
     notifications: { unread: number };
+    flash: Flash;
     [key: string]: unknown;
+}
+
+export interface Flash {
+    status?: string | null;
+    ai_result?: Record<string, unknown> | null;
 }
 
 export interface User {

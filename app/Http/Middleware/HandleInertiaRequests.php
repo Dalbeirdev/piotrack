@@ -81,6 +81,12 @@ class HandleInertiaRequests extends Middleware
             'notifications' => [
                 'unread' => $user !== null ? $user->unreadNotifications()->count() : 0,
             ],
+            // Session flash surfaced to the client. Without this, every
+            // `back()->with('status', …)` confirmation in the app is invisible.
+            'flash' => [
+                'status' => $request->session()->get('status'),
+                'ai_result' => $request->session()->get('ai_result'),
+            ],
         ]);
     }
 }

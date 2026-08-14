@@ -153,6 +153,17 @@ it('stops a viewer from writing a growth-score snapshot', function () {
     expect(GrowthScore::withoutGlobalScope('tenant')->where('organization_id', $org->id)->exists())->toBeTrue();
 });
 
+it('gives the analyst role access to analytics', function () {
+    // Regression: the Analyst role — whose whole purpose is analysis — was
+    // initially left without analytics.view when Stage 11 mapped permissions.
+    [$org] = analyticsOrganization();
+    $analyst = addMember($org, Role::Analyst);
+
+    $this->actingAs($analyst)->get(route('analytics.dashboard'))->assertOk();
+    $this->actingAs($analyst)->get(route('analytics.benchmarks.index'))->assertOk();
+    $this->actingAs($analyst)->post(route('analytics.growth-score.snapshot'))->assertRedirect();
+});
+
 it('blocks the analytics module without the plan feature', function () {
     [, $owner] = makeOrganization(); // Growth trial: no `analytics`
 
