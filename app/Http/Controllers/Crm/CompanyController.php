@@ -24,7 +24,7 @@ class CompanyController extends Controller
         $filters = $request->validate(['search' => ['nullable', 'string', 'max:100']]);
 
         $companies = Company::withCount('contacts', 'deals')
-            ->when($filters['search'] ?? null, fn ($q, $s) => $q->where('name', 'like', "%{$s}%")->orWhere('domain', 'like', "%{$s}%"))
+            ->when($filters['search'] ?? null, fn ($q, $s) => $q->whereLike('name', "%{$s}%")->orWhereLike('domain', "%{$s}%"))
             ->latest('id')
             ->paginate(20)
             ->withQueryString()

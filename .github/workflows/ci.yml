@@ -106,6 +106,72 @@ jobs:
       - name: Run test suite
         run: php vendor/bin/pest --ci
 
+  tests-mysql:
+    name: Tests & migration validation (MySQL 8)
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: piotrack_test
+          MYSQL_ROOT_PASSWORD: secret
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -psecret"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: piotrack_test
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_mysql, mysqli, intl, gd, zip, bcmath
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Build frontend assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Prepare application
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      # MySQL enforces a 64-character identifier limit and index byte-width
+      # limits that sqlite ignores entirely, so the schema is validated here
+      # rather than discovered on a customer's shared host.
+      - name: Migration validation (migrate, rollback, re-migrate)
+        run: |
+          php artisan migrate --force
+          php artisan migrate:rollback --force
+          php artisan migrate --force
+
+      - name: Run test suite
+        run: php vendor/bin/pest --ci
+
+      - name: Demo seeder runs on MySQL
+        run: php artisan db:seed --class=DemoSeeder --force
+
+
   security:
     name: Dependency security audit
     runs-on: ubuntu-latest

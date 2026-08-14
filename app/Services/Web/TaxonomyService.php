@@ -109,16 +109,16 @@ class TaxonomyService
 
     private function keywordMatches(string $term): int
     {
-        return Keyword::where('phrase', 'like', '%'.mb_strtolower($term).'%')->count();
+        return Keyword::whereLike('phrase', '%'.$term.'%')->count();
     }
 
     private function campaignMatches(string $term): int
     {
-        return Campaign::where('name', 'like', '%'.$term.'%')->count();
+        return Campaign::whereLike('name', '%'.$term.'%')->count();
     }
 
     private function contentMatches(string $term): int
     {
-        return ContentPiece::where('title', 'like', '%'.$term.'%')->count();
+        return ContentPiece::whereLike('title', '%'.$term.'%')->count();
     }
 }

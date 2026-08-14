@@ -30,8 +30,8 @@ class LeadController extends Controller
 
         $leads = Lead::with('owner:id,name')
             ->when($filters['search'] ?? null, fn ($q, $s) => $q->where(fn ($w) => $w
-                ->where('first_name', 'like', "%{$s}%")->orWhere('last_name', 'like', "%{$s}%")
-                ->orWhere('email', 'like', "%{$s}%")->orWhere('company_name', 'like', "%{$s}%")))
+                ->whereLike('first_name', "%{$s}%")->orWhereLike('last_name', "%{$s}%")
+                ->orWhereLike('email', "%{$s}%")->orWhereLike('company_name', "%{$s}%")))
             ->when($filters['status'] ?? null, fn ($q, $status) => $q->where('status', $status))
             ->latest('id')
             ->paginate(20)

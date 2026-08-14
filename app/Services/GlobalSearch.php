@@ -34,7 +34,7 @@ class GlobalSearch
         $groups = [];
 
         // Organizations the user belongs to.
-        $orgs = $user->activeOrganizations()->where('name', 'like', $like)->limit(5)->get();
+        $orgs = $user->activeOrganizations()->whereLike('name', $like)->limit(5)->get();
         if ($orgs->isNotEmpty()) {
             $groups[] = $this->group('Organizations', $orgs->map(fn (Organization $o) => [
                 'title' => $o->name,
@@ -45,7 +45,7 @@ class GlobalSearch
 
         if (Gate::forUser($user)->allows('crm.contact.read')) {
             $contacts = Contact::query()
-                ->where(fn ($q) => $q->where('first_name', 'like', $like)->orWhere('last_name', 'like', $like)->orWhere('email', 'like', $like))
+                ->where(fn ($q) => $q->whereLike('first_name', $like)->orWhereLike('last_name', $like)->orWhereLike('email', $like))
                 ->limit(5)->get();
             if ($contacts->isNotEmpty()) {
                 $groups[] = $this->group('Contacts', $contacts->map(fn (Contact $c) => [
@@ -58,7 +58,7 @@ class GlobalSearch
 
         if (Gate::forUser($user)->allows('crm.company.read')) {
             $companies = Company::query()
-                ->where(fn ($q) => $q->where('name', 'like', $like)->orWhere('domain', 'like', $like))
+                ->where(fn ($q) => $q->whereLike('name', $like)->orWhereLike('domain', $like))
                 ->limit(5)->get();
             if ($companies->isNotEmpty()) {
                 $groups[] = $this->group('Companies', $companies->map(fn (Company $c) => [
@@ -70,7 +70,7 @@ class GlobalSearch
         }
 
         if (Gate::forUser($user)->allows('crm.deal.read')) {
-            $deals = Deal::where('name', 'like', $like)->limit(5)->get();
+            $deals = Deal::whereLike('name', $like)->limit(5)->get();
             if ($deals->isNotEmpty()) {
                 $groups[] = $this->group('Deals', $deals->map(fn (Deal $d) => [
                     'title' => $d->name,
@@ -82,7 +82,7 @@ class GlobalSearch
 
         if (Gate::forUser($user)->allows('members.view')) {
             $members = $organization->members()
-                ->where(fn ($q) => $q->where('name', 'like', $like)->orWhere('email', 'like', $like))
+                ->where(fn ($q) => $q->whereLike('name', $like)->orWhereLike('email', $like))
                 ->limit(5)->get();
             if ($members->isNotEmpty()) {
                 $groups[] = $this->group('Members', $members->map(fn (User $m) => [
@@ -94,7 +94,7 @@ class GlobalSearch
         }
 
         if (Gate::forUser($user)->allows('teams.view')) {
-            $teams = Team::where('name', 'like', $like)->limit(5)->get();
+            $teams = Team::whereLike('name', $like)->limit(5)->get();
             if ($teams->isNotEmpty()) {
                 $groups[] = $this->group('Teams', $teams->map(fn (Team $t) => [
                     'title' => $t->name,
@@ -106,7 +106,7 @@ class GlobalSearch
 
         if (Gate::forUser($user)->allows('billing.view')) {
             $invoices = Invoice::where('organization_id', $organization->id)
-                ->where('number', 'like', $like)->limit(5)->get();
+                ->whereLike('number', $like)->limit(5)->get();
             if ($invoices->isNotEmpty()) {
                 $groups[] = $this->group('Invoices', $invoices->map(fn (Invoice $i) => [
                     'title' => $i->number,
@@ -117,7 +117,7 @@ class GlobalSearch
         }
 
         if (Gate::forUser($user)->allows('files.view')) {
-            $files = File::where('name', 'like', $like)->limit(5)->get();
+            $files = File::whereLike('name', $like)->limit(5)->get();
             if ($files->isNotEmpty()) {
                 $groups[] = $this->group('Files', $files->map(fn (File $f) => [
                     'title' => $f->name,

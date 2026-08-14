@@ -105,8 +105,8 @@ class Contact extends Model implements HasActivities
         $like = '%'.trim($term).'%';
 
         return $query->where(fn (Builder $q) => $q
-            ->where('first_name', 'like', $like)
-            ->orWhere('last_name', 'like', $like)
-            ->orWhere('email', 'like', $like));
+            ->whereLike('first_name', $like)
+            ->orWhereLike('last_name', $like)
+            ->orWhereLike('email', $like));
     }
 }

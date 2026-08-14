@@ -28,10 +28,10 @@ class AuditLogController extends Controller
         $logs = AuditLog::query()
             ->where('organization_id', $this->currentOrganization->id())
             ->with('actor:id,name,email')
-            ->when($filters['action'] ?? null, fn ($q, $action) => $q->where('action', 'like', "%{$action}%"))
+            ->when($filters['action'] ?? null, fn ($q, $action) => $q->whereLike('action', "%{$action}%"))
             ->when($filters['actor'] ?? null, fn ($q, $actor) => $q->whereHas(
                 'actor',
-                fn ($a) => $a->where('name', 'like', "%{$actor}%")->orWhere('email', 'like', "%{$actor}%"),
+                fn ($a) => $a->whereLike('name', "%{$actor}%")->orWhereLike('email', "%{$actor}%"),
             ))
             ->latest('created_at')
             ->paginate(25)

@@ -34,7 +34,10 @@ return new class extends Migration
             $table->string('link_type')->nullable(); // dofollow|nofollow
             $table->timestamps();
 
-            $table->index(['organization_id', 'outreach_campaign_id', 'status']);
+            // Named explicitly: the auto-generated name would be 68 characters,
+            // over MySQL's 64-character identifier limit, and the migration
+            // would fail outright on MySQL (sqlite and Postgres accept it).
+            $table->index(['organization_id', 'outreach_campaign_id', 'status'], 'outreach_prospects_org_campaign_status_idx');
         });
     }
 

@@ -17,6 +17,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Demo seeding
+    |--------------------------------------------------------------------------
+    | DemoSeeder creates a login with a known password, so it refuses to run in
+    | production unless this is explicitly turned on for a demo/staging box.
+    */
+    'demo_seed_allowed' => env('DEMO_SEED_ALLOWED', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Version
     |--------------------------------------------------------------------------
     |

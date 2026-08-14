@@ -44,7 +44,7 @@ class AnalyticsService
         $meetings = Booking::count();
 
         $opportunities = Deal::whereHas('stage', fn ($q) => $q->where('is_won', false)->where('is_lost', false))->count();
-        $proposals = Deal::whereHas('stage', fn ($q) => $q->where('name', 'like', '%roposal%'))->count();
+        $proposals = Deal::whereHas('stage', fn ($q) => $q->whereLike('name', '%roposal%'))->count();
         $won = Deal::whereHas('stage', fn ($q) => $q->where('is_won', true))->count();
         $lost = Deal::whereHas('stage', fn ($q) => $q->where('is_lost', true))->count();
 
