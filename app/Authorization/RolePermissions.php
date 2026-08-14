@@ -69,6 +69,16 @@ class RolePermissions
         // AI permission grouping.
         $aiAll = array_values(array_filter($all, fn (Permission $p) => str_starts_with($p->value, 'ai.')));
 
+        // Service-delivery groupings (Stage 13). Platform administration is
+        // deliberately NOT in any organization role — it is held by platform
+        // staff through users.platform_role.
+        $deliveryAll = [
+            Permission::SupportView, Permission::SupportManage,
+            Permission::ProjectsView, Permission::ProjectsManage, Permission::ProjectsApprove,
+            Permission::StrategyView, Permission::StrategyManage,
+        ];
+        $deliveryReadOnly = [Permission::SupportView, Permission::ProjectsView, Permission::StrategyView];
+
         return [
             Role::Owner->value => $all,
             Role::Admin->value => $adminExceptDelete,
@@ -90,6 +100,7 @@ class RolePermissions
                 ...$salesAll,
                 ...$analyticsAll,
                 ...$aiAll,
+                ...$deliveryAll,
             ],
             Role::SalesManager->value => [
                 Permission::OrganizationView,
@@ -110,6 +121,7 @@ class RolePermissions
                 ...$salesAll,
                 ...$analyticsAll,
                 ...$aiAll,
+                ...$deliveryAll,
             ],
             Role::MarketingUser->value => [
                 Permission::OrganizationView,
@@ -128,6 +140,12 @@ class RolePermissions
                 Permission::AnalyticsGrowthScoreManage,
                 Permission::AiView,
                 Permission::AiAgentUse,
+                Permission::SupportView,
+                Permission::SupportManage,
+                Permission::ProjectsView,
+                Permission::ProjectsManage,
+                Permission::StrategyView,
+                Permission::StrategyManage,
             ],
             Role::SalesRepresentative->value => [
                 Permission::OrganizationView,
@@ -144,6 +162,9 @@ class RolePermissions
                 Permission::AnalyticsView,
                 Permission::AiView,
                 Permission::AiAgentUse,
+                Permission::SupportView,
+                Permission::ProjectsView,
+                Permission::StrategyView,
             ],
             Role::Analyst->value => [
                 Permission::OrganizationView,
@@ -163,6 +184,7 @@ class RolePermissions
                 Permission::AnalyticsGrowthScoreManage,
                 Permission::AiView,
                 Permission::AiAgentUse,
+                ...$deliveryReadOnly,
             ],
             Role::BillingAdministrator->value => [
                 Permission::OrganizationView,
@@ -181,6 +203,14 @@ class RolePermissions
                 Permission::SalesView,
                 Permission::AnalyticsView,
                 Permission::AiView,
+                ...$deliveryReadOnly,
+            ],
+            // The client portal role is deliberately minimal: portal access and
+            // approving its own deliverables. No CRM, marketing, sales,
+            // analytics or administrative permissions.
+            Role::Client->value => [
+                Permission::PortalAccess,
+                Permission::ProjectsApprove,
             ],
         ];
     }

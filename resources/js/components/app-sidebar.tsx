@@ -11,11 +11,13 @@ import {
     Building2,
     CalendarClock,
     Code,
+    Compass,
     Eye,
     FileCode,
     FileSearch,
     FileText,
     Filter,
+    Flag,
     Flame,
     FlaskConical,
     Gauge,
@@ -25,18 +27,21 @@ import {
     Layers,
     LayoutGrid,
     LayoutTemplate,
+    LifeBuoy,
     LineChart,
     List,
     Mail,
     MapPin,
     Megaphone,
     MessagesSquare,
+    Palette,
     PenLine,
     Phone,
     Radar,
     Scale,
     Search,
     Send,
+    Server,
     Share2,
     ShieldCheck,
     Sparkles,
@@ -44,6 +49,7 @@ import {
     Swords,
     Target,
     TrendingUp,
+    Trophy,
     UserPlus,
     Users,
     Workflow,
@@ -126,6 +132,24 @@ export function AppSidebar() {
         can('ai.view') && { title: 'Visibility', url: '/ai/visibility', icon: Eye },
     ].filter(Boolean) as NavItem[];
 
+    const deliveryNavItems: NavItem[] = [
+        can('projects.view') && { title: 'Projects', url: '/projects', icon: Workflow },
+        can('support.view') && { title: 'Support', url: '/support', icon: LifeBuoy },
+        can('strategy.view') && { title: 'Strategy', url: '/strategy', icon: Compass },
+        can('strategy.view') && { title: 'Brand', url: '/strategy/brand', icon: Palette },
+        can('strategy.view') && { title: 'Performance', url: '/strategy/performance', icon: Trophy },
+    ].filter(Boolean) as NavItem[];
+
+    const portalNavItems: NavItem[] = [can('portal.access') && { title: 'Client Portal', url: '/portal', icon: Handshake }].filter(
+        Boolean,
+    ) as NavItem[];
+
+    const platformNavItems: NavItem[] = [
+        can('admin.platform') && { title: 'Overview', url: '/platform', icon: Server },
+        can('admin.platform') && { title: 'Feature Flags', url: '/platform/flags', icon: Flag },
+        can('admin.platform') && { title: 'Announcements', url: '/platform/announcements', icon: Megaphone },
+    ].filter(Boolean) as NavItem[];
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -142,6 +166,9 @@ export function AppSidebar() {
                 {salesNavItems.length > 0 && <NavMain items={salesNavItems} label="Sales" />}
                 {analyticsNavItems.length > 0 && <NavMain items={analyticsNavItems} label="Analytics" />}
                 {aiNavItems.length > 0 && <NavMain items={aiNavItems} label="AI" />}
+                {deliveryNavItems.length > 0 && <NavMain items={deliveryNavItems} label="Delivery" />}
+                {portalNavItems.length > 0 && <NavMain items={portalNavItems} label="Portal" />}
+                {platformNavItems.length > 0 && <NavMain items={platformNavItems} label="Platform" />}
             </SidebarContent>
 
             <SidebarFooter>

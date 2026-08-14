@@ -44,6 +44,7 @@ export interface SharedData {
     entitlements: Entitlements;
     notifications: { unread: number };
     flash: Flash;
+    impersonation: Impersonation;
     [key: string]: unknown;
 }
 
@@ -51,6 +52,16 @@ export interface Flash {
     status?: string | null;
     ai_result?: Record<string, unknown> | null;
 }
+
+/**
+ * The active support-impersonation session. `null` whenever the request is the
+ * user's own — anything else means someone else is acting as them.
+ */
+export type Impersonation = {
+    active: true;
+    user: string | null;
+    impersonator: string | null;
+} | null;
 
 export interface User {
     id: number;

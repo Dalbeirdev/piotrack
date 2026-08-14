@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Billing\Entitlements;
+use App\Services\Platform\ImpersonationService;
 use App\Support\CurrentOrganization;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
@@ -27,6 +28,28 @@ class HandleInertiaRequests extends Middleware
     public function version(Request $request): ?string
     {
         return parent::version($request);
+    }
+
+    /**
+     * The active support-impersonation session, if any.
+     *
+     * @return array{active: bool, user: string|null, impersonator: string|null}|null
+     */
+    private function impersonationState(): ?array
+    {
+        $service = app(ImpersonationService::class);
+
+        if (! $service->isImpersonating()) {
+            return null;
+        }
+
+        $session = $service->active();
+
+        return [
+            'active' => true,
+            'user' => $session?->user?->name,
+            'impersonator' => $session?->impersonator?->name,
+        ];
     }
 
     /**
@@ -81,6 +104,9 @@ class HandleInertiaRequests extends Middleware
             'notifications' => [
                 'unread' => $user !== null ? $user->unreadNotifications()->count() : 0,
             ],
+            // Impersonation must never be invisible: the UI renders a
+            // persistent banner whenever this is present (ADMIN-006).
+            'impersonation' => $this->impersonationState(),
             // Session flash surfaced to the client. Without this, every
             // `back()->with('status', …)` confirmation in the app is invisible.
             'flash' => [

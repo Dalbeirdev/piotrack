@@ -22,6 +22,7 @@ enum Role: string
     case Analyst = 'analyst';
     case BillingAdministrator = 'billing_administrator';
     case Viewer = 'viewer';
+    case Client = 'client';
 
     // Platform roles
     case PlatformSuperAdmin = 'platform_super_admin';
@@ -52,6 +53,7 @@ enum Role: string
             self::Analyst => 'Analyst',
             self::BillingAdministrator => 'Billing Administrator',
             self::Viewer => 'Viewer',
+            self::Client => 'Client',
             self::PlatformSuperAdmin => 'Super Administrator',
             self::PlatformAdmin => 'Platform Administrator',
             self::PlatformSupportAdmin => 'Support Administrator',

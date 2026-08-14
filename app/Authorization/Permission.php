@@ -111,6 +111,26 @@ enum Permission: string
     case AiActionsApprove = 'ai.actions.approve';
     case AiPromptsManage = 'ai.prompts.manage';
 
+    // Platform administration (Stage 13) — held by platform staff.
+    case AdminPlatform = 'admin.platform';
+    case AdminImpersonate = 'admin.impersonate';
+
+    // Support
+    case SupportView = 'support.view';
+    case SupportManage = 'support.manage';
+
+    // Project delivery
+    case ProjectsView = 'projects.view';
+    case ProjectsManage = 'projects.manage';
+    case ProjectsApprove = 'projects.approve';
+
+    // Strategy / brand / training / performance workspaces
+    case StrategyView = 'strategy.view';
+    case StrategyManage = 'strategy.manage';
+
+    // Client portal
+    case PortalAccess = 'portal.access';
+
     // Settings
     case SettingsManage = 'settings.manage';
 
