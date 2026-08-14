@@ -6,6 +6,7 @@ use App\Models\ImpersonationSession;
 use App\Models\Organization;
 use App\Models\User;
 use App\Services\Platform\ImpersonationService;
+use App\Services\Platform\PlatformAdminService;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -119,6 +120,22 @@ it('lets an impersonated session always be stopped without a permission', functi
     $this->post(route('impersonate.stop'))->assertRedirect();
 
     expect(ImpersonationSession::first()->ended_at)->not->toBeNull();
+});
+
+it('lists impersonatable members per tenant and excludes platform staff', function () {
+    // So an operator picks a person by name rather than typing a raw id —
+    // mistyping one would mean impersonating the wrong customer.
+    [$org, $owner] = deliveryOrganization('Acme MSP');
+    $staffInsideOrg = platformStaff();
+    $org->members()->attach($staffInsideOrg->id, ['role' => Role::Viewer->value, 'status' => 'active', 'joined_at' => now()]);
+
+    $tenants = app(PlatformAdminService::class)->tenants();
+    $acme = collect($tenants)->firstWhere('name', 'Acme MSP');
+
+    $ids = collect($acme['users'])->pluck('id');
+    expect($ids)->toContain($owner->id)
+        ->and($ids)->not->toContain($staffInsideOrg->id)
+        ->and($acme['users'][0])->toHaveKeys(['id', 'name', 'email']);
 });
 
 it('keeps the platform console out of reach of tenant users', function () {

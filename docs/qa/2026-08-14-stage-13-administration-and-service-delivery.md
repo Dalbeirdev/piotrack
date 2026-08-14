@@ -82,7 +82,7 @@ strategy item carries a `source_module` cross-reference instead of the work bein
 
 ## Automated test results
 
-- **Pest: 438/438 PASS** (1440 assertions) · PHPStan L6: 0 errors · Pint PASS · Prettier PASS ·
+- **Pest: 439/439 PASS** (1445 assertions) · PHPStan L6: 0 errors · Pint PASS · Prettier PASS ·
   ESLint PASS · tsc PASS · `npm run build` PASS.
 - +40 tests across 5 suites:
   - **Impersonation (9)**: audited session with reason; **platform staff can never be impersonated**;
@@ -106,6 +106,12 @@ strategy item carries a `source_module` cross-reference instead of the work bein
 
 ## Defects discovered & fixed
 
+- **The impersonation dialog required typing a raw user ID.** `PlatformAdminService::tenants()` shipped
+  only organization-level fields, so the operator had to type the target's numeric id — and mistyping
+  one means impersonating the *wrong customer*, which the audit log would faithfully record as
+  intentional. Fixed by shipping each tenant's impersonatable members (id, name, email) with platform
+  staff filtered out server-side, and replacing the numeric input with a named select. Covered by a
+  test asserting members are listed and platform staff excluded.
 - **`PerformanceService::create()` returned a model with null `status`/targets**, so reading attainment
   in the same request threw a `TypeError`. Column defaults are not hydrated onto the in-memory model
   after `create()` — the same class of bug as the Stage 9 `ContentService` slug/status defect. Defaulted
@@ -133,6 +139,11 @@ impersonation banner state is asserted to reach the client (`impersonation.activ
 - Creative production (logo, graphic style, iconography, visual identity) — human/design tooling.
 - An LMS surface (materials, completion tracking) for training.
 - Sprint/deadline reminder jobs.
+- **Known rough edges carried forward** (raised during UI review, not defects): lead replacement still
+  takes numeric contact ids because `PerformanceController::index` ships no contacts list; KPI money
+  targets (`mrr`, `revenue`) are entered and displayed in the same raw units as the analytics actuals so
+  the two stay comparable — a currency-aware input would be clearer; announcement `audience` is a free
+  string server-side while the UI offers a fixed set.
 
 ## Completion
 

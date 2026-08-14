@@ -4,8 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, type SharedData } from '@/types';
@@ -27,6 +27,12 @@ type Overview = {
     ai_spend: number;
 };
 
+type TenantUser = {
+    id: number;
+    name: string;
+    email: string;
+};
+
 type Tenant = {
     id: number;
     name: string;
@@ -36,6 +42,8 @@ type Tenant = {
     status: string | null;
     trial_ends_at: string | null;
     created_at: string | null;
+    /** Impersonatable members — platform staff are excluded server-side. */
+    users: TenantUser[];
 };
 
 type ImpersonationRow = {
@@ -116,16 +124,25 @@ function ImpersonateDialog({ tenant }: { tenant: Tenant }) {
                         </p>
                     </div>
                     <div className="grid gap-1">
-                        <Label htmlFor={`impersonate_user_${tenant.id}`}>User ID</Label>
-                        <Input
-                            id={`impersonate_user_${tenant.id}`}
-                            type="number"
-                            min="1"
-                            value={form.data.user_id}
-                            onChange={(e) => form.setData('user_id', e.target.value)}
-                        />
+                        <Label htmlFor={`impersonate_user_${tenant.id}`}>Member to act as</Label>
+                        {/* Chosen by name, never typed as an id: mistyping one would
+                            mean impersonating the wrong customer. */}
+                        <Select value={form.data.user_id} onValueChange={(value) => form.setData('user_id', value)}>
+                            <SelectTrigger id={`impersonate_user_${tenant.id}`}>
+                                <SelectValue placeholder="Choose a member" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {tenant.users.map((member) => (
+                                    <SelectItem key={member.id} value={String(member.id)}>
+                                        {member.name} — {member.email}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                         <p className="text-muted-foreground text-xs">
-                            The id of the member of {tenant.name} to act as. Platform staff accounts cannot be impersonated.
+                            {tenant.users.length === 0
+                                ? `${tenant.name} has no impersonatable members.`
+                                : 'Platform staff accounts are excluded and cannot be impersonated.'}
                         </p>
                         <InputError message={form.errors.user_id} />
                     </div>

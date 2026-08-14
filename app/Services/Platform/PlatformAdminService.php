@@ -44,6 +44,7 @@ class PlatformAdminService
     {
         return Organization::query()
             ->withCount('members')
+            ->with(['members' => fn ($q) => $q->select('users.id', 'users.name', 'users.email', 'users.platform_role')])
             ->latest('id')->limit($limit)->get()
             ->map(function (Organization $organization) {
                 $subscription = $organization->activeSubscription();
@@ -57,6 +58,14 @@ class PlatformAdminService
                     'status' => $subscription?->status,
                     'trial_ends_at' => $subscription?->trial_ends_at?->toDateString(),
                     'created_at' => $organization->created_at?->toDateString(),
+                    // Named members so an operator picks a person rather than
+                    // typing a raw id — mistyping one would mean impersonating
+                    // the wrong customer. Platform staff are excluded here as
+                    // well as refused by ImpersonationService.
+                    'users' => $organization->members
+                        ->filter(fn (User $u) => $u->platform_role === null)
+                        ->map(fn (User $u) => ['id' => $u->id, 'name' => $u->name, 'email' => $u->email])
+                        ->values()->all(),
                 ];
             })->all();
     }
