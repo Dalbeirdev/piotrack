@@ -156,3 +156,41 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* Sidebar section expand/collapse. Radix measures the panel and exposes its
+   height as a custom property, which is what lets height animate at all. */
+@keyframes collapsible-down {
+    from {
+        height: 0;
+    }
+    to {
+        height: var(--radix-collapsible-content-height);
+    }
+}
+
+@keyframes collapsible-up {
+    from {
+        height: var(--radix-collapsible-content-height);
+    }
+    to {
+        height: 0;
+    }
+}
+
+.collapsible-content {
+    overflow: hidden;
+}
+
+.collapsible-content[data-state='open'] {
+    animation: collapsible-down 200ms ease-out;
+}
+
+.collapsible-content[data-state='closed'] {
+    animation: collapsible-up 200ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .collapsible-content[data-state] {
+        animation: none;
+    }
+}

@@ -4,6 +4,7 @@ import { OrganizationSwitcher } from '@/components/organization-switcher';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from '@/components/ui/sidebar';
 import { usePermissions } from '@/hooks/use-permissions';
 import { type NavItem } from '@/types';
+import { usePage } from '@inertiajs/react';
 import {
     Bell,
     BookOpen,
@@ -55,6 +56,9 @@ import {
     Users,
     Workflow,
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
+
+type NavGroup = { id: string; label: string; items: NavItem[] };
 
 export function AppSidebar() {
     const { can } = usePermissions();
@@ -156,6 +160,43 @@ export function AppSidebar() {
         can('admin.platform') && { title: 'Announcements', url: '/platform/announcements', icon: Megaphone },
     ].filter(Boolean) as NavItem[];
 
+    const groups: NavGroup[] = [
+        { id: 'crm', label: 'CRM', items: crmNavItems },
+        { id: 'marketing', label: 'Marketing', items: marketingNavItems },
+        { id: 'seo', label: 'SEO', items: seoNavItems },
+        { id: 'ads', label: 'Advertising', items: adsNavItems },
+        { id: 'content', label: 'Content', items: contentNavItems },
+        { id: 'website', label: 'Website', items: websiteNavItems },
+        { id: 'sales', label: 'Sales', items: salesNavItems },
+        { id: 'analytics', label: 'Analytics', items: analyticsNavItems },
+        { id: 'ai', label: 'AI', items: aiNavItems },
+        { id: 'delivery', label: 'Delivery', items: deliveryNavItems },
+        { id: 'portal', label: 'Portal', items: portalNavItems },
+        { id: 'platform', label: 'Platform', items: platformNavItems },
+    ].filter((group) => group.items.length > 0);
+
+    // The current path, without the query string - Inertia's page.url carries one.
+    const path = usePage().url.split('?')[0];
+
+    // Longest match wins, so /seo/keywords highlights Keywords rather than also
+    // lighting up the /seo dashboard that happens to be a prefix of it.
+    const activeUrl =
+        [...groups.flatMap((group) => group.items), ...mainNavItems]
+            .filter((item) => path === item.url || path.startsWith(`${item.url}/`))
+            .sort((a, b) => b.url.length - a.url.length)[0]?.url ?? null;
+
+    const activeGroupId = groups.find((group) => group.items.some((item) => item.url === activeUrl))?.id ?? null;
+
+    const [openGroupId, setOpenGroupId] = useState<string | null>(activeGroupId);
+
+    // Follow the page: arriving in a section from a link, the command palette or a
+    // deep link opens that section. Manual toggles in between are left alone.
+    useEffect(() => {
+        if (activeGroupId) {
+            setOpenGroupId(activeGroupId);
+        }
+    }, [activeGroupId]);
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -163,19 +204,17 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
-                {crmNavItems.length > 0 && <NavMain items={crmNavItems} label="CRM" />}
-                {marketingNavItems.length > 0 && <NavMain items={marketingNavItems} label="Marketing" />}
-                {seoNavItems.length > 0 && <NavMain items={seoNavItems} label="SEO" />}
-                {adsNavItems.length > 0 && <NavMain items={adsNavItems} label="Advertising" />}
-                {contentNavItems.length > 0 && <NavMain items={contentNavItems} label="Content" />}
-                {websiteNavItems.length > 0 && <NavMain items={websiteNavItems} label="Website" />}
-                {salesNavItems.length > 0 && <NavMain items={salesNavItems} label="Sales" />}
-                {analyticsNavItems.length > 0 && <NavMain items={analyticsNavItems} label="Analytics" />}
-                {aiNavItems.length > 0 && <NavMain items={aiNavItems} label="AI" />}
-                {deliveryNavItems.length > 0 && <NavMain items={deliveryNavItems} label="Delivery" />}
-                {portalNavItems.length > 0 && <NavMain items={portalNavItems} label="Portal" />}
-                {platformNavItems.length > 0 && <NavMain items={platformNavItems} label="Platform" />}
+                <NavMain items={mainNavItems} activeUrl={activeUrl} />
+                {groups.map((group) => (
+                    <NavMain
+                        key={group.id}
+                        items={group.items}
+                        label={group.label}
+                        activeUrl={activeUrl}
+                        open={openGroupId === group.id}
+                        onOpenChange={(open) => setOpenGroupId(open ? group.id : null)}
+                    />
+                ))}
             </SidebarContent>
 
             <SidebarFooter>
