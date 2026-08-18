@@ -140,7 +140,8 @@ class DemoSeeder extends Seeder
         ] as [$name, $industry, $city, $region, $size]) {
             $companies[$name] = Company::create([
                 'name' => $name, 'industry' => $industry, 'city' => $city,
-                'region' => $region, 'size' => (string) $size, 'country' => 'Canada',
+                // companies.country is a 2-char ISO-3166 alpha-2 code, not a display name.
+                'region' => $region, 'size' => (string) $size, 'country' => 'CA',
             ]);
         }
 

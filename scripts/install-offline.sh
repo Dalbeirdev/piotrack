@@ -96,8 +96,11 @@ ok "Bundle contents verified (vendor + built assets present)"
 [[ -e "$APP_DIR/.env" ]] && die "$APP_DIR/.env exists — piotrack is already installed here."
 
 # Detect a co-resident osTicket so we can back it up before touching the DB server.
+# Look where Apache actually points, not just at the conventional paths - this install
+# had osTicket at /var/www/html/osticket, which a fixed list of guesses missed.
 OST_DIR=""; OST_DB=""
-for d in /var/www/html /var/www/osticket /var/www/html/upload; do
+OST_ROOTS=$(grep -rhiE '^\s*DocumentRoot' /etc/apache2/sites-enabled/ 2>/dev/null | awk '{print $2}' | tr -d '"')
+for d in $OST_ROOTS /var/www/html /var/www/osticket /var/www/html/osticket /var/www/html/upload; do
   [[ -f "$d/include/ost-config.php" ]] && { OST_DIR="$d"; break; }
 done
 if [[ -n "$OST_DIR" ]]; then
