@@ -113,7 +113,7 @@ $( [[ -n "$OST_DIR" ]] && echo "  Back up osTicket to ${BACKUP_DIR} first" )
 
 EOF
 read -rp "  Type 'yes' to continue: " reply
-[[ "$reply" == "yes" ]] || die "Cancelled — nothing was changed."
+[[ "${reply,,}" =~ ^(yes|y)$ ]] || die "Cancelled — nothing was changed."
 
 # ============================================================= 3. BACKUP ====
 if [[ -n "$OST_DIR" ]]; then
