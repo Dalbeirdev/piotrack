@@ -146,6 +146,40 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq >>"$LOG" 2>&1
 apt-get install -y -qq software-properties-common curl git unzip ca-certificates >>"$LOG" 2>&1
 
+# Confirm we can actually fetch the code BEFORE installing 300MB of packages.
+# piotrack is a private repository, so this is where a missing deploy key surfaces.
+if [[ ! -d "$APP_DIR/.git" ]]; then
+  if GIT_TERMINAL_PROMPT=0 GIT_SSH_COMMAND="ssh -o BatchMode=yes -o StrictHostKeyChecking=accept-new" \
+     git ls-remote --exit-code --heads "$REPO" "$BRANCH" >/dev/null 2>&1; then
+    ok "Repository reachable (branch $BRANCH)"
+  else
+    cat >&2 <<EOF
+
+  Cannot read $REPO
+
+  piotrack is a private repository, so this server needs its own read access.
+  Set up a deploy key (once), then re-run:
+
+    ssh-keygen -t ed25519 -f ~/.ssh/piotrack_deploy -N "" -C "piotrack-deploy"
+    cat ~/.ssh/piotrack_deploy.pub
+
+  Add that key at:
+    https://github.com/Dalbeirdev/piotrack/settings/keys  ->  Add deploy key
+    (leave "Allow write access" UNCHECKED)
+
+  Then point ssh at it:
+
+    printf 'Host github.com\\n  IdentityFile ~/.ssh/piotrack_deploy\\n  IdentitiesOnly yes\\n' >> ~/.ssh/config
+
+  And re-run this script with the SSH URL:
+
+    REPO=git@github.com:Dalbeirdev/piotrack.git sudo -E bash \$0
+
+EOF
+    die "No read access to the repository — nothing was installed."
+  fi
+fi
+
 # Ondrej PPA adds PHP 8.4 as ADDITIONAL packages. The default `php` alternative
 # is left pointing wherever it already pointed.
 add-apt-repository -y ppa:ondrej/php >>"$LOG" 2>&1
