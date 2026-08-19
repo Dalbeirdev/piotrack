@@ -354,6 +354,17 @@ def load_existing_state():
         }
 
 
+# Gaps found by QA against an expectation the source inventory does not contain.
+# They are appended here rather than hand-edited into the CSV, because main()
+# rebuilds every row from the inventory and PLATFORM: a row that exists only in
+# the CSV is silently dropped on the next regeneration, which is exactly the
+# disappearance Master Prompt §65 forbids.
+QA_FINDINGS = s("AUTO", "Marketing Automation", [
+    ("Automated actions", "Conditional branching in workflows", "QA §21 (2026-08-19)"),
+    ("Automated actions", "Contact tagging", "QA §21 (2026-08-19)"),
+])
+
+
 def main():
     existing = load_existing_state()
     rows, notes = parse_inventory(INVENTORY_TXT)
@@ -394,6 +405,23 @@ def main():
             "submodule": sub,
             "feature": feat,
             "origin": "Master Prompt",
+            "source": src,
+            "status": "Planned",
+            "backend": "Pending", "frontend": "Pending",
+            "tests": "Pending", "docs": "Pending",
+            "depends_on": "", "notes": "",
+        })
+
+    for (code, module, sub, feat, src) in QA_FINDINGS:
+        counters[code] = counters.get(code, 0) + 1
+        fid = f"{code}-{counters[code]:03d}"
+        out_rows.append({
+            "id": fid,
+            "module_code": code,
+            "module": module,
+            "submodule": sub,
+            "feature": feat,
+            "origin": "QA Audit",
             "source": src,
             "status": "Planned",
             "backend": "Pending", "frontend": "Pending",
