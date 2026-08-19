@@ -18,7 +18,20 @@ class RolePermissions
      */
     public static function map(): array
     {
-        $all = Permission::cases();
+        // Platform-staff abilities are held only through users.platform_role and
+        // must never be granted by an organization role. They are excluded from
+        // the base set here so that Owner (all) and Admin (all but delete),
+        // which are built from it, cannot sweep them in. A tenant owner or admin
+        // otherwise passed the can:admin.platform gate and could open the
+        // platform console - reading every tenant's name, plan, MRR and AI spend
+        // - and toggle global feature flags. Platform super admins still get
+        // these via Gate::before, which bypasses this map entirely.
+        $platformOnly = [Permission::AdminPlatform, Permission::AdminImpersonate];
+
+        $all = array_values(array_filter(
+            Permission::cases(),
+            fn (Permission $p) => ! in_array($p, $platformOnly, true),
+        ));
 
         $adminExceptDelete = array_values(array_filter(
             $all,

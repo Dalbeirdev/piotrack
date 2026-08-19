@@ -4,9 +4,17 @@ use App\Authorization\Permission;
 use App\Authorization\Role;
 use App\Authorization\RolePermissions;
 
-it('grants an owner every permission', function () {
-    expect(RolePermissions::for(Role::Owner->value))
-        ->toEqualCanonicalizing(Permission::values());
+it('grants an owner every organization permission but no platform-staff ability', function () {
+    $owner = RolePermissions::for(Role::Owner->value);
+
+    // Platform administration and impersonation are held only through
+    // users.platform_role, never by an organization role - see RolePermissions.
+    $platformOnly = [Permission::AdminPlatform->value, Permission::AdminImpersonate->value];
+    $organizationPermissions = array_values(array_diff(Permission::values(), $platformOnly));
+
+    expect($owner)->toEqualCanonicalizing($organizationPermissions)
+        ->and($owner)->not->toContain(Permission::AdminPlatform->value)
+        ->and($owner)->not->toContain(Permission::AdminImpersonate->value);
 });
 
 it('grants an admin everything except deleting the organization', function () {

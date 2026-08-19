@@ -59,7 +59,10 @@ class FeatureFlagService
     {
         $flag = FeatureFlag::updateOrCreate(['key' => $key], $attributes);
 
-        $this->audit->log('admin.feature_flag.updated', context: [
+        // Feature flags are global, so this is a platform-level audit entry and
+        // must not be attributed to whatever tenant the acting super admin
+        // happens to be seated in.
+        $this->audit->platform('admin.feature_flag.updated', context: [
             'key' => $key,
             'is_enabled' => $flag->is_enabled,
             'is_kill_switch' => $flag->is_kill_switch,
