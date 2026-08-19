@@ -21,6 +21,25 @@ class Deal extends Model implements HasActivities
     /** @use HasFactory<DealFactory> */
     use BelongsToTenant, HasFactory, SoftDeletes;
 
+    /**
+     * Annual recurring revenue is annualised monthly recurring revenue, so it is
+     * derived rather than asked for twice. DealController accepts `arr` as
+     * optional, and a deal saved with only MRR filled in previously left ARR at
+     * its column default of 0 - the revenue dashboard then reported $0 ARR
+     * against real MRR.
+     *
+     * An explicitly supplied ARR wins: prepaid multi-year terms do not always
+     * annualise cleanly, and the operator's figure is the authoritative one.
+     */
+    protected static function booted(): void
+    {
+        static::saving(function (Deal $deal): void {
+            if (! $deal->isDirty('arr') && (int) $deal->mrr > 0) {
+                $deal->arr = (int) $deal->mrr * 12;
+            }
+        });
+    }
+
     protected $fillable = [
         'organization_id', 'pipeline_id', 'stage_id', 'name', 'contact_id', 'company_id',
         'value', 'mrr', 'arr', 'contract_term_months', 'ltv', 'currency', 'status',
