@@ -44,10 +44,20 @@ class PlatformAdminService
     {
         return Organization::query()
             ->withCount('members')
-            ->with(['members' => fn ($q) => $q->select('users.id', 'users.name', 'users.email', 'users.platform_role')])
+            ->with([
+                'members' => fn ($q) => $q->select('users.id', 'users.name', 'users.email', 'users.platform_role'),
+                // Eager-load the active subscriptions and their plan so the map
+                // below reads them from memory. Calling activeSubscription() per
+                // row ran a subscription query and then a plan query for every
+                // tenant - fine for three, 2N+1 queries for a full console.
+                'subscriptions' => fn ($q) => $q->whereIn('status', Subscription::ACTIVE_STATES)
+                    ->latest('id')->with('plan:id,code'),
+            ])
             ->latest('id')->limit($limit)->get()
             ->map(function (Organization $organization) {
-                $subscription = $organization->activeSubscription();
+                // Already filtered to active and ordered newest-first by the
+                // eager load, so first() is an in-memory pick, not a query.
+                $subscription = $organization->subscriptions->first();
 
                 return [
                     'id' => $organization->id,
