@@ -10,6 +10,7 @@ use App\Models\ProjectTask;
 use App\Models\Sprint;
 use App\Models\User;
 use App\Services\Delivery\ProjectService;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -101,7 +102,7 @@ class ProjectController extends Controller
     public function assign(Request $request, Project $project): RedirectResponse
     {
         $data = $request->validate([
-            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'user_id' => ['required', 'integer', TenantExists::member()],
             'role' => ['required', Rule::in(ProjectMember::ROLES)],
         ]);
 
@@ -127,8 +128,8 @@ class ProjectController extends Controller
         $this->projects->addTask($project, $request->validate([
             'title' => ['required', 'string', 'max:200'],
             'description' => ['nullable', 'string', 'max:2000'],
-            'sprint_id' => ['nullable', 'integer', 'exists:sprints,id'],
-            'assignee_id' => ['nullable', 'integer', 'exists:users,id'],
+            'sprint_id' => ['nullable', 'integer', TenantExists::in('sprints')],
+            'assignee_id' => ['nullable', 'integer', TenantExists::member()],
             'priority' => ['nullable', Rule::in(['low', 'normal', 'high'])],
             'due_on' => ['nullable', 'date'],
         ]));

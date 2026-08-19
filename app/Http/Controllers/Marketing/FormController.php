@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Form;
 use App\Models\MarketingList;
 use App\Support\AuditLogger;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -80,7 +81,7 @@ class FormController extends Controller
             'fields.*.label' => ['required', 'string', 'max:120'],
             'fields.*.type' => ['required', Rule::in(['text', 'email', 'tel', 'textarea'])],
             'fields.*.required' => ['boolean'],
-            'target_list_id' => ['nullable', Rule::exists('marketing_lists', 'id')],
+            'target_list_id' => ['nullable', TenantExists::in('marketing_lists')],
             'lifecycle_stage' => ['nullable', 'string', 'max:40'],
             'settings' => ['nullable', 'array'],
             'settings.success_message' => ['nullable', 'string', 'max:500'],

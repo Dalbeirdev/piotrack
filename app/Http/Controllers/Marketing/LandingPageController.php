@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Form;
 use App\Models\LandingPage;
 use App\Support\AuditLogger;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -78,7 +78,7 @@ class LandingPageController extends Controller
             'headline' => ['required', 'string', 'max:200'],
             'subheadline' => ['nullable', 'string', 'max:300'],
             'body_html' => ['nullable', 'string', 'max:20000'],
-            'form_id' => ['nullable', Rule::exists('forms', 'id')],
+            'form_id' => ['nullable', TenantExists::in('forms')],
         ]);
     }
 

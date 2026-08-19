@@ -9,6 +9,7 @@ use App\Models\Ticket;
 use App\Models\TicketMessage;
 use App\Models\User;
 use App\Services\Delivery\TicketService;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -86,7 +87,7 @@ class SupportController extends Controller
 
     public function assign(Request $request, Ticket $ticket): RedirectResponse
     {
-        $data = $request->validate(['user_id' => ['required', 'integer', 'exists:users,id']]);
+        $data = $request->validate(['user_id' => ['required', 'integer', TenantExists::member()]]);
         $this->tickets->assign($ticket, User::findOrFail($data['user_id']));
 
         return back()->with('status', __('Ticket assigned.'));

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Call;
 use App\Models\CallTrackingNumber;
 use App\Services\Analytics\CallTrackingService;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -60,9 +61,9 @@ class CallController extends Controller
     public function storeCall(Request $request): RedirectResponse
     {
         $this->calls->logCall($request->validate([
-            'call_tracking_number_id' => ['nullable', 'integer', 'exists:call_tracking_numbers,id'],
-            'contact_id' => ['nullable', 'integer', 'exists:contacts,id'],
-            'owner_id' => ['nullable', 'integer', 'exists:users,id'],
+            'call_tracking_number_id' => ['nullable', 'integer', TenantExists::in('call_tracking_numbers')],
+            'contact_id' => ['nullable', 'integer', TenantExists::active('contacts')],
+            'owner_id' => ['nullable', 'integer', TenantExists::member()],
             'from_number' => ['nullable', 'string', 'max:32'],
             'direction' => ['required', Rule::in(['inbound', 'outbound'])],
             'duration_seconds' => ['required', 'integer', 'min:0'],

@@ -7,6 +7,7 @@ use App\Models\ContentPiece;
 use App\Models\SocialPost;
 use App\Services\Content\SocialService;
 use App\Support\AuditLogger;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -52,7 +53,7 @@ class SocialController extends Controller
             'type' => ['nullable', 'string', 'max:40'],
             'body' => ['required', 'string', 'max:5000'],
             'media_url' => ['nullable', 'url', 'max:2048'],
-            'content_piece_id' => ['nullable', Rule::exists('content_pieces', 'id')],
+            'content_piece_id' => ['nullable', TenantExists::in('content_pieces')],
         ]));
 
         $this->audit->log('content.social.created', context: ['channel' => $post->channel], resourceType: 'social_post', resourceId: (string) $post->id, organizationId: $post->organization_id);

@@ -7,6 +7,7 @@ use App\Models\Contact;
 use App\Models\MarketingList;
 use App\Services\Marketing\ListService;
 use App\Support\AuditLogger;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -82,7 +83,7 @@ class ListController extends Controller
     public function addContact(Request $request, MarketingList $list): RedirectResponse
     {
         $data = $request->validate([
-            'contact_id' => ['required', Rule::exists('contacts', 'id')->whereNull('deleted_at')],
+            'contact_id' => ['required', TenantExists::active('contacts')],
         ]);
 
         $contact = Contact::findOrFail($data['contact_id']);

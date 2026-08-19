@@ -12,6 +12,7 @@ use App\Models\StrategyPlan;
 use App\Services\Strategy\KpiTargetService;
 use App\Services\Strategy\MethodologyService;
 use App\Support\AuditLogger;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -78,7 +79,7 @@ class StrategyController extends Controller
     public function storeItem(Request $request): RedirectResponse
     {
         StrategyItem::create($request->validate([
-            'strategy_plan_id' => ['nullable', 'integer', 'exists:strategy_plans,id'],
+            'strategy_plan_id' => ['nullable', 'integer', TenantExists::in('strategy_plans')],
             'type' => ['required', Rule::in(StrategyItem::TYPES)],
             'title' => ['required', 'string', 'max:200'],
             'findings' => ['nullable', 'string', 'max:5000'],

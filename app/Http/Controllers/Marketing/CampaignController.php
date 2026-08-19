@@ -7,6 +7,7 @@ use App\Models\Campaign;
 use App\Models\MarketingList;
 use App\Services\Marketing\CampaignService;
 use App\Support\AuditLogger;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -112,7 +113,7 @@ class CampaignController extends Controller
             'from_email' => ['nullable', 'email', 'max:200'],
             'body_html' => ['nullable', 'string', 'max:50000'],
             'body_text' => ['nullable', 'string', 'max:5000'],
-            'marketing_list_id' => ['nullable', Rule::exists('marketing_lists', 'id')],
+            'marketing_list_id' => ['nullable', TenantExists::in('marketing_lists')],
         ]);
     }
 }

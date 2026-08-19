@@ -10,6 +10,7 @@ use App\Models\AiMessage;
 use App\Models\Contact;
 use App\Models\Deal;
 use App\Services\Ai\AiSalesAgent;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -45,7 +46,7 @@ class AiAgentController extends Controller
     public function run(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'contact_id' => ['required', 'integer', 'exists:contacts,id'],
+            'contact_id' => ['required', 'integer', TenantExists::active('contacts')],
             'task' => ['required', Rule::in(['qualify', 'research', 'next_action', 'draft_email', 'follow_up', 'score_lead'])],
             'purpose' => ['nullable', 'string', 'max:200'],
         ]);
@@ -103,7 +104,7 @@ class AiAgentController extends Controller
 
     public function startConversation(Request $request): RedirectResponse
     {
-        $data = $request->validate(['contact_id' => ['nullable', 'integer', 'exists:contacts,id']]);
+        $data = $request->validate(['contact_id' => ['nullable', 'integer', TenantExists::active('contacts')]]);
 
         AiConversation::create([
             'contact_id' => $data['contact_id'] ?? null,
@@ -145,7 +146,7 @@ class AiAgentController extends Controller
     public function proposeCrmUpdate(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'contact_id' => ['required', 'integer', 'exists:contacts,id'],
+            'contact_id' => ['required', 'integer', TenantExists::active('contacts')],
             'changes' => ['required', 'array'],
         ]);
 

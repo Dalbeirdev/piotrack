@@ -7,6 +7,7 @@ use App\Models\Contact;
 use App\Models\LeadReplacement;
 use App\Models\PerformanceAgreement;
 use App\Services\Strategy\PerformanceService;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -66,8 +67,8 @@ class PerformanceController extends Controller
     public function replaceLead(Request $request, PerformanceAgreement $agreement): RedirectResponse
     {
         $data = $request->validate([
-            'contact_id' => ['required', 'integer', 'exists:contacts,id'],
-            'replacement_contact_id' => ['nullable', 'integer', 'exists:contacts,id'],
+            'contact_id' => ['required', 'integer', TenantExists::active('contacts')],
+            'replacement_contact_id' => ['nullable', 'integer', TenantExists::active('contacts')],
             'reason' => ['required', 'string', 'max:255'],
         ]);
 

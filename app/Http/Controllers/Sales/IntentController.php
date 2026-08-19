@@ -7,6 +7,7 @@ use App\Models\Contact;
 use App\Models\IntentSignal;
 use App\Services\Sales\AlertService;
 use App\Services\Sales\IntentService;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -56,7 +57,7 @@ class IntentController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'contact_id' => ['required', Rule::exists('contacts', 'id')],
+            'contact_id' => ['required', TenantExists::active('contacts')],
             'type' => ['required', Rule::in(self::TYPES)],
             'weight' => ['required', 'integer', 'min:1', 'max:50'],
             'url' => ['nullable', 'url', 'max:2048'],

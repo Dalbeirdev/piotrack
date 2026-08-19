@@ -7,6 +7,7 @@ use App\Models\AuthorityAsset;
 use App\Models\Review;
 use App\Models\ReviewRequest;
 use App\Services\Content\ReputationService;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -84,7 +85,7 @@ class ReputationController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:150'],
-            'contact_id' => ['nullable', Rule::exists('contacts', 'id')],
+            'contact_id' => ['nullable', TenantExists::active('contacts')],
             'channel' => ['required', Rule::in(['email', 'sms'])],
         ]);
 

@@ -14,6 +14,7 @@ use App\Services\Web\LocationService;
 use App\Services\Web\SiteBuilderService;
 use App\Services\Web\SiteHealthService;
 use App\Services\Web\TaxonomyService;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -86,10 +87,10 @@ class SiteController extends Controller
             'meta_description' => ['nullable', 'string', 'max:500'],
             'headline' => ['nullable', 'string', 'max:200'],
             'subheadline' => ['nullable', 'string', 'max:255'],
-            'service_line_id' => ['nullable', 'integer', 'exists:service_lines,id'],
-            'vertical_id' => ['nullable', 'integer', 'exists:verticals,id'],
-            'seo_location_id' => ['nullable', 'integer', 'exists:seo_locations,id'],
-            'form_id' => ['nullable', 'integer', 'exists:forms,id'],
+            'service_line_id' => ['nullable', 'integer', TenantExists::in('service_lines')],
+            'vertical_id' => ['nullable', 'integer', TenantExists::in('verticals')],
+            'seo_location_id' => ['nullable', 'integer', TenantExists::in('seo_locations')],
+            'form_id' => ['nullable', 'integer', TenantExists::in('forms')],
         ]));
 
         return back()->with('status', __('Page created.'));
@@ -103,14 +104,14 @@ class SiteController extends Controller
             'meta_description' => ['nullable', 'string', 'max:500'],
             'headline' => ['nullable', 'string', 'max:200'],
             'subheadline' => ['nullable', 'string', 'max:255'],
-            'form_id' => ['nullable', 'integer', 'exists:forms,id'],
+            'form_id' => ['nullable', 'integer', TenantExists::in('forms')],
             // Re-targeting must be editable: the coverage report exists to expose
             // gaps, and a gap you can only close by creating a NEW page rather
             // than re-pointing an existing one makes the report far less useful.
             'type' => ['sometimes', Rule::in(SitePage::TYPES)],
-            'service_line_id' => ['nullable', 'integer', 'exists:service_lines,id'],
-            'vertical_id' => ['nullable', 'integer', 'exists:verticals,id'],
-            'seo_location_id' => ['nullable', 'integer', 'exists:seo_locations,id'],
+            'service_line_id' => ['nullable', 'integer', TenantExists::in('service_lines')],
+            'vertical_id' => ['nullable', 'integer', TenantExists::in('verticals')],
+            'seo_location_id' => ['nullable', 'integer', TenantExists::in('seo_locations')],
         ]));
 
         return back()->with('status', __('Page updated.'));
@@ -194,7 +195,7 @@ class SiteController extends Controller
             // A nav item needs somewhere to go: either an internal page or an
             // external URL. Without this both could be omitted and the item
             // would render as a dead link.
-            'site_page_id' => ['nullable', 'required_without:url', 'integer', 'exists:site_pages,id'],
+            'site_page_id' => ['nullable', 'required_without:url', 'integer', TenantExists::in('site_pages')],
             'url' => ['nullable', 'required_without:site_page_id', 'string', 'max:2048'],
             'placement' => ['required', Rule::in(['header', 'footer'])],
             'sort_order' => ['nullable', 'integer', 'min:0'],

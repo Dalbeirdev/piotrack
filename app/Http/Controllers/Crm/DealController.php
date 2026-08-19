@@ -8,6 +8,7 @@ use App\Models\Pipeline;
 use App\Models\PipelineStage;
 use App\Support\AuditLogger;
 use App\Support\CurrentOrganization;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -145,7 +146,7 @@ class DealController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:200'],
-            'contact_id' => ['nullable', Rule::exists('contacts', 'id')->where('organization_id', $this->currentOrganization->id())],
+            'contact_id' => ['nullable', TenantExists::active('contacts')],
             'company_id' => ['nullable', Rule::exists('companies', 'id')->where('organization_id', $this->currentOrganization->id())],
             'value' => ['nullable', 'numeric', 'min:0'],
             'mrr' => ['nullable', 'numeric', 'min:0'],

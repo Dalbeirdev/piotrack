@@ -7,6 +7,7 @@ use App\Models\MarketingList;
 use App\Models\RetargetingAudience;
 use App\Services\Advertising\RetargetingService;
 use App\Support\AuditLogger;
+use App\Validation\TenantExists;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -42,7 +43,7 @@ class RetargetingController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:150'],
             'source' => ['required', Rule::in(['list', 'behavior', 'funnel_stage', 'all_contacts'])],
-            'marketing_list_id' => ['nullable', Rule::exists('marketing_lists', 'id')],
+            'marketing_list_id' => ['nullable', TenantExists::in('marketing_lists')],
             'rules' => ['nullable', 'array'],
             'rules.lifecycle_stage' => ['nullable', 'string', 'max:40'],
             'rules.min_lead_score' => ['nullable', 'integer', 'min:0'],
