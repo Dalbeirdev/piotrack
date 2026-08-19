@@ -5,6 +5,8 @@ namespace App\Console\Commands;
 use App\Models\Booking;
 use App\Models\User;
 use App\Notifications\BookingReminderNotification;
+use App\Services\Marketing\MessageDispatcher;
+use App\Support\CurrentOrganization;
 use App\Support\NotificationDispatcher;
 use Illuminate\Console\Command;
 
@@ -19,7 +21,7 @@ class SendBookingReminders extends Command
 
     protected $description = 'Notify owners of bookings scheduled in the next 24 hours';
 
-    public function handle(NotificationDispatcher $notifications): int
+    public function handle(NotificationDispatcher $notifications, MessageDispatcher $messages, CurrentOrganization $current): int
     {
         $sent = 0;
 
@@ -27,12 +29,33 @@ class SendBookingReminders extends Command
             ->where('status', 'booked')
             ->whereBetween('scheduled_at', [now(), now()->addDay()])
             ->whereNotNull('owner_id')
-            ->each(function (Booking $booking) use ($notifications, &$sent) {
+            ->each(function (Booking $booking) use ($notifications, $messages, $current, &$sent) {
+                $when = $booking->scheduled_at->toDayDateTimeString();
                 $owner = User::find($booking->owner_id);
 
                 if ($owner !== null) {
-                    $notifications->toUser($owner, new BookingReminderNotification($booking->name, $booking->scheduled_at->toDayDateTimeString()));
+                    $notifications->toUser($owner, new BookingReminderNotification($booking->name, $when));
                     $sent++;
+                }
+
+                // The attendee is the one the public page promised a reminder
+                // to. The owner's in-app notification points at an
+                // authenticated route they cannot open.
+                // Mail is written per tenant, so the booking's own organization
+                // has to be the active context - the scheduler runs with none.
+                $organization = $booking->organization()->first();
+                $contact = $booking->contact()->first();
+
+                if ($organization !== null && $contact !== null && $contact->email !== null) {
+                    $current->set($organization);
+                    $messages->sendEmail(
+                        $contact,
+                        __('Reminder: your meeting on :when', ['when' => $when]),
+                        __('This is a reminder of your meeting on :when (UTC).', ['when' => $when]),
+                        'booking',
+                    );
+
+                    $current->forget();
                 }
             });
 

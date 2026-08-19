@@ -6,6 +6,7 @@ use App\Models\Activity;
 use App\Models\Booking;
 use App\Models\BookingPage;
 use App\Models\Contact;
+use App\Services\Marketing\MessageDispatcher;
 use App\Support\AuditLogger;
 use App\Support\CurrentOrganization;
 use Illuminate\Support\Carbon;
@@ -22,7 +23,32 @@ class BookingService
     public function __construct(
         private CurrentOrganization $currentOrganization,
         private AuditLogger $audit,
+        private MessageDispatcher $messages,
     ) {}
+
+    /**
+     * Confirm the appointment to the person who booked it.
+     *
+     * The public page tells them "Your :type is confirmed. We will send a
+     * reminder." Nothing used to reach them: booking sent no mail at all, and
+     * the reminder command notified only the owner, through an in-app
+     * notification pointing at an authenticated route the attendee cannot open.
+     * The promise on that page was never kept.
+     */
+    private function confirm(Booking $booking, BookingPage $page, Contact $contact): void
+    {
+        $when = $booking->scheduled_at->toDayDateTimeString();
+
+        $this->messages->sendEmail(
+            $contact,
+            __(':type confirmed for :when', ['type' => ucfirst((string) $page->meeting_type), 'when' => $when]),
+            __('Your :type is confirmed for :when (UTC). Reply to this email if you need to reschedule.', [
+                'type' => $page->meeting_type,
+                'when' => $when,
+            ]),
+            'booking',
+        );
+    }
 
     /**
      * @param  array{name: string, email: string, scheduled_at: mixed, source?: ?string, notes?: ?string}  $data
@@ -61,6 +87,8 @@ class BookingService
             'title' => 'Booked: '.$page->meeting_type,
             'due_at' => $booking->scheduled_at,
         ]);
+
+        $this->confirm($booking, $page, $contact);
 
         $this->audit->log('sales.booking.created', context: ['page' => $page->name], resourceType: 'booking', resourceId: (string) $booking->id, organizationId: $booking->organization_id);
 
