@@ -364,6 +364,10 @@ QA_FINDINGS = s("AUTO", "Marketing Automation", [
     ("Automated actions", "Contact tagging", "QA §21 (2026-08-19)"),
 ])
 
+QA_FINDINGS += s("SUPP", "Support System", [
+    ("Support tickets", "Ticket notifications to requester and assignee", "QA §53 (2026-08-20)"),
+])
+
 
 def main():
     existing = load_existing_state()
