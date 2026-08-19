@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Crm;
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use App\Support\AuditLogger;
+use App\Support\Csv;
 use App\Support\CurrentOrganization;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -31,14 +32,17 @@ class ContactExportController extends Controller
 
             Contact::with('company:id,name')->chunk(500, function ($contacts) use ($out) {
                 foreach ($contacts as $contact) {
-                    fputcsv($out, [
+                    // Csv::row neutralises formula injection: a contact created
+                    // from an unauthenticated form could carry a value like
+                    // "=HYPERLINK(...)" that would execute in a spreadsheet.
+                    fputcsv($out, Csv::row([
                         $contact->first_name,
                         $contact->last_name,
                         $contact->email,
                         $contact->phone,
                         $contact->title,
                         $contact->company?->name,
-                    ]);
+                    ]));
                 }
             });
 
