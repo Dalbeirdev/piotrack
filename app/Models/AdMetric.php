@@ -21,6 +21,7 @@ class AdMetric extends Model
 
     protected $fillable = [
         'organization_id', 'ad_campaign_id', 'date', 'impressions', 'clicks', 'spend', 'conversions', 'revenue',
+        'provider',
     ];
 
     protected function casts(): array

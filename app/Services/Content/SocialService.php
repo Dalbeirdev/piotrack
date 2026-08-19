@@ -40,6 +40,9 @@ class SocialService
             'status' => 'published',
             'published_at' => now(),
             'external_id' => $externalId,
+            // The fixture driver invents engagement, and a post it "published"
+            // was never published anywhere.
+            'provider' => (string) config('content.social_provider', 'fixture'),
             'impressions' => $metrics->impressions,
             'likes' => $metrics->likes,
             'comments' => $metrics->comments,
@@ -56,6 +59,7 @@ class SocialService
         $metrics = $this->provider->metrics($post);
 
         $post->update([
+            'provider' => (string) config('content.social_provider', 'fixture'),
             'impressions' => $metrics->impressions,
             'likes' => $metrics->likes,
             'comments' => $metrics->comments,

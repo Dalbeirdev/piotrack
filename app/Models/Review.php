@@ -18,7 +18,7 @@ class Review extends Model
     use BelongsToTenant;
 
     protected $fillable = [
-        'organization_id', 'source', 'author_name', 'rating', 'body', 'url',
+        'organization_id', 'source', 'provider', 'author_name', 'rating', 'body', 'url',
         'sentiment', 'responded', 'response', 'reviewed_at',
     ];
 

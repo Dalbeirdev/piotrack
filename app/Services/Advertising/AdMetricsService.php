@@ -40,11 +40,15 @@ class AdMetricsService
                     'spend' => $row['spend'],
                     'conversions' => $row['conversions'],
                     'revenue' => $row['revenue'],
+                    // Which driver produced these. The fixture driver derives
+                    // spend and revenue from a hash, and the dashboard reports
+                    // ROAS from them.
+                    'provider' => (string) config('advertising.driver', 'fixture'),
                 ],
             );
         }
 
-        $this->audit->log('ads.metrics.refreshed', context: ['campaign' => $campaign->name, 'days' => $days], resourceType: 'ad_campaign', resourceId: (string) $campaign->id, organizationId: $campaign->organization_id);
+        $this->audit->log('ads.metrics.refreshed', context: ['campaign' => $campaign->name, 'days' => $days, 'provider' => (string) config('advertising.driver', 'fixture')], resourceType: 'ad_campaign', resourceId: (string) $campaign->id, organizationId: $campaign->organization_id);
 
         return count($rows);
     }

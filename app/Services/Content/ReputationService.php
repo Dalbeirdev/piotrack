@@ -62,7 +62,12 @@ class ReputationService
 
         foreach ($rows as $row) {
             Review::create([
+                // `source` is the platform the review is filed under; `provider`
+                // is the driver that produced it. The fixture driver invents an
+                // author, rating and body, which must never read as a real
+                // customer's words filed under Google.
                 'source' => $source,
+                'provider' => (string) config('content.review_provider', 'fixture'),
                 'author_name' => $row['author_name'],
                 'rating' => $row['rating'],
                 'body' => $row['body'],

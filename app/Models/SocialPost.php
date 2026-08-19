@@ -23,7 +23,7 @@ class SocialPost extends Model
 
     protected $fillable = [
         'organization_id', 'channel', 'type', 'body', 'media_url', 'content_piece_id',
-        'status', 'scheduled_at', 'published_at', 'external_id',
+        'status', 'scheduled_at', 'published_at', 'external_id', 'provider',
         'impressions', 'likes', 'comments', 'shares',
     ];
 
