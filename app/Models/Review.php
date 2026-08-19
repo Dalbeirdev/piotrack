@@ -19,7 +19,7 @@ class Review extends Model
 
     protected $fillable = [
         'organization_id', 'source', 'provider', 'author_name', 'rating', 'body', 'url',
-        'sentiment', 'responded', 'response', 'reviewed_at',
+        'sentiment', 'responded', 'response', 'response_published_at', 'reviewed_at',
     ];
 
     protected function casts(): array

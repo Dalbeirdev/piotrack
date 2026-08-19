@@ -37,10 +37,23 @@ class ReputationService
         return $review;
     }
 
+    /**
+     * Store a reply to a review.
+     *
+     * The reply is recorded against the review and nothing more:
+     * ReviewProvider exposes only fetch(), so no driver can post a reply back
+     * to Google, Clutch or any other platform. response_published_at stays null
+     * to say so, rather than leaving `responded` to imply the public has seen
+     * it. Once a driver can publish, set it there.
+     */
     public function respond(Review $review, string $response): Review
     {
-        $review->update(['responded' => true, 'response' => $response]);
-        $this->audit->log('content.review.responded', resourceType: 'review', resourceId: (string) $review->id, organizationId: $review->organization_id);
+        $review->update([
+            'responded' => true,
+            'response' => $response,
+            'response_published_at' => null,
+        ]);
+        $this->audit->log('content.review.responded', context: ['published_externally' => false], resourceType: 'review', resourceId: (string) $review->id, organizationId: $review->organization_id);
 
         return $review;
     }

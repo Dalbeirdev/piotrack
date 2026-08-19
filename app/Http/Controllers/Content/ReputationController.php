@@ -21,6 +21,14 @@ class ReputationController extends Controller
     public function index(): Response
     {
         return Inertia::render('content/reputation/index', [
+            // Where the reviews came from, and what replying actually does.
+            // No driver can post a reply back to a platform, so the screen must
+            // not let "Responded" imply the public has seen it.
+            'reviewSource' => [
+                'name' => (string) config('content.review_provider', 'fixture'),
+                'live' => (string) config('content.review_provider', 'fixture') !== 'fixture',
+                'canPublishResponses' => false,
+            ],
             'aggregate' => $this->reputation->aggregate(),
             'reviews' => Review::latest('id')->limit(100)->get()->map(fn (Review $r) => [
                 'id' => $r->id,
