@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Seo;
 
 use App\Http\Controllers\Controller;
 use App\Models\AiVisibilityCheck;
+use App\Seo\SeoProviderManager;
 use App\Services\Seo\AiVisibilityService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,6 +22,12 @@ class AiVisibilityController extends Controller
 
         return Inertia::render('seo/ai-visibility/index', [
             'engines' => config('seo.ai_engines'),
+            // Stated plainly: the fixture driver invents competitors and
+            // citations, so a screen showing them must say where they came from.
+            'aiSource' => [
+                'name' => app(SeoProviderManager::class)->aiProviderName(),
+                'live' => app(SeoProviderManager::class)->isAiLive(),
+            ],
             'checks' => $checks->map(fn (AiVisibilityCheck $c) => [
                 'id' => $c->id,
                 'prompt' => $c->prompt,

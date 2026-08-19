@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ai;
 
 use App\Http\Controllers\Controller;
 use App\Models\AiPrompt;
+use App\Seo\SeoProviderManager;
 use App\Services\Ai\AiVisibilityDashboard;
 use App\Support\CurrentOrganization;
 use Illuminate\Http\RedirectResponse;
@@ -18,6 +19,12 @@ class AiVisibilityController extends Controller
     public function index(): Response
     {
         return Inertia::render('ai/visibility', [
+            // The same disclosure the SEO surface carries: this screen shows
+            // competitors and citations the fixture driver invents.
+            'aiSource' => [
+                'name' => app(SeoProviderManager::class)->aiProviderName(),
+                'live' => app(SeoProviderManager::class)->isAiLive(),
+            ],
             'frequencies' => $this->dashboard->frequencies(),
             'share_of_voice' => $this->dashboard->shareOfVoice(),
             'by_engine' => $this->dashboard->byEngine(),

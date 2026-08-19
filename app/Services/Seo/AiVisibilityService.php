@@ -4,6 +4,7 @@ namespace App\Services\Seo;
 
 use App\Models\AiVisibilityCheck;
 use App\Seo\Contracts\AiSearchProvider;
+use App\Seo\SeoProviderManager;
 use App\Support\AuditLogger;
 
 /**
@@ -16,6 +17,7 @@ class AiVisibilityService
     public function __construct(
         private AiSearchProvider $provider,
         private AuditLogger $audit,
+        private SeoProviderManager $providers,
     ) {}
 
     public function check(string $prompt, string $brand, string $engine = 'chatgpt'): AiVisibilityCheck
@@ -31,10 +33,13 @@ class AiVisibilityService
             'cited_sources' => $result->citedSources,
             'competitors' => $result->competitors,
             'share_of_answer' => $result->shareOfAnswer,
+            // Which driver produced this. The fixture driver invents competitor
+            // domains and citations, which must never read as market findings.
+            'provider' => $this->providers->aiProviderName(),
             'checked_at' => now(),
         ]);
 
-        $this->audit->log('seo.ai.checked', context: ['prompt' => $prompt, 'engine' => $engine, 'mentioned' => $result->mentioned], resourceType: 'ai_visibility_check', resourceId: (string) $check->id, organizationId: $check->organization_id);
+        $this->audit->log('seo.ai.checked', context: ['prompt' => $prompt, 'engine' => $engine, 'mentioned' => $result->mentioned, 'provider' => $this->providers->aiProviderName()], resourceType: 'ai_visibility_check', resourceId: (string) $check->id, organizationId: $check->organization_id);
 
         return $check;
     }

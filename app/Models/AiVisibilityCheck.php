@@ -18,7 +18,7 @@ class AiVisibilityCheck extends Model
     use BelongsToTenant;
 
     protected $fillable = [
-        'organization_id', 'ai_prompt_id', 'prompt', 'engine', 'brand', 'mentioned', 'recommended',
+        'organization_id', 'ai_prompt_id', 'prompt', 'engine', 'provider', 'brand', 'mentioned', 'recommended',
         'position', 'cited_sources', 'competitors', 'share_of_answer', 'checked_at',
     ];
 

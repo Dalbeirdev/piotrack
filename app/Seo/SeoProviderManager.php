@@ -58,9 +58,19 @@ class SeoProviderManager
         return $this->rankProviderName() !== 'fixture';
     }
 
-    /** Same question for the AI-search driver behind AI visibility. */
+    /** The configured AI-search driver's name, recorded against every check. */
+    public function aiProviderName(): string
+    {
+        return (string) config('seo.ai_provider', 'fixture');
+    }
+
+    /**
+     * Same question for the AI-search driver behind AI visibility, and with a
+     * sharper edge: the fixture driver invents competitor domains and citations,
+     * which must never be read as findings about a real market.
+     */
     public function isAiLive(): bool
     {
-        return (string) config('seo.ai_provider', 'fixture') !== 'fixture';
+        return $this->aiProviderName() !== 'fixture';
     }
 }
