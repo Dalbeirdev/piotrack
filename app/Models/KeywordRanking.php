@@ -18,7 +18,7 @@ class KeywordRanking extends Model
 
     protected $fillable = [
         'organization_id', 'keyword_id', 'engine', 'location', 'position', 'url',
-        'is_competitor', 'competitor_domain', 'checked_at',
+        'provider', 'is_competitor', 'competitor_domain', 'checked_at',
     ];
 
     protected function casts(): array

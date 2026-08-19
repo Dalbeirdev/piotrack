@@ -7,6 +7,7 @@ use App\Models\AiVisibilityCheck;
 use App\Models\Keyword;
 use App\Models\SeoAudit;
 use App\Models\SeoLocation;
+use App\Seo\SeoProviderManager;
 use App\Services\Seo\RankTracker;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -18,6 +19,13 @@ class SeoDashboardController extends Controller
         $trackedKeywords = Keyword::where('is_tracked', true)->get();
 
         return Inertia::render('seo/dashboard', [
+            // Stated plainly so fixture positions are never mistaken for real
+            // rankings: the fixture driver derives a position from a hash.
+            'rankSource' => [
+                'name' => app(SeoProviderManager::class)->rankProviderName(),
+                'live' => app(SeoProviderManager::class)->isRankLive(),
+            ],
+
             'stats' => [
                 'audits' => SeoAudit::count(),
                 'avg_score' => (int) round(SeoAudit::avg('score') ?? 0),

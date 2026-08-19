@@ -5,6 +5,7 @@ namespace App\Services\Seo;
 use App\Models\Keyword;
 use App\Models\KeywordRanking;
 use App\Seo\Contracts\RankProvider;
+use App\Seo\SeoProviderManager;
 use App\Support\AuditLogger;
 
 /**
@@ -17,6 +18,7 @@ class RankTracker
     public function __construct(
         private RankProvider $provider,
         private AuditLogger $audit,
+        private SeoProviderManager $providers,
     ) {}
 
     public function check(Keyword $keyword, string $domain, ?string $location = null, string $engine = 'google'): KeywordRanking
@@ -29,12 +31,16 @@ class RankTracker
             'location' => $location,
             'position' => $result->position,
             'url' => $result->url,
+            // Which driver produced this: a fixture position is a hash, not a
+            // ranking, and history must stay self-describing once a real
+            // provider is connected.
+            'provider' => $this->providers->rankProviderName(),
             'checked_at' => now(),
         ]);
 
         $keyword->update(['current_position' => $result->position]);
 
-        $this->audit->log('seo.rank.checked', context: ['keyword' => $keyword->phrase, 'position' => $result->position], resourceType: 'keyword', resourceId: (string) $keyword->id, organizationId: $keyword->organization_id);
+        $this->audit->log('seo.rank.checked', context: ['keyword' => $keyword->phrase, 'position' => $result->position, 'provider' => $this->providers->rankProviderName()], resourceType: 'keyword', resourceId: (string) $keyword->id, organizationId: $keyword->organization_id);
 
         return $ranking;
     }
@@ -49,6 +55,7 @@ class RankTracker
             'location' => $location,
             'position' => $result->position,
             'url' => $result->url,
+            'provider' => $this->providers->rankProviderName(),
             'is_competitor' => true,
             'competitor_domain' => $competitorDomain,
             'checked_at' => now(),

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Seo;
 
 use App\Http\Controllers\Controller;
 use App\Models\Keyword;
+use App\Seo\SeoProviderManager;
 use App\Services\Seo\KeywordService;
 use App\Services\Seo\RankTracker;
 use App\Support\AuditLogger;
@@ -24,6 +25,13 @@ class KeywordController extends Controller
     public function index(): Response
     {
         return Inertia::render('seo/keywords/index', [
+            // Stated plainly so fixture positions are never mistaken for real
+            // rankings: the fixture driver derives a position from a hash.
+            'rankSource' => [
+                'name' => app(SeoProviderManager::class)->rankProviderName(),
+                'live' => app(SeoProviderManager::class)->isRankLive(),
+            ],
+
             'keywords' => Keyword::latest('id')->get()->map(fn (Keyword $k) => [
                 'id' => $k->id,
                 'phrase' => $k->phrase,

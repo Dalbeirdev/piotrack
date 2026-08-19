@@ -38,4 +38,29 @@ class SeoProviderManager
             default => throw new InvalidArgumentException("Unknown AI search provider [{$name}]."),
         };
     }
+
+    /** The configured rank driver's name, recorded against every position. */
+    public function rankProviderName(): string
+    {
+        return (string) config('seo.rank_provider', 'fixture');
+    }
+
+    /**
+     * Whether positions come from a real SERP lookup.
+     *
+     * The fixture driver derives a position from a hash of the inputs, which is
+     * useful for exercising the pipeline and useless as a ranking. Mirrors
+     * AiProviderManager::isLive() so the UI can say so plainly rather than
+     * presenting a hash as a search result.
+     */
+    public function isRankLive(): bool
+    {
+        return $this->rankProviderName() !== 'fixture';
+    }
+
+    /** Same question for the AI-search driver behind AI visibility. */
+    public function isAiLive(): bool
+    {
+        return (string) config('seo.ai_provider', 'fixture') !== 'fixture';
+    }
 }
