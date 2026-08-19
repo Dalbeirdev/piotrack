@@ -160,7 +160,7 @@ export function AppSidebar() {
         can('admin.platform') && { title: 'Announcements', url: '/platform/announcements', icon: Megaphone },
     ].filter(Boolean) as NavItem[];
 
-    const groups: NavGroup[] = [
+    const sections: NavGroup[] = [
         { id: 'crm', label: 'CRM', items: crmNavItems },
         { id: 'marketing', label: 'Marketing', items: marketingNavItems },
         { id: 'seo', label: 'SEO', items: seoNavItems },
@@ -173,7 +173,13 @@ export function AppSidebar() {
         { id: 'delivery', label: 'Delivery', items: deliveryNavItems },
         { id: 'portal', label: 'Portal', items: portalNavItems },
         { id: 'platform', label: 'Platform', items: platformNavItems },
-    ].filter((group) => group.items.length > 0);
+    ].filter((section) => section.items.length > 0);
+
+    // A header exists to group things. A section holding a single item is not a
+    // group, so it joins Dashboard as a plain link rather than costing a click
+    // to reveal one child - Portal is the case that made this obvious.
+    const groups = sections.filter((section) => section.items.length > 1);
+    const topLevelItems = [...mainNavItems, ...sections.filter((section) => section.items.length === 1).flatMap((section) => section.items)];
 
     // The current path, without the query string - Inertia's page.url carries one.
     const path = usePage().url.split('?')[0];
@@ -181,7 +187,7 @@ export function AppSidebar() {
     // Longest match wins, so /seo/keywords highlights Keywords rather than also
     // lighting up the /seo dashboard that happens to be a prefix of it.
     const activeUrl =
-        [...groups.flatMap((group) => group.items), ...mainNavItems]
+        [...groups.flatMap((group) => group.items), ...topLevelItems]
             .filter((item) => path === item.url || path.startsWith(`${item.url}/`))
             .sort((a, b) => b.url.length - a.url.length)[0]?.url ?? null;
 
@@ -204,7 +210,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} activeUrl={activeUrl} />
+                <NavMain items={topLevelItems} activeUrl={activeUrl} />
                 {groups.map((group) => (
                     <NavMain
                         key={group.id}
