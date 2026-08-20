@@ -1,5 +1,5 @@
-import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
+import { PageHeader } from '@/components/page-header';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -37,56 +37,59 @@ export default function Deals({ pipeline, stages }: { pipeline: { id: number; na
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Deals" />
             <div className="space-y-4 p-4">
-                <div className="flex items-center justify-between gap-2">
-                    <Heading title="Deals" description={pipeline.name} />
-                    {can('crm.deal.create') && (
-                        <Dialog open={open} onOpenChange={setOpen}>
-                            <DialogTrigger asChild>
-                                <Button>New deal</Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogTitle>New deal</DialogTitle>
-                                <form onSubmit={create} className="space-y-3">
-                                    <div className="grid gap-1">
-                                        <Label htmlFor="name">Name</Label>
-                                        <Input id="name" value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} />
-                                        <InputError message={form.errors.name} />
-                                    </div>
-                                    <div className="grid gap-1">
-                                        <Label htmlFor="value">Value ($)</Label>
-                                        <Input
-                                            id="value"
-                                            type="number"
-                                            min="0"
-                                            value={form.data.value}
-                                            onChange={(e) => form.setData('value', e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="grid gap-1">
-                                        <Label htmlFor="stage">Stage</Label>
-                                        <Select value={form.data.stage_id} onValueChange={(v) => form.setData('stage_id', v)}>
-                                            <SelectTrigger id="stage">
-                                                <SelectValue placeholder="First stage" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {stages.map((s) => (
-                                                    <SelectItem key={s.id} value={String(s.id)}>
-                                                        {s.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                    <DialogFooter>
-                                        <Button type="submit" disabled={form.processing}>
-                                            Create
-                                        </Button>
-                                    </DialogFooter>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
-                    )}
-                </div>
+                <PageHeader
+                    title="Deals"
+                    description={`Your opportunity pipeline · ${pipeline.name}`}
+                    actions={
+                        can('crm.deal.create') && (
+                            <Dialog open={open} onOpenChange={setOpen}>
+                                <DialogTrigger asChild>
+                                    <Button>New deal</Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogTitle>New deal</DialogTitle>
+                                    <form onSubmit={create} className="space-y-3">
+                                        <div className="grid gap-1">
+                                            <Label htmlFor="name">Name</Label>
+                                            <Input id="name" value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} />
+                                            <InputError message={form.errors.name} />
+                                        </div>
+                                        <div className="grid gap-1">
+                                            <Label htmlFor="value">Value ($)</Label>
+                                            <Input
+                                                id="value"
+                                                type="number"
+                                                min="0"
+                                                value={form.data.value}
+                                                onChange={(e) => form.setData('value', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="grid gap-1">
+                                            <Label htmlFor="stage">Stage</Label>
+                                            <Select value={form.data.stage_id} onValueChange={(v) => form.setData('stage_id', v)}>
+                                                <SelectTrigger id="stage">
+                                                    <SelectValue placeholder="First stage" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {stages.map((s) => (
+                                                        <SelectItem key={s.id} value={String(s.id)}>
+                                                            {s.name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                        <DialogFooter>
+                                            <Button type="submit" disabled={form.processing}>
+                                                Create
+                                            </Button>
+                                        </DialogFooter>
+                                    </form>
+                                </DialogContent>
+                            </Dialog>
+                        )
+                    }
+                />
 
                 <div className="flex gap-3 overflow-x-auto pb-2">
                     {stages.map((stage) => (

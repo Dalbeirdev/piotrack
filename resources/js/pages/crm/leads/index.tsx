@@ -1,5 +1,6 @@
-import Heading from '@/components/heading';
+import { EmptyState } from '@/components/empty-state';
 import InputError from '@/components/input-error';
+import { PageHeader } from '@/components/page-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -11,6 +12,7 @@ import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, router, useForm } from '@inertiajs/react';
+import { UserPlus } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'Leads', href: '/crm/leads' }];
@@ -52,72 +54,75 @@ export default function Leads({ leads, filters, statuses }: { leads: Paginated; 
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Leads" />
             <div className="space-y-4 p-4">
-                <div className="flex items-center justify-between gap-2">
-                    <Heading title="Leads" description={`${leads.total} total`} />
-                    {can('crm.lead.create') && (
-                        <Dialog open={open} onOpenChange={setOpen}>
-                            <DialogTrigger asChild>
-                                <Button>New lead</Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogTitle>New lead</DialogTitle>
-                                <form onSubmit={submitCreate} className="space-y-3">
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <div className="grid gap-1">
-                                            <Label htmlFor="first_name">First name</Label>
-                                            <Input
-                                                id="first_name"
-                                                value={create.data.first_name}
-                                                onChange={(e) => create.setData('first_name', e.target.value)}
-                                            />
-                                            <InputError message={create.errors.first_name} />
+                <PageHeader
+                    title="Leads"
+                    description={`Capture and qualify inbound prospects · ${leads.total} total`}
+                    actions={
+                        can('crm.lead.create') && (
+                            <Dialog open={open} onOpenChange={setOpen}>
+                                <DialogTrigger asChild>
+                                    <Button>New lead</Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogTitle>New lead</DialogTitle>
+                                    <form onSubmit={submitCreate} className="space-y-3">
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="grid gap-1">
+                                                <Label htmlFor="first_name">First name</Label>
+                                                <Input
+                                                    id="first_name"
+                                                    value={create.data.first_name}
+                                                    onChange={(e) => create.setData('first_name', e.target.value)}
+                                                />
+                                                <InputError message={create.errors.first_name} />
+                                            </div>
+                                            <div className="grid gap-1">
+                                                <Label htmlFor="last_name">Last name</Label>
+                                                <Input
+                                                    id="last_name"
+                                                    value={create.data.last_name}
+                                                    onChange={(e) => create.setData('last_name', e.target.value)}
+                                                />
+                                            </div>
                                         </div>
                                         <div className="grid gap-1">
-                                            <Label htmlFor="last_name">Last name</Label>
+                                            <Label htmlFor="email">Email</Label>
                                             <Input
-                                                id="last_name"
-                                                value={create.data.last_name}
-                                                onChange={(e) => create.setData('last_name', e.target.value)}
+                                                id="email"
+                                                type="email"
+                                                value={create.data.email}
+                                                onChange={(e) => create.setData('email', e.target.value)}
                                             />
                                         </div>
-                                    </div>
-                                    <div className="grid gap-1">
-                                        <Label htmlFor="email">Email</Label>
-                                        <Input
-                                            id="email"
-                                            type="email"
-                                            value={create.data.email}
-                                            onChange={(e) => create.setData('email', e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-3">
-                                        <div className="grid gap-1">
-                                            <Label htmlFor="company_name">Company</Label>
-                                            <Input
-                                                id="company_name"
-                                                value={create.data.company_name}
-                                                onChange={(e) => create.setData('company_name', e.target.value)}
-                                            />
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="grid gap-1">
+                                                <Label htmlFor="company_name">Company</Label>
+                                                <Input
+                                                    id="company_name"
+                                                    value={create.data.company_name}
+                                                    onChange={(e) => create.setData('company_name', e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="grid gap-1">
+                                                <Label htmlFor="source">Source</Label>
+                                                <Input
+                                                    id="source"
+                                                    value={create.data.source}
+                                                    onChange={(e) => create.setData('source', e.target.value)}
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="grid gap-1">
-                                            <Label htmlFor="source">Source</Label>
-                                            <Input
-                                                id="source"
-                                                value={create.data.source}
-                                                onChange={(e) => create.setData('source', e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-                                    <DialogFooter>
-                                        <Button type="submit" disabled={create.processing}>
-                                            Create
-                                        </Button>
-                                    </DialogFooter>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
-                    )}
-                </div>
+                                        <DialogFooter>
+                                            <Button type="submit" disabled={create.processing}>
+                                                Create
+                                            </Button>
+                                        </DialogFooter>
+                                    </form>
+                                </DialogContent>
+                            </Dialog>
+                        )
+                    }
+                />
 
                 <div className="flex gap-2">
                     <Select
@@ -141,7 +146,12 @@ export default function Leads({ leads, filters, statuses }: { leads: Paginated; 
                 </div>
 
                 {leads.data.length === 0 ? (
-                    <p className="text-muted-foreground text-sm">No leads yet.</p>
+                    <EmptyState
+                        icon={UserPlus}
+                        title="No leads yet"
+                        description="New form submissions and manually added prospects will appear here."
+                        action={can('crm.lead.create') && <Button onClick={() => setOpen(true)}>New lead</Button>}
+                    />
                 ) : (
                     <div className="overflow-x-auto rounded-lg border">
                         <table className="w-full text-left text-sm">

@@ -1,5 +1,6 @@
-import Heading from '@/components/heading';
+import { EmptyState } from '@/components/empty-state';
 import InputError from '@/components/input-error';
+import { PageHeader } from '@/components/page-header';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,7 @@ import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Building2 } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'Companies', href: '/crm/companies' }];
@@ -36,45 +38,52 @@ export default function Companies({ companies, filters }: { companies: Paginated
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Companies" />
             <div className="space-y-4 p-4">
-                <div className="flex items-center justify-between gap-2">
-                    <Heading title="Companies" description={`${companies.total} total`} />
-                    {can('crm.company.create') && (
-                        <Dialog open={open} onOpenChange={setOpen}>
-                            <DialogTrigger asChild>
-                                <Button>New company</Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogTitle>New company</DialogTitle>
-                                <form onSubmit={create} className="space-y-3">
-                                    <div className="grid gap-1">
-                                        <Label htmlFor="name">Name</Label>
-                                        <Input id="name" value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} />
-                                        <InputError message={form.errors.name} />
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-3">
+                <PageHeader
+                    title="Companies"
+                    description={`Track the organizations behind your contacts · ${companies.total} total`}
+                    actions={
+                        can('crm.company.create') && (
+                            <Dialog open={open} onOpenChange={setOpen}>
+                                <DialogTrigger asChild>
+                                    <Button>New company</Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogTitle>New company</DialogTitle>
+                                    <form onSubmit={create} className="space-y-3">
                                         <div className="grid gap-1">
-                                            <Label htmlFor="domain">Domain</Label>
-                                            <Input id="domain" value={form.data.domain} onChange={(e) => form.setData('domain', e.target.value)} />
+                                            <Label htmlFor="name">Name</Label>
+                                            <Input id="name" value={form.data.name} onChange={(e) => form.setData('name', e.target.value)} />
+                                            <InputError message={form.errors.name} />
                                         </div>
-                                        <div className="grid gap-1">
-                                            <Label htmlFor="industry">Industry</Label>
-                                            <Input
-                                                id="industry"
-                                                value={form.data.industry}
-                                                onChange={(e) => form.setData('industry', e.target.value)}
-                                            />
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="grid gap-1">
+                                                <Label htmlFor="domain">Domain</Label>
+                                                <Input
+                                                    id="domain"
+                                                    value={form.data.domain}
+                                                    onChange={(e) => form.setData('domain', e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="grid gap-1">
+                                                <Label htmlFor="industry">Industry</Label>
+                                                <Input
+                                                    id="industry"
+                                                    value={form.data.industry}
+                                                    onChange={(e) => form.setData('industry', e.target.value)}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <DialogFooter>
-                                        <Button type="submit" disabled={form.processing}>
-                                            Create
-                                        </Button>
-                                    </DialogFooter>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
-                    )}
-                </div>
+                                        <DialogFooter>
+                                            <Button type="submit" disabled={form.processing}>
+                                                Create
+                                            </Button>
+                                        </DialogFooter>
+                                    </form>
+                                </DialogContent>
+                            </Dialog>
+                        )
+                    }
+                />
 
                 <form
                     onSubmit={(e) => {
@@ -90,7 +99,12 @@ export default function Companies({ companies, filters }: { companies: Paginated
                 </form>
 
                 {companies.data.length === 0 ? (
-                    <p className="text-muted-foreground text-sm">No companies yet.</p>
+                    <EmptyState
+                        icon={Building2}
+                        title="No companies yet"
+                        description="Add the organizations your contacts belong to."
+                        action={can('crm.company.create') && <Button onClick={() => setOpen(true)}>New company</Button>}
+                    />
                 ) : (
                     <div className="overflow-x-auto rounded-lg border">
                         <table className="w-full text-left text-sm">
