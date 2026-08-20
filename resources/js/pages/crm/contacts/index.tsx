@@ -1,5 +1,6 @@
-import Heading from '@/components/heading';
+import { EmptyState } from '@/components/empty-state';
 import InputError from '@/components/input-error';
+import { PageHeader } from '@/components/page-header';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,7 @@ import { usePermissions } from '@/hooks/use-permissions';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Users } from 'lucide-react';
 import { FormEventHandler, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: 'Contacts', href: '/crm/contacts' }];
@@ -41,87 +43,103 @@ export default function Contacts({ contacts, filters }: { contacts: Paginated; f
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Contacts" />
             <div className="space-y-4 p-4">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                    <Heading title="Contacts" description={`${contacts.total} total`} />
-                    <div className="flex gap-2">
-                        {can('crm.contact.read') && (
-                            <Button variant="outline" asChild>
-                                <a href={route('crm.contacts.export')}>Export CSV</a>
-                            </Button>
-                        )}
-                        {can('crm.import') && (
-                            <Button variant="outline" asChild>
-                                <Link href={route('crm.contacts.import')}>Import</Link>
-                            </Button>
-                        )}
-                        {can('crm.contact.create') && (
-                            <Dialog open={open} onOpenChange={setOpen}>
-                                <DialogTrigger asChild>
-                                    <Button>New contact</Button>
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <DialogTitle>New contact</DialogTitle>
-                                    <form onSubmit={create} className="space-y-3">
-                                        <div className="grid grid-cols-2 gap-3">
+                <PageHeader
+                    title="Contacts"
+                    description={`Manage and qualify your customer relationships · ${contacts.total} total`}
+                    actions={
+                        <>
+                            {can('crm.contact.read') && (
+                                <Button variant="outline" asChild>
+                                    <a href={route('crm.contacts.export')}>Export CSV</a>
+                                </Button>
+                            )}
+                            {can('crm.import') && (
+                                <Button variant="outline" asChild>
+                                    <Link href={route('crm.contacts.import')}>Import</Link>
+                                </Button>
+                            )}
+                            {can('crm.contact.create') && (
+                                <Dialog open={open} onOpenChange={setOpen}>
+                                    <DialogTrigger asChild>
+                                        <Button>New contact</Button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogTitle>New contact</DialogTitle>
+                                        <form onSubmit={create} className="space-y-3">
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <div className="grid gap-1">
+                                                    <Label htmlFor="first_name">First name</Label>
+                                                    <Input
+                                                        id="first_name"
+                                                        value={form.data.first_name}
+                                                        onChange={(e) => form.setData('first_name', e.target.value)}
+                                                    />
+                                                    <InputError message={form.errors.first_name} />
+                                                </div>
+                                                <div className="grid gap-1">
+                                                    <Label htmlFor="last_name">Last name</Label>
+                                                    <Input
+                                                        id="last_name"
+                                                        value={form.data.last_name}
+                                                        onChange={(e) => form.setData('last_name', e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
                                             <div className="grid gap-1">
-                                                <Label htmlFor="first_name">First name</Label>
+                                                <Label htmlFor="email">Email</Label>
                                                 <Input
-                                                    id="first_name"
-                                                    value={form.data.first_name}
-                                                    onChange={(e) => form.setData('first_name', e.target.value)}
+                                                    id="email"
+                                                    type="email"
+                                                    value={form.data.email}
+                                                    onChange={(e) => form.setData('email', e.target.value)}
                                                 />
-                                                <InputError message={form.errors.first_name} />
+                                                <InputError message={form.errors.email} />
                                             </div>
-                                            <div className="grid gap-1">
-                                                <Label htmlFor="last_name">Last name</Label>
-                                                <Input
-                                                    id="last_name"
-                                                    value={form.data.last_name}
-                                                    onChange={(e) => form.setData('last_name', e.target.value)}
-                                                />
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <div className="grid gap-1">
+                                                    <Label htmlFor="title">Title</Label>
+                                                    <Input
+                                                        id="title"
+                                                        value={form.data.title}
+                                                        onChange={(e) => form.setData('title', e.target.value)}
+                                                    />
+                                                </div>
+                                                <div className="grid gap-1">
+                                                    <Label htmlFor="phone">Phone</Label>
+                                                    <Input
+                                                        id="phone"
+                                                        value={form.data.phone}
+                                                        onChange={(e) => form.setData('phone', e.target.value)}
+                                                    />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="grid gap-1">
-                                            <Label htmlFor="email">Email</Label>
-                                            <Input
-                                                id="email"
-                                                type="email"
-                                                value={form.data.email}
-                                                onChange={(e) => form.setData('email', e.target.value)}
-                                            />
-                                            <InputError message={form.errors.email} />
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-3">
-                                            <div className="grid gap-1">
-                                                <Label htmlFor="title">Title</Label>
-                                                <Input id="title" value={form.data.title} onChange={(e) => form.setData('title', e.target.value)} />
-                                            </div>
-                                            <div className="grid gap-1">
-                                                <Label htmlFor="phone">Phone</Label>
-                                                <Input id="phone" value={form.data.phone} onChange={(e) => form.setData('phone', e.target.value)} />
-                                            </div>
-                                        </div>
-                                        <DialogFooter>
-                                            <Button type="submit" disabled={form.processing}>
-                                                Create
-                                            </Button>
-                                        </DialogFooter>
-                                    </form>
-                                </DialogContent>
-                            </Dialog>
-                        )}
-                    </div>
-                </div>
-
-                <form onSubmit={submitSearch} className="flex gap-2">
-                    <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search name or email…" className="max-w-sm" />
-                    <Button type="submit" variant="outline">
-                        Search
-                    </Button>
-                </form>
+                                            <DialogFooter>
+                                                <Button type="submit" disabled={form.processing}>
+                                                    Create
+                                                </Button>
+                                            </DialogFooter>
+                                        </form>
+                                    </DialogContent>
+                                </Dialog>
+                            )}
+                        </>
+                    }
+                >
+                    <form onSubmit={submitSearch} className="flex gap-2">
+                        <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search name or email…" className="max-w-sm" />
+                        <Button type="submit" variant="outline">
+                            Search
+                        </Button>
+                    </form>
+                </PageHeader>
 
                 {contacts.data.length === 0 ? (
-                    <p className="text-muted-foreground text-sm">No contacts yet. Create your first contact or import a CSV.</p>
+                    <EmptyState
+                        icon={Users}
+                        title="No contacts yet"
+                        description="Add your first contact or import a CSV to start building your customer relationships."
+                        action={can('crm.contact.create') && <Button onClick={() => setOpen(true)}>New contact</Button>}
+                    />
                 ) : (
                     <div className="overflow-x-auto rounded-lg border">
                         <table className="w-full text-left text-sm">
