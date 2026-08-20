@@ -46,6 +46,9 @@ jobs:
       - name: TypeScript type check
         run: npx tsc --noEmit
 
+      - name: Front-end unit tests (Vitest)
+        run: npm run test
+
   tests:
     name: Tests & migration validation (PostgreSQL 16)
     runs-on: ubuntu-latest

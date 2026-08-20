@@ -12,7 +12,7 @@ alias composer='php /c/tools/composer/composer.phar'
 
 Quality gate before every commit (all must pass; CI re-runs them plus Postgres migration validation):
 `vendor/bin/pint --test` · `php vendor/bin/phpstan analyse` · `npm run format:check` ·
-`npx eslint .` · `npm run types` · `php vendor/bin/pest`
+`npx eslint .` · `npm run types` · `npm run test` (Vitest, front-end unit tests) · `php vendor/bin/pest`
 
 Local DB is sqlite (`database/database.sqlite`); the product DB is PostgreSQL 16 — keep migrations
 Postgres-compatible. See docs/engineering/local-development.md.
