@@ -1,16 +1,27 @@
-import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { OrganizationSwitcher } from '@/components/organization-switcher';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from '@/components/ui/sidebar';
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarGroupLabel,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+} from '@/components/ui/sidebar';
 import { usePermissions } from '@/hooks/use-permissions';
+import { cn } from '@/lib/utils';
 import { type NavItem } from '@/types';
-import { usePage } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import {
     Bell,
     BookOpen,
     Bot,
     Building2,
     CalendarClock,
+    ChevronRight,
     Code,
     Compass,
     Eye,
@@ -55,10 +66,11 @@ import {
     UserPlus,
     Users,
     Workflow,
+    type LucideIcon,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-type NavGroup = { id: string; label: string; items: NavItem[] };
+type NavGroup = { id: string; label: string; icon: LucideIcon; items: NavItem[] };
 
 export function AppSidebar() {
     const { can } = usePermissions();
@@ -161,18 +173,18 @@ export function AppSidebar() {
     ].filter(Boolean) as NavItem[];
 
     const sections: NavGroup[] = [
-        { id: 'crm', label: 'CRM', items: crmNavItems },
-        { id: 'marketing', label: 'Marketing', items: marketingNavItems },
-        { id: 'seo', label: 'SEO', items: seoNavItems },
-        { id: 'ads', label: 'Advertising', items: adsNavItems },
-        { id: 'content', label: 'Content', items: contentNavItems },
-        { id: 'website', label: 'Website', items: websiteNavItems },
-        { id: 'sales', label: 'Sales', items: salesNavItems },
-        { id: 'analytics', label: 'Analytics', items: analyticsNavItems },
-        { id: 'ai', label: 'AI', items: aiNavItems },
-        { id: 'delivery', label: 'Delivery', items: deliveryNavItems },
-        { id: 'portal', label: 'Portal', items: portalNavItems },
-        { id: 'platform', label: 'Platform', items: platformNavItems },
+        { id: 'crm', label: 'CRM', icon: Users, items: crmNavItems },
+        { id: 'marketing', label: 'Marketing', icon: Megaphone, items: marketingNavItems },
+        { id: 'seo', label: 'SEO', icon: Search, items: seoNavItems },
+        { id: 'ads', label: 'Advertising', icon: Target, items: adsNavItems },
+        { id: 'content', label: 'Content', icon: PenLine, items: contentNavItems },
+        { id: 'website', label: 'Website', icon: Globe, items: websiteNavItems },
+        { id: 'sales', label: 'Sales', icon: Gauge, items: salesNavItems },
+        { id: 'analytics', label: 'Analytics', icon: LineChart, items: analyticsNavItems },
+        { id: 'ai', label: 'AI', icon: Sparkles, items: aiNavItems },
+        { id: 'delivery', label: 'Delivery', icon: Workflow, items: deliveryNavItems },
+        { id: 'portal', label: 'Portal', icon: Handshake, items: portalNavItems },
+        { id: 'platform', label: 'Platform', icon: Server, items: platformNavItems },
     ].filter((section) => section.items.length > 0);
 
     // A header exists to group things. A section holding a single item is not a
@@ -191,41 +203,109 @@ export function AppSidebar() {
             .filter((item) => path === item.url || path.startsWith(`${item.url}/`))
             .sort((a, b) => b.url.length - a.url.length)[0]?.url ?? null;
 
+    // The section whose items fill the panel. Defaults to the section holding
+    // the current page; on a page that belongs to no section (the dashboard) it
+    // falls back to the first section, so the panel is never blank.
     const activeGroupId = groups.find((group) => group.items.some((item) => item.url === activeUrl))?.id ?? null;
 
-    const [openGroupId, setOpenGroupId] = useState<string | null>(activeGroupId);
+    const [openGroupId, setOpenGroupId] = useState<string | null>(activeGroupId ?? groups[0]?.id ?? null);
 
     // Follow the page: arriving in a section from a link, the command palette or a
-    // deep link opens that section. Manual toggles in between are left alone.
+    // deep link brings that section's panel forward. Manual picks in between are
+    // left alone.
     useEffect(() => {
         if (activeGroupId) {
             setOpenGroupId(activeGroupId);
         }
     }, [activeGroupId]);
 
+    const openGroup = groups.find((group) => group.id === openGroupId) ?? groups[0] ?? null;
+
     return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
-                <OrganizationSwitcher />
-            </SidebarHeader>
+        // Widened to hold two columns: a section rail and the sub-item panel.
+        <Sidebar collapsible="offcanvas" variant="inset" style={{ '--sidebar-width': '25rem' } as React.CSSProperties}>
+            <div className="flex h-full w-full">
+                {/* Rail: organization, the section list, and the user - always visible. */}
+                <div className="border-sidebar-border flex w-[13rem] shrink-0 flex-col border-r">
+                    <SidebarHeader>
+                        <OrganizationSwitcher />
+                    </SidebarHeader>
 
-            <SidebarContent>
-                <NavMain items={topLevelItems} activeUrl={activeUrl} />
-                {groups.map((group) => (
-                    <NavMain
-                        key={group.id}
-                        items={group.items}
-                        label={group.label}
-                        activeUrl={activeUrl}
-                        open={openGroupId === group.id}
-                        onOpenChange={(open) => setOpenGroupId(open ? group.id : null)}
-                    />
-                ))}
-            </SidebarContent>
+                    <SidebarContent>
+                        <SidebarGroup className="px-2 py-0">
+                            <SidebarMenu>
+                                {topLevelItems.map((item) => (
+                                    <SidebarMenuItem key={item.url}>
+                                        <SidebarMenuButton asChild isActive={item.url === activeUrl} tooltip={item.title}>
+                                            <Link href={item.url} prefetch>
+                                                {item.icon && <item.icon />}
+                                                <span>{item.title}</span>
+                                            </Link>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroup>
 
-            <SidebarFooter>
-                <NavUser />
-            </SidebarFooter>
+                        <SidebarGroup className="px-2 py-0">
+                            <SidebarMenu>
+                                {groups.map((group) => (
+                                    <SidebarMenuItem key={group.id}>
+                                        <SidebarMenuButton
+                                            // A section button swaps the panel; it does not navigate.
+                                            // The current page's section, and whatever you last picked,
+                                            // read as selected.
+                                            isActive={openGroupId === group.id}
+                                            tooltip={group.label}
+                                            onClick={() => setOpenGroupId(group.id)}
+                                        >
+                                            <group.icon />
+                                            <span>{group.label}</span>
+                                            <ChevronRight
+                                                className={cn(
+                                                    'ml-auto transition-transform',
+                                                    openGroupId === group.id && 'text-sidebar-accent-foreground',
+                                                )}
+                                            />
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                ))}
+                            </SidebarMenu>
+                        </SidebarGroup>
+                    </SidebarContent>
+
+                    <SidebarFooter>
+                        <NavUser />
+                    </SidebarFooter>
+                </div>
+
+                {/* Panel: the open section's items. */}
+                <div className="flex min-w-0 flex-1 flex-col">
+                    {openGroup && (
+                        <>
+                            <div className="flex h-14 items-center px-4">
+                                <SidebarGroupLabel className="text-sidebar-foreground text-sm font-semibold">{openGroup.label}</SidebarGroupLabel>
+                            </div>
+                            <SidebarContent>
+                                <SidebarGroup className="px-2 py-0">
+                                    <SidebarMenu>
+                                        {openGroup.items.map((item) => (
+                                            <SidebarMenuItem key={item.url}>
+                                                <SidebarMenuButton asChild isActive={item.url === activeUrl}>
+                                                    <Link href={item.url} prefetch>
+                                                        {item.icon && <item.icon />}
+                                                        <span>{item.title}</span>
+                                                    </Link>
+                                                </SidebarMenuButton>
+                                            </SidebarMenuItem>
+                                        ))}
+                                    </SidebarMenu>
+                                </SidebarGroup>
+                            </SidebarContent>
+                        </>
+                    )}
+                </div>
+            </div>
         </Sidebar>
     );
 }

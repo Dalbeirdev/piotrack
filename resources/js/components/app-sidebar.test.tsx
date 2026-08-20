@@ -5,14 +5,15 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 /**
- * The sidebar accordion, finally under a real test.
+ * The two-pane sidebar.
  *
- * This is the behaviour that shipped unverified for lack of a JS test runner
- * (blocker B4 in the QA final report): sections collapse, only one is open at a
- * time, the section holding the current page opens itself, and a section with a
- * single item renders as a plain link rather than a header. Everything the
- * sidebar needs from Inertia is read through usePage().props.auth, so one mock
- * of the page state drives the component and its children.
+ * A left rail lists every section the user may see; clicking a section shows its
+ * items in a second panel that stays put until another section is picked (the
+ * click-to-open, persistent model chosen over a hover flyout). The section
+ * holding the current page is open on load, and Dashboard / Client Portal are
+ * direct links in the rail. Everything the sidebar needs from Inertia comes
+ * through usePage().props.auth, so one mock drives the component and its
+ * children.
  */
 
 const { page } = vi.hoisted(() => ({
@@ -51,8 +52,8 @@ function renderSidebar(url: string, permissions: string[]) {
     );
 }
 
-// A permission set that yields two multi-item sections (CRM, Marketing) and one
-// single-item section (Portal).
+// Yields two multi-item sections (CRM, Marketing) and one single-item section
+// (Portal).
 const PERMS = ['crm.contact.read', 'crm.company.read', 'crm.lead.read', 'crm.deal.read', 'marketing.view', 'portal.access'];
 
 beforeEach(() => {
@@ -60,67 +61,90 @@ beforeEach(() => {
     page.props.auth.permissions = [];
 });
 
-describe('AppSidebar sections', () => {
-    it('renders multi-item groups as collapsible headers and starts them closed on the dashboard', () => {
+describe('AppSidebar two-pane navigation', () => {
+    it('lists every permitted section as a button in the rail', () => {
         renderSidebar('/dashboard', PERMS);
 
-        // The section headers exist as buttons.
         expect(screen.getByRole('button', { name: /CRM/i })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /Marketing/i })).toBeInTheDocument();
-
-        // Nothing is active on the dashboard, so no section is expanded: the
-        // child links are not mounted.
-        expect(screen.queryByRole('link', { name: 'Contacts' })).not.toBeInTheDocument();
-        expect(screen.queryByRole('link', { name: 'Lists' })).not.toBeInTheDocument();
     });
 
-    it('renders a single-item section as a plain link, not a header', () => {
+    it('renders Dashboard and single-item sections as links, not section buttons', () => {
         renderSidebar('/dashboard', PERMS);
 
-        // Portal has one item (portal.access), so it is a top-level link and
-        // there is no "Portal" collapsible header to click.
+        expect(screen.getByRole('link', { name: /Dashboard/i })).toHaveAttribute('href', '/dashboard');
+        // Portal has one item, so it is a rail link with no section button.
         expect(screen.getByRole('link', { name: /Client Portal/i })).toBeInTheDocument();
         expect(screen.queryByRole('button', { name: /^Portal$/i })).not.toBeInTheDocument();
     });
 
-    it('opens the section that holds the current page', () => {
-        renderSidebar('/crm/contacts', PERMS);
+    it('shows the panel for the first section by default on the dashboard', () => {
+        renderSidebar('/dashboard', PERMS);
 
-        // Landing on a CRM page opens CRM, so its items are mounted...
+        // The panel is never blank: with no section for /dashboard it falls back
+        // to the first section (CRM), so CRM items are visible and Marketing's
+        // are not.
         expect(screen.getByRole('link', { name: 'Contacts' })).toBeInTheDocument();
-        expect(screen.getByRole('link', { name: 'Deals' })).toBeInTheDocument();
-
-        // ...while Marketing stays closed.
         expect(screen.queryByRole('link', { name: 'Lists' })).not.toBeInTheDocument();
     });
 
-    it('opens only one section at a time', async () => {
-        const user = userEvent.setup();
-        renderSidebar('/dashboard', PERMS);
+    it('opens the panel for the section that holds the current page', () => {
+        renderSidebar('/marketing', PERMS);
 
-        await user.click(screen.getByRole('button', { name: /CRM/i }));
-        expect(screen.getByRole('link', { name: 'Contacts' })).toBeInTheDocument();
-        expect(screen.queryByRole('link', { name: 'Lists' })).not.toBeInTheDocument();
-
-        // Opening Marketing must close CRM.
-        await user.click(screen.getByRole('button', { name: /Marketing/i }));
         expect(screen.getByRole('link', { name: 'Lists' })).toBeInTheDocument();
         expect(screen.queryByRole('link', { name: 'Contacts' })).not.toBeInTheDocument();
     });
 
-    it('marks the current page as the active item', () => {
+    it('swaps the panel when another section is clicked, showing one at a time', async () => {
+        const user = userEvent.setup();
+        renderSidebar('/dashboard', PERMS);
+
+        // Default panel is CRM.
+        expect(screen.getByRole('link', { name: 'Contacts' })).toBeInTheDocument();
+
+        await user.click(screen.getByRole('button', { name: /Marketing/i }));
+
+        expect(screen.getByRole('link', { name: 'Lists' })).toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: 'Contacts' })).not.toBeInTheDocument();
+    });
+
+    it('does not navigate when a section button is clicked - it only opens the panel', async () => {
+        const user = userEvent.setup();
+        renderSidebar('/dashboard', PERMS);
+
+        const marketing = screen.getByRole('button', { name: /Marketing/i });
+        // A section control is a button, not a link, so it carries no href.
+        expect(marketing).not.toHaveAttribute('href');
+
+        await user.click(marketing);
+        // The URL mock is unchanged; the panel simply swapped.
+        expect(page.url).toBe('/dashboard');
+    });
+
+    it('marks the section button of the current page as selected', () => {
         renderSidebar('/crm/contacts', PERMS);
 
-        const contacts = screen.getByRole('link', { name: 'Contacts' });
+        expect(screen.getByRole('button', { name: /CRM/i })).toHaveAttribute('data-active', 'true');
+        expect(screen.getByRole('button', { name: /Marketing/i })).toHaveAttribute('data-active', 'false');
+    });
 
-        // The active item carries aria-current or the active data attribute the
-        // sidebar button sets via isActive.
-        expect(contacts).toHaveAttribute('data-active', 'true');
+    it('marks the current page as the active item in the panel', () => {
+        renderSidebar('/crm/contacts', PERMS);
+
+        expect(screen.getByRole('link', { name: 'Contacts' })).toHaveAttribute('data-active', 'true');
+        expect(screen.getByRole('link', { name: 'Companies' })).toHaveAttribute('data-active', 'false');
+    });
+
+    it('resolves the longest-matching active item, not a prefix', () => {
+        // /crm/contacts activates Contacts, never a shorter /crm prefix - the bug
+        // the longest-match rule fixed.
+        renderSidebar('/crm/contacts', PERMS);
+
+        const panelLink = screen.getByRole('link', { name: 'Contacts' });
+        expect(panelLink).toHaveAttribute('data-active', 'true');
     });
 
     it('hides sections the user has no permission for', () => {
-        // Two CRM permissions keep CRM a multi-item collapsible; Marketing and
-        // Portal have no granted permission and must not appear at all.
         renderSidebar('/dashboard', ['crm.contact.read', 'crm.deal.read']);
 
         expect(screen.getByRole('button', { name: /CRM/i })).toBeInTheDocument();
@@ -128,33 +152,20 @@ describe('AppSidebar sections', () => {
         expect(screen.queryByRole('link', { name: /Client Portal/i })).not.toBeInTheDocument();
     });
 
-    it('collapses a section down to a plain link when only one of its items is permitted', () => {
-        // With a single CRM permission, CRM is no longer a group - it renders as
-        // one link, the same rule that makes Portal a link.
+    it('collapses a section to a rail link when only one of its items is permitted', () => {
+        // A single CRM permission makes CRM one item, so it becomes a link rather
+        // than a section button - the same rule that makes Portal a link.
         renderSidebar('/dashboard', ['crm.contact.read']);
 
         expect(screen.queryByRole('button', { name: /^CRM$/i })).not.toBeInTheDocument();
         expect(screen.getByRole('link', { name: 'Contacts' })).toBeInTheDocument();
     });
 
-    it('always shows the Dashboard link regardless of permissions', () => {
-        renderSidebar('/dashboard', []);
+    it('keeps the panel scoped to its own section when asserting item membership', () => {
+        renderSidebar('/marketing', PERMS);
 
-        const dashboard = screen.getByRole('link', { name: 'Dashboard' });
-        expect(dashboard).toBeInTheDocument();
-        expect(dashboard).toHaveAttribute('href', '/dashboard');
-    });
-
-    it('resolves the longest-matching active item, not a prefix', () => {
-        // /crm/contacts must activate Contacts, not a shorter prefix like a
-        // hypothetical /crm dashboard - the bug the longest-match rule fixed.
-        renderSidebar('/crm/contacts', PERMS);
-
-        const crmSection = screen.getByRole('button', { name: /CRM/i }).closest('div');
-        const contacts = within(crmSection as HTMLElement).getByRole('link', { name: 'Contacts' });
-
-        expect(contacts).toHaveAttribute('data-active', 'true');
-        // Companies is in the same section but must not be active.
-        expect(within(crmSection as HTMLElement).getByRole('link', { name: 'Companies' })).toHaveAttribute('data-active', 'false');
+        // The panel header names the open section.
+        const lists = screen.getByRole('link', { name: 'Lists' });
+        expect(within(lists.closest('div') as HTMLElement).queryByRole('link', { name: 'Contacts' })).not.toBeInTheDocument();
     });
 });
