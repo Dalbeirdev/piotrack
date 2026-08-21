@@ -1,6 +1,6 @@
-import Heading from '@/components/heading';
+import { PageHeader } from '@/components/page-header';
+import { StatCard } from '@/components/stat-card';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
@@ -45,16 +45,11 @@ export default function SeoDashboard({ stats, recentAudits }: { stats: Stats; re
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="SEO" />
             <div className="space-y-6 p-4">
-                <Heading title="SEO" description="Search intelligence, rankings and AI visibility at a glance" />
+                <PageHeader title="SEO" description="Search intelligence, rankings and AI visibility at a glance." />
 
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
                     {STAT_CARDS.map((card) => (
-                        <Card key={card.key}>
-                            <CardContent className="p-4">
-                                <p className="text-muted-foreground text-sm">{card.label}</p>
-                                <p className="text-2xl font-semibold">{stats[card.key]}</p>
-                            </CardContent>
-                        </Card>
+                        <StatCard key={card.key} label={card.label} value={stats[card.key]} />
                     ))}
                 </div>
 

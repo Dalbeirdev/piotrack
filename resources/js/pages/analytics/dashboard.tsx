@@ -1,4 +1,5 @@
-import Heading from '@/components/heading';
+import { PageHeader } from '@/components/page-header';
+import { StatCard } from '@/components/stat-card';
 import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
@@ -105,16 +106,11 @@ export default function AnalyticsDashboard({ metrics }: { metrics: Metrics }) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Analytics" />
             <div className="space-y-6 p-4">
-                <Heading title="Analytics" description="Funnel, paid media, organic visibility and revenue in one view" />
+                <PageHeader title="Analytics" description="Funnel, paid media, organic visibility and revenue in one view." />
 
                 <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
                     {revenueCards(metrics.revenue).map((card) => (
-                        <Card key={card.label}>
-                            <CardContent className="p-4">
-                                <p className="text-muted-foreground text-sm">{card.label}</p>
-                                <p className="text-2xl font-semibold">{card.value}</p>
-                            </CardContent>
-                        </Card>
+                        <StatCard key={card.label} label={card.label} value={card.value} />
                     ))}
                 </div>
 

@@ -1,4 +1,4 @@
-import Heading from '@/components/heading';
+import { PageHeader } from '@/components/page-header';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -149,7 +149,7 @@ export default function AiDashboard({ usage, driver, credits, recent }: { usage:
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="AI" />
             <div className="space-y-6 p-4">
-                <Heading title="AI" description="Provider status, credit consumption and every request the platform has made" />
+                <PageHeader title="AI" description="Provider status, credit consumption and every request the platform has made." />
 
                 <DriverNotice driver={driver} />
 

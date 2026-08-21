@@ -24,6 +24,20 @@ class DashboardTest extends TestCase
         $this->get('/dashboard')->assertOk();
     }
 
+    public function test_the_dashboard_carries_the_command_centre_metrics()
+    {
+        [, $owner] = makeOrganization();
+
+        $this->actingAs($owner)
+            ->get('/dashboard')
+            ->assertInertia(fn ($page) => $page
+                ->component('dashboard')
+                ->has('metrics.leads')
+                ->has('metrics.mrr')
+                ->has('metrics.arr')
+                ->has('sources'));
+    }
+
     public function test_authenticated_users_without_an_organization_are_sent_to_create_one()
     {
         $this->actingAs(User::factory()->create());

@@ -1,4 +1,5 @@
-import Heading from '@/components/heading';
+import { PageHeader } from '@/components/page-header';
+import { StatCard } from '@/components/stat-card';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
@@ -65,16 +66,11 @@ export default function AdvertisingDashboard({ kpi, stats, campaigns }: { kpi: K
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Advertising" />
             <div className="space-y-6 p-4">
-                <Heading title="Advertising" description="Paid media performance across platforms" />
+                <PageHeader title="Advertising" description="Paid media performance across platforms." />
 
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
                     {kpiCards(kpi).map((card) => (
-                        <Card key={card.label}>
-                            <CardContent className="p-4">
-                                <p className="text-muted-foreground text-sm">{card.label}</p>
-                                <p className="text-2xl font-semibold">{card.value}</p>
-                            </CardContent>
-                        </Card>
+                        <StatCard key={card.label} label={card.label} value={card.value} />
                     ))}
                 </div>
 

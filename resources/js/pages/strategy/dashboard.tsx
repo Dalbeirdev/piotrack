@@ -1,5 +1,5 @@
-import Heading from '@/components/heading';
 import InputError from '@/components/input-error';
+import { PageHeader } from '@/components/page-header';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -579,7 +579,7 @@ export default function StrategyDashboard({
             <Head title="Strategy" />
             <div className="space-y-6 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                    <Heading title="Strategy" description="Plans, the consulting work under them, KPI attainment and the five-P methodology" />
+                    <PageHeader title="Strategy" description="Plans, the consulting work under them, KPI attainment and the five-P methodology." />
                     {canManage && (
                         <div className="flex flex-wrap gap-2">
                             <NewItemDialog plans={plans} types={types} />

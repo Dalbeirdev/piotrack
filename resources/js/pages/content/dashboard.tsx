@@ -1,4 +1,4 @@
-import Heading from '@/components/heading';
+import { PageHeader } from '@/components/page-header';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
@@ -58,7 +58,7 @@ export default function ContentDashboard({
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Content" />
             <div className="space-y-6 p-4">
-                <Heading title="Content" description="Content, social, reputation, and authority at a glance" />
+                <PageHeader title="Content" description="Content, social, reputation, and authority at a glance." />
 
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
                     {kpiCards.map((card) => (

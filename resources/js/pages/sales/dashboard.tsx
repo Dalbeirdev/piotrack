@@ -1,4 +1,4 @@
-import Heading from '@/components/heading';
+import { PageHeader } from '@/components/page-header';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
@@ -52,7 +52,7 @@ export default function SalesDashboard({
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Sales" />
             <div className="space-y-6 p-4">
-                <Heading title="Sales" description="Lead temperature, alerts, and pipeline signals at a glance" />
+                <PageHeader title="Sales" description="Lead temperature, alerts, and pipeline signals at a glance." />
 
                 <div>
                     <h3 className="mb-2 text-sm font-medium">Lead temperature</h3>
